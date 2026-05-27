@@ -177,15 +177,59 @@
         .timeline-item {
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: space-between;
             padding: 12px 0;
             border-bottom: 1px solid #333;
+        }
+
+        .timeline-main {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .timeline-time {
             font-weight: bold;
             color: #00adb5;
             min-width: 60px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: #2d2d2d;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* כפתורי ניהול קטנים */
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff4a4a;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: none; /* מוצג רק במצב עריכה */
+        }
+
+        .admin-controls {
+            display: none;
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px dashed #00adb5;
+        }
+
+        .admin-input {
+            background: #121212;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 8px;
+            border-radius: 5px;
+            margin-left: 10px;
         }
 
         /* אזור משחקים */
@@ -275,7 +319,6 @@
 </head>
 <body>
 
-    <!-- מסך כניסה (נעילה) -->
     <div id="lock-screen">
         <h1>🔒 מערכת הפעלה סודית</h1>
         <p>הקש קוד גישה כדי להיכנס למערכת המשחקים:</p>
@@ -285,12 +328,10 @@
         <div id="lock-error" class="error-msg"></div>
     </div>
 
-    <!-- מערכת ההפעלה המרכזית -->
     <div id="main-os">
         <div class="top-bar">
-            <h2>⚡ SCHOOL OS v2.0</h2>
-            <!-- כפתור הגדרות עובד שמאפשר לשנות סיסמה -->
-            <button class="settings-btn" onclick="openSettings()" title="שינוי סיסמה סודית">⚙️</button>
+            <h2>⚡ SCHOOL OS v3.0</h2>
+            <button class="settings-btn" onclick="toggleAdminMode()" title="מצב עריכת לוז ומשימות">⚙️ מרכז שליטה</button>
         </div>
 
         <div class="nav-tabs">
@@ -299,19 +340,40 @@
             <button class="tab-btn" onclick="switchTab('my-games')">🎮 משחקי חשיבה</button>
         </div>
 
-        <!-- עמוד 1: היום שלי -->
-        <div id="my-day" class="content-section active">
-            <div class="card">
-                <h3>⏰ לו"ז ימי ויזואלי</h3>
-                <div class="timeline-item"><div class="timeline-time">08:00</div> <span>🎒 הגעה וארגון כיתה</span></div>
-                <div class="timeline-item"><div class="timeline-time">08:15</div> <span>🧠 שיעור חשבון (להוציא מחשבונים!)</span></div>
-                <div class="timeline-item"><div class="timeline-time">09:45</div> <span>🍎 הפסקת אוכל ומשחקים</span></div>
-                <div class="timeline-item"><div class="timeline-time">10:15</div> <span>📚 שיעור שפה וקריאה</span></div>
-                <div class="timeline-item"><div class="timeline-time">12:00</div> <span>⚽ הפסקה גדולה בחצר</span></div>
+        <div id="admin-panel" style="padding: 20px 30px 0 30px; display: none;">
+            <div class="admin-controls" id="day-controls">
+                <h4>➕ הוספת אירוע ללו"ז:</h4>
+                שעה: <input type="text" id="new-time" class="admin-input" placeholder="08:00" style="width: 60px;">
+                פעילות: <input type="text" id="new-activity" class="admin-input" placeholder="שיעור חשבון" style="width: 200px;">
+                <button class="pin-btn" style="padding: 5px 15px; font-size: 1rem;" onclick="addTimelineItem()">הוסף ללו"ז</button>
+            </div>
+            <div class="admin-controls" id="task-controls">
+                <h4>➕ הוספת משימה חדשה:</h4>
+                תיאור המשימה: <input type="text" id="new-task-text" class="admin-input" placeholder="לקרוא פרק בקיצור..." style="width: 250px;">
+                <button class="pin-btn" style="padding: 5px 15px; font-size: 1rem;" onclick="addTaskItem()">הוסף משימה</button>
             </div>
         </div>
 
-        <!-- עמוד 2: משימות ומד התקדמות -->
+        <div id="my-day" class="content-section active">
+            <div class="card">
+                <h3>⏰ לו"ז ימי ויזואלי</h3>
+                <div id="timeline-list">
+                    <div class="timeline-item">
+                        <div class="timeline-main"><div class="timeline-time">08:00</div> <span>🎒 הגעה וארגון כיתה</span></div>
+                        <button class="delete-btn" onclick="this.parentElement.remove()">🗑️</button>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-main"><div class="timeline-time">08:15</div> <span>🧠 שיעור חשבון (להוציא מחשבונים!)</span></div>
+                        <button class="delete-btn" onclick="this.parentElement.remove()">🗑️</button>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-main"><div class="timeline-time">09:45</div> <span>🍎 הפסקת אוכל ומשחקים</span></div>
+                        <button class="delete-btn" onclick="this.parentElement.remove()">🗑️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="my-tasks" class="content-section">
             <div class="card">
                 <h3>⭐ מד התקדמות המשימות שלי</h3>
@@ -320,18 +382,21 @@
                     <div id="p-bar" class="progress-bar"></div>
                 </div>
                 
-                <div style="margin-top: 20px;">
-                    <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📝 לסיים עמוד 12 בחוברת חשבון</label><br><br>
-                    <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📖 לקרוא פרק 3 בספר הקריאה</label><br><br>
-                    <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 🎨 להכין את הציור לשיעור אמנות</label>
+                <div id="tasks-list" style="margin-top: 20px;">
+                    <div class="task-item">
+                        <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📝 לסיים עמוד 12 בחוברת חשבון</label>
+                        <button class="delete-btn" onclick="this.parentElement.remove(); updateProgress();">🗑️</button>
+                    </div>
+                    <div class="task-item">
+                        <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📖 לקרוא פרק 3 בספר הקריאה</label>
+                        <button class="delete-btn" onclick="this.parentElement.remove(); updateProgress();">🗑️</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- עמוד 3: משחקי חשיבה -->
         <div id="my-games" class="content-section">
             <div class="games-grid">
-                <!-- משחק 1: זיכרון -->
                 <div class="card">
                     <h3>🧩 משחק הזיכרון המהיר</h3>
                     <p>מצא את כל הזוגות התואמים בהכי מעט לחיצות!</p>
@@ -339,7 +404,6 @@
                     <button class="pin-btn" style="font-size:1fr; padding:5px 15px;" onclick="resetMemoryGame()">התחל מחדש</button>
                 </div>
 
-                <!-- משחק 2: ניחוש מספר מעודכן עד 100 -->
                 <div class="card">
                     <h3>🔢 ניחוש המספר הסודי</h3>
                     <p>אני חושב על מספר בין 1 ל-100. מצליח לנחש?</p>
@@ -354,8 +418,8 @@
     </div>
 
     <script>
-        // משתנה השומר את הסיסמה הנוכחית (מתחיל ב-1234)
         let secretPin = '1234';
+        let isAdmin = false;
 
         // בדיקת סיסמה סודית בכניסה
         function checkPin() {
@@ -363,20 +427,78 @@
             if (enteredPin === secretPin) {
                 document.getElementById('lock-screen').style.display = 'none';
                 document.getElementById('main-os').style.display = 'block';
-                resetMemoryGame(); // טוען את משחק הזיכרון
+                resetMemoryGame();
+                updateProgress();
             } else {
                 document.getElementById('lock-error').innerText = '❌ קוד שגוי! נסה שוב סוכן סודי.';
             }
         }
 
+        // פתיחת/סגירת מצב עריכה (מרכז שליטה)
+        function toggleAdminMode() {
+            if (!isAdmin) {
+                const pass = prompt("🔐 הקש את סיסמת המערכת (1234) כדי להיכנס למצב עריכת לו\"ז ומשימות:");
+                if (pass === secretPin) {
+                    isAdmin = true;
+                    document.getElementById('admin-panel').style.display = 'block';
+                    document.querySelectorAll('.admin-controls').forEach(el => el.style.display = 'block');
+                    document.querySelectorAll('.delete-btn').forEach(el => el.style.display = 'inline-block');
+                    alert("🛠️ נכנסת למצב מנהל! עכשיו אתה יכול להוסיף פריטים, או למחוק פריטים קיימים בעזרת ה-🗑️");
+                } else {
+                    alert("❌ סיסמה שגויה! אין לך גישה לעריכת המערכת.");
+                }
+            } else {
+                // יציאה ממצב מנהל
+                isAdmin = false;
+                document.getElementById('admin-panel').style.display = 'none';
+                document.querySelectorAll('.admin-controls').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.delete-btn').forEach(el => el.style.display = 'none');
+            }
+        }
+
+        // פונקציה להוספת אירוע ללו"ז
+        function addTimelineItem() {
+            const time = document.getElementById('new-time').value;
+            const activity = document.getElementById('new-activity').value;
+            
+            if(!time || !activity) { alert("אנא מלא גם שעה וגם פעילות!"); return; }
+
+            const list = document.getElementById('timeline-list');
+            const newItem = document.createElement('div');
+            newItem.classList.add('timeline-item');
+            newItem.innerHTML = `
+                <div class="timeline-main"><div class="timeline-time">${time}</div> <span>${activity}</span></div>
+                <button class="delete-btn" style="display: inline-block;" onclick="this.parentElement.remove()">🗑️</button>
+            `;
+            list.appendChild(newItem);
+            
+            // איפוס שדות
+            document.getElementById('new-time').value = '';
+            document.getElementById('new-activity').value = '';
+        }
+
+        // פונקציה להוספת משימה חדשה
+        function addTaskItem() {
+            const taskText = document.getElementById('new-task-text').value;
+            if(!taskText) { alert("אנא כתוב תיאור למשימה!"); return; }
+
+            const list = document.getElementById('tasks-list');
+            const newItem = document.createElement('div');
+            newItem.classList.add('task-item');
+            newItem.innerHTML = `
+                <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📝 ${taskText}</label>
+                <button class="delete-btn" style="display: inline-block;" onclick="this.parentElement.remove(); updateProgress();">🗑️</button>
+            `;
+            list.appendChild(newItem);
+            
+            document.getElementById('new-task-text').value = '';
+            updateProgress(); // עדכון מד התקדמות
+        }
+
         // ניווט בין עמודים (טאבים)
         function switchTab(tabId) {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
         }
@@ -385,24 +507,15 @@
         function updateProgress() {
             const checkboxes = document.querySelectorAll('.task-check');
             const checked = document.querySelectorAll('.task-check:checked');
+            if(checkboxes.length === 0) {
+                document.getElementById('p-bar').style.width = '0%';
+                return;
+            }
             const percentage = (checked.length / checkboxes.length) * 100;
             document.getElementById('p-bar').style.width = percentage + '%';
         }
 
-        // כפתור הגדרות פתוח לשינוי סיסמה
-        function openSettings() {
-            const newPin = prompt("🛠️ הגדרות מערכת:\nהקש סיסמה סודית חדשה בת 4 ספרות:");
-            if (newPin) {
-                if (newPin.length === 4 && !isNaN(newPin)) {
-                    secretPin = newPin;
-                    alert("✅ הסיסמה שונתה בהצלחה! בפעם הבאה שתיכנסו יש להשתמש בסיסמה החדשה.");
-                } else {
-                    alert("❌ שגיאה: הסיסמה חייבת להכיל בדיוק 4 מספרים.");
-                }
-            }
-        }
-
-        // לוגיקה משחק ניחושים (מעודכן ל-100)
+        // לוגיקה משחק ניחושים (עד 100)
         let secretNumber = Math.floor(Math.random() * 100) + 1;
         function playGuessGame() {
             const userGuess = parseInt(document.getElementById('guess-input').value);
@@ -417,7 +530,6 @@
             if (userGuess === secretNumber) {
                 hintElement.innerHTML = '🎉 בול! כל הכבוד, ניחשת נכון!';
                 hintElement.style.color = '#28a745';
-                // מייצר מספר חדש לפעם הבאה
                 secretNumber = Math.floor(Math.random() * 100) + 1;
             } else if (userGuess > secretNumber) {
                 hintElement.innerHTML = '📉 גבוה מדי! נסה מספר קטן יותר.';
@@ -438,9 +550,7 @@
             board.innerHTML = '';
             flippedCards = [];
             matchedCount = 0;
-            
             const shuffled = icons.sort(() => 0.5 - Math.random());
-            
             shuffled.forEach((icon, index) => {
                 const card = document.createElement('div');
                 card.classList.add('memory-card');
@@ -454,19 +564,15 @@
 
         function flipCard() {
             if (flippedCards.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) return;
-
             this.classList.add('flipped');
             flippedCards.push(this);
-
             if (flippedCards.length === 2) {
                 if (flippedCards[0].dataset.icon === flippedCards[1].dataset.icon) {
                     flippedCards[0].classList.add('matched');
                     flippedCards[1].classList.add('matched');
                     matchedCount += 2;
                     flippedCards = [];
-                    if (matchedCount === icons.length) {
-                        alert('🏆 ניצחת במשחק הזיכרון! אלוף!');
-                    }
+                    if (matchedCount === icons.length) { alert('🏆 ניצחת במשחק הזיכרון! אלוף!'); }
                 } else {
                     setTimeout(() => {
                         flippedCards[0].classList.remove('flipped');
