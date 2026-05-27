@@ -29,6 +29,7 @@
             border: 2px solid #333;
             width: 280px;
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            z-index: 9999;
         }
 
         .pin-input {
@@ -53,7 +54,7 @@
             cursor: pointer;
         }
 
-        /* מערכת הפעלה ראשית */
+        /* מערכת הפעלה ראשית - מוסתרת בהתחלה */
         #main-os {
             display: none;
             width: 100%;
@@ -155,7 +156,7 @@
             margin-left: 10px;
         }
 
-        /* גריד משחקים משופר */
+        /* גריד משחקים */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -206,7 +207,7 @@
             padding: 5px;
         }
 
-        /* עיצוב משחק סנייק החדש */
+        /* סנייק */
         #snake-canvas {
             background-color: #000000;
             display: block;
@@ -247,4 +248,15 @@
     </div>
 
     <div id="main-os">
-        <div class
+        <div class="top-bar">
+            <h2>⚡ SCHOOL OS v6.5</h2>
+            <button class="pin-btn" onclick="toggleAdminMode()" style="background:#252525; border:1px solid #333;">⚙️ מרכז שליטה</button>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('my-day')">📅 היום שלי</button>
+            <button class="tab-btn" onclick="switchTab('my-tasks')">🚀 משימות</button>
+            <button class="tab-btn" onclick="switchTab('my-games')">🎮 משחקים</button>
+        </div>
+
+        <div id="admin-panel"
