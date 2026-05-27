@@ -15,47 +15,7 @@
             font-family: 'Segoe UI', Arial, sans-serif;
         }
 
-        #lock-screen {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            background-color: #1e1e1e;
-            padding: 35px;
-            border-radius: 15px;
-            border: 2px solid #333;
-            width: 280px;
-            box-shadow: 0 0 25px rgba(0,0,0,0.9);
-            z-index: 9999;
-        }
-
-        .pin-input {
-            font-size: 2rem;
-            width: 140px;
-            text-align: center;
-            background: #2d2d2d;
-            color: #fff;
-            border: 1px solid #444;
-            padding: 8px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            outline: none;
-        }
-
-        .pin-btn {
-            background-color: #00adb5;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
         #main-os {
-            display: none;
             width: 100%;
             min-height: 100vh;
         }
@@ -86,12 +46,12 @@
             font-size: 1rem;
             cursor: pointer;
             border-radius: 5px;
+            font-weight: bold;
         }
 
         .tab-btn.active {
             background-color: #00adb5;
             color: white;
-            font-weight: bold;
         }
 
         .content-section {
@@ -179,7 +139,6 @@
             margin: 5px;
         }
 
-        /* גריד למשחקים */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -190,7 +149,6 @@
             .games-grid { grid-template-columns: 1fr 1fr; }
         }
 
-        /* עיצוב משחק זיכרון */
         .memory-board {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -210,7 +168,6 @@
             color: transparent;
             cursor: pointer;
             user-select: none;
-            transition: background-color 0.2s;
         }
 
         .memory-card.flipped {
@@ -218,98 +175,4 @@
             color: #121212;
         }
 
-        .memory-card.matched {
-            background-color: #28a745;
-            color: white;
-            cursor: default;
-        }
-
-        /* עיצוב ניחוש מספר */
-        .game-input {
-            width: 80px;
-            font-size: 1.5rem;
-            text-align: center;
-            background: #121212;
-            color: #fff;
-            border: 1px solid #444;
-            padding: 5px;
-            border-radius: 5px;
-            margin-left: 10px;
-        }
-
-        /* עיצוב סנייק */
-        #snake-canvas {
-            background-color: #000000;
-            display: block;
-            margin: 15px auto;
-            border: 2px solid #333;
-            border-radius: 5px;
-        }
-
-        .snake-controls {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            width: 150px;
-            margin: 15px auto 0 auto;
-            gap: 6px;
-        }
-
-        .snake-btn {
-            background-color: #2d2d2d;
-            color: white;
-            border: 1px solid #444;
-            padding: 12px;
-            text-align: center;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            user-select: none;
-        }
-        .snake-btn:active { background-color: #00adb5; }
-    </style>
-</head>
-<body>
-
-    <div id="lock-screen">
-        <h2>🔒 קוד גישה למערכת</h2>
-        <p>הקש 1234 לכניסה:</p>
-        <input type="password" id="pin-code" class="pin-input" maxlength="4" placeholder="••••">
-        <br>
-        <button class="pin-btn" onclick="checkPin()">כניסה</button>
-        <div id="lock-error" style="color: #ff4a4a; margin-top: 10px; font-weight: bold;"></div>
-    </div>
-
-    <div id="main-os">
-        <div class="top-bar">
-            <h2>⚡ SCHOOL OS v12.0</h2>
-            <button class="pin-btn" onclick="toggleAdminMode()" style="background:#252525; border:1px solid #333; font-size: 1.1rem; padding: 8px 12px;">⚙️</button>
-        </div>
-
-        <div class="nav-tabs">
-            <button id="tab-day" class="tab-btn active" onclick="switchTab('my-day', 'tab-day')">📅 היום שלי</button>
-            <button id="tab-tasks" class="tab-btn" onclick="switchTab('my-tasks', 'tab-tasks')">🚀 משימות</button>
-            <button id="tab-games" class="tab-btn" onclick="switchTab('my-games', 'tab-games')">🎮 מרכז המשחקים</button>
-        </div>
-
-        <div id="admin-panel">
-            <h3 style="color: #00adb5; margin-top: 0;">🛠️ מרכז שליטה מנהל</h3>
-            <div class="admin-controls">
-                <h5>➕ הוספת פעילות ללו"ז:</h5>
-                שעה: <input type="text" id="new-time" class="admin-input" placeholder="08:00" style="width: 60px;">
-                פעילות: <input type="text" id="new-activity" class="admin-input" placeholder="שיעור">
-                <button class="pin-btn" style="padding: 5px 15px; font-size: 0.9rem;" onclick="addTimelineItem()">הוסף</button>
-            </div>
-            <div class="admin-controls">
-                <h5>➕ הוספת משימה:</h5>
-                תיאור: <input type="text" id="new-task-text" class="admin-input" placeholder="משימה...">
-                <button class="pin-btn" style="padding: 5px 15px; font-size: 0.9rem;" onclick="addTaskItem()">הוסף</button>
-            </div>
-        </div>
-
-        <div id="my-day" class="content-section active">
-            <div class="card">
-                <h3>⏰ הלו"ז היומי שלי</h3>
-                <div id="timeline-list">
-                    <div class="timeline-item">
-                        <div><b>08:00</b> - 🎒 הגעה וארגון כיתה</div>
-                        <button class="delete-
+        .memory-card.
