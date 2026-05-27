@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מערכת הפעלה - חיי בית הספר</title>
     <style>
-        /* עיצוב כללי - רקע שחור קוזמי */
-        body {]
+        /* עיצוב כללי - רקע שחור מלא על כל המסך */
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #121212;
             color: #ffffff;
@@ -14,12 +14,12 @@
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* מתחיל מלמעלה */
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* מסך נעילה */
+        /* מסך נעילה - נשאר ממורכז ויפה */
         #lock-screen {
             text-align: center;
             background: #1e1e1e;
@@ -27,6 +27,7 @@
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.7);
             border: 2px solid #333;
+            margin-top: 10vh;
         }
 
         #lock-screen h1 {
@@ -65,47 +66,46 @@
             box-shadow: 0 0 15px #00adb5;
         }
 
-        /* מערכת הפעלה ראשית */
+        /* מערכת הפעלה ראשית - מתפרסת על כל העמוד מקצה לקצה! */
         #main-os {
             display: none;
-            width: 90%;
-            max-width: 1000px;
-            background: #1e1e1e;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
-            border: 1px solid #333;
+            width: 100vw; /* 100% מרוחב המסך */
+            min-height: 100vh; /* 100% מגובה המסך */
+            background: #121212; /* צבע הרקע הכללי */
             overflow: hidden;
         }
 
-        /* סרגל עליון */
+        /* סרגל עליון - נמתח מקצה לקצה */
         .top-bar {
-            background-color: #2d2d2d;
-            padding: 15px 25px;
+            background-color: #1e1e1e;
+            padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #333;
+            border-bottom: 2px solid #333;
         }
 
         .top-bar h2 {
             margin: 0;
             color: #00adb5;
+            font-size: 1.8rem;
         }
 
-        /* תפריט ניווט */
+        /* תפריט ניווט - נמתח ומעוצב */
         .nav-tabs {
             display: flex;
-            background-color: #252525;
-            padding: 10px;
-            gap: 10px;
+            background-color: #181818;
+            padding: 10px 20px;
+            gap: 15px;
+            border-bottom: 1px solid #252525;
         }
 
         .tab-btn {
             background: none;
             border: none;
             color: #aaa;
-            padding: 10px 20px;
-            font-size: 1.1rem;
+            padding: 12px 25px;
+            font-size: 1.2rem;
             cursor: pointer;
             border-radius: 8px;
             transition: 0.3s;
@@ -115,7 +115,7 @@
         }
 
         .tab-btn:hover {
-            background-color: #333;
+            background-color: #252525;
             color: #fff;
         }
 
@@ -123,12 +123,13 @@
             background-color: #00adb5;
             color: #fff;
             font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 173, 181, 0.4);
         }
 
-        /* תוכן העמודים */
+        /* תוכן העמודים - מרווח ונוח על כל המסך */
         .content-section {
             display: none;
-            padding: 30px;
+            padding: 40px;
             animation: fadeIn 0.5s ease;
         }
 
@@ -141,18 +142,20 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* אלמנטים ויזואליים וכרטיסיות */
+        /* כרטיסיות התוכן בתוך העמוד */
         .card {
-            background: #252525;
+            background: #1e1e1e;
             border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
             border: 1px solid #333;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         h3 {
             color: #eee;
             margin-top: 0;
+            font-size: 1.5rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -168,7 +171,7 @@
 
         .progress-bar {
             background-color: #00adb5;
-            height: 20px;
+            height: 25px;
             width: 0%;
             transition: width 0.5s ease;
             box-shadow: 0 0 10px #00adb5;
@@ -178,8 +181,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #333;
+            padding: 15px 0;
+            border-bottom: 1px solid #252525;
+            font-size: 1.1rem;
         }
 
         .timeline-main {
@@ -191,17 +195,24 @@
         .timeline-time {
             font-weight: bold;
             color: #00adb5;
-            min-width: 60px;
+            min-width: 70px;
         }
 
         .task-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px;
-            background: #2d2d2d;
+            padding: 15px;
+            background: #252525;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .task-item input[type="checkbox"] {
+            transform: scale(1.3);
+            margin-left: 10px;
+            cursor: pointer;
         }
 
         /* כפתורי ניהול קטנים */
@@ -210,16 +221,16 @@
             border: none;
             color: #ff4a4a;
             cursor: pointer;
-            font-size: 1.1rem;
-            display: none; /* מוצג רק במצב עריכה */
+            font-size: 1.2rem;
+            display: none;
         }
 
         .admin-controls {
             display: none;
-            background: #2d2d2d;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
             border: 1px dashed #00adb5;
         }
 
@@ -227,19 +238,20 @@
             background: #121212;
             border: 1px solid #444;
             color: #fff;
-            padding: 8px;
-            border-radius: 5px;
-            margin-left: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            margin-left: 15px;
+            font-size: 1rem;
         }
 
-        /* אזור משחקים */
+        /* אזור משחקים - מתפרס יפה על מסך רחב */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 30px;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .games-grid { grid-template-columns: 1fr; }
         }
 
@@ -247,23 +259,27 @@
         .memory-board {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            max-width: 320px;
+            gap: 12px;
+            max-width: 360px;
             margin: 20px auto;
         }
 
         .memory-card {
-            height: 70px;
+            height: 80px;
             background-color: #00adb5;
             border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.8rem;
+            font-size: 2rem;
             color: transparent;
             cursor: pointer;
             user-select: none;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .memory-card:active {
+            transform: scale(0.95);
         }
 
         .memory-card.flipped {
@@ -280,34 +296,36 @@
         /* משחק ניחושים */
         .guess-box {
             text-align: center;
-            padding: 10px;
+            padding: 20px;
         }
 
         .game-input {
-            width: 100px;
-            font-size: 1.5rem;
-            padding: 5px;
+            width: 120px;
+            font-size: 1.8rem;
+            padding: 8px;
             text-align: center;
             border-radius: 8px;
             border: 2px solid #444;
-            background: #2d2d2d;
+            background: #121212;
             color: #fff;
-            margin-left: 10px;
+            margin-left: 15px;
         }
 
         /* הגדרות קלילות */
         .settings-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
+            background: #252525;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 8px 15px;
+            font-size: 1rem;
+            border-radius: 8px;
             cursor: pointer;
-            color: #aaa;
-            transition: transform 0.3s;
+            transition: 0.3s;
         }
 
         .settings-btn:hover {
-            transform: rotate(45deg);
-            color: #fff;
+            background-color: #00adb5;
+            box-shadow: 0 0 10px #00adb5;
         }
 
         .error-msg {
@@ -330,8 +348,8 @@
 
     <div id="main-os">
         <div class="top-bar">
-            <h2>⚡ SCHOOL OS v3.0</h2>
-            <button class="settings-btn" onclick="toggleAdminMode()" title="מצב עריכת לוז ומשימות">⚙️ מרכז שליטה</button>
+            <h2>⚡ SCHOOL OS v3.5</h2>
+            <button class="settings-btn" onclick="toggleAdminMode()" title="מצב עריכת לוז ומשימות">⚙️ מרכז שליטה סודי</button>
         </div>
 
         <div class="nav-tabs">
@@ -340,17 +358,17 @@
             <button class="tab-btn" onclick="switchTab('my-games')">🎮 משחקי חשיבה</button>
         </div>
 
-        <div id="admin-panel" style="padding: 20px 30px 0 30px; display: none;">
+        <div id="admin-panel" style="padding: 20px 40px 0 40px; display: none;">
             <div class="admin-controls" id="day-controls">
                 <h4>➕ הוספת אירוע ללו"ז:</h4>
-                שעה: <input type="text" id="new-time" class="admin-input" placeholder="08:00" style="width: 60px;">
-                פעילות: <input type="text" id="new-activity" class="admin-input" placeholder="שיעור חשבון" style="width: 200px;">
-                <button class="pin-btn" style="padding: 5px 15px; font-size: 1rem;" onclick="addTimelineItem()">הוסף ללו"ז</button>
+                שעה: <input type="text" id="new-time" class="admin-input" placeholder="08:00" style="width: 80px;">
+                פעילות: <input type="text" id="new-activity" class="admin-input" placeholder="שיעור חשבון" style="width: 250px;">
+                <button class="pin-btn" style="padding: 8px 20px; font-size: 1rem;" onclick="addTimelineItem()">הוסף ללו"ז</button>
             </div>
             <div class="admin-controls" id="task-controls">
                 <h4>➕ הוספת משימה חדשה:</h4>
-                תיאור המשימה: <input type="text" id="new-task-text" class="admin-input" placeholder="לקרוא פרק בקיצור..." style="width: 250px;">
-                <button class="pin-btn" style="padding: 5px 15px; font-size: 1rem;" onclick="addTaskItem()">הוסף משימה</button>
+                תיאור המשימה: <input type="text" id="new-task-text" class="admin-input" placeholder="לסיים שיעורי בית..." style="width: 300px;">
+                <button class="pin-btn" style="padding: 8px 20px; font-size: 1rem;" onclick="addTaskItem()">הוסף משימה</button>
             </div>
         </div>
 
@@ -401,7 +419,7 @@
                     <h3>🧩 משחק הזיכרון המהיר</h3>
                     <p>מצא את כל הזוגות התואמים בהכי מעט לחיצות!</p>
                     <div class="memory-board" id="mem-board"></div>
-                    <button class="pin-btn" style="font-size:1fr; padding:5px 15px;" onclick="resetMemoryGame()">התחל מחדש</button>
+                    <button class="pin-btn" style="font-size:1rem; padding:8px 20px;" onclick="resetMemoryGame()">התחל מחדש</button>
                 </div>
 
                 <div class="card">
@@ -409,7 +427,7 @@
                     <p>אני חושב על מספר בין 1 ל-100. מצליח לנחש?</p>
                     <div class="guess-box">
                         <input type="number" id="guess-input" class="game-input" min="1" max="100">
-                        <button class="pin-btn" style="padding: 6px 15px; font-size: 1rem;" onclick="playGuessGame()">ניחוש!</button>
+                        <button class="pin-btn" style="padding: 8px 20px; font-size: 1rem;" onclick="playGuessGame()">ניחוש!</button>
                         <p id="guess-hint" style="margin-top: 15px; font-weight: bold; color: #00adb5;">הקש מספר ולחץ ניחוש</p>
                     </div>
                 </div>
@@ -418,10 +436,9 @@
     </div>
 
     <script>
-        let secretPin = '6789';
+        let secretPin = '1234';
         let isAdmin = false;
 
-        // בדיקת סיסמה סודית בכניסה
         function checkPin() {
             const enteredPin = document.getElementById('pin-code').value;
             if (enteredPin === secretPin) {
@@ -434,7 +451,6 @@
             }
         }
 
-        // פתיחת/סגירת מצב עריכה (מרכז שליטה)
         function toggleAdminMode() {
             if (!isAdmin) {
                 const pass = prompt("🔐 הקש את סיסמת המערכת (1234) כדי להיכנס למצב עריכת לו\"ז ומשימות:");
@@ -443,12 +459,10 @@
                     document.getElementById('admin-panel').style.display = 'block';
                     document.querySelectorAll('.admin-controls').forEach(el => el.style.display = 'block');
                     document.querySelectorAll('.delete-btn').forEach(el => el.style.display = 'inline-block');
-                    alert("🛠️ נכנסת למצב מנהל! עכשיו אתה יכול להוסיף פריטים, או למחוק פריטים קיימים בעזרת ה-🗑️");
                 } else {
-                    alert("❌ סיסמה שגויה! אין לך גישה לעריכת המערכת.");
+                    alert("❌ סיסמה שגויה!");
                 }
             } else {
-                // יציאה ממצב מנהל
                 isAdmin = false;
                 document.getElementById('admin-panel').style.display = 'none';
                 document.querySelectorAll('.admin-controls').forEach(el => el.style.display = 'none');
@@ -456,13 +470,10 @@
             }
         }
 
-        // פונקציה להוספת אירוע ללו"ז
         function addTimelineItem() {
             const time = document.getElementById('new-time').value;
             const activity = document.getElementById('new-activity').value;
-            
-            if(!time || !activity) { alert("אנא מלא גם שעה וגם פעילות!"); return; }
-
+            if(!time || !activity) return;
             const list = document.getElementById('timeline-list');
             const newItem = document.createElement('div');
             newItem.classList.add('timeline-item');
@@ -471,17 +482,13 @@
                 <button class="delete-btn" style="display: inline-block;" onclick="this.parentElement.remove()">🗑️</button>
             `;
             list.appendChild(newItem);
-            
-            // איפוס שדות
             document.getElementById('new-time').value = '';
             document.getElementById('new-activity').value = '';
         }
 
-        // פונקציה להוספת משימה חדשה
         function addTaskItem() {
             const taskText = document.getElementById('new-task-text').value;
-            if(!taskText) { alert("אנא כתוב תיאור למשימה!"); return; }
-
+            if(!taskText) return;
             const list = document.getElementById('tasks-list');
             const newItem = document.createElement('div');
             newItem.classList.add('task-item');
@@ -490,12 +497,10 @@
                 <button class="delete-btn" style="display: inline-block;" onclick="this.parentElement.remove(); updateProgress();">🗑️</button>
             `;
             list.appendChild(newItem);
-            
             document.getElementById('new-task-text').value = '';
-            updateProgress(); // עדכון מד התקדמות
+            updateProgress();
         }
 
-        // ניווט בין עמודים (טאבים)
         function switchTab(tabId) {
             document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -503,7 +508,6 @@
             event.currentTarget.classList.add('active');
         }
 
-        // עדכון מד התקדמות משימות
         function updateProgress() {
             const checkboxes = document.querySelectorAll('.task-check');
             const checked = document.querySelectorAll('.task-check:checked');
@@ -512,76 +516,4 @@
                 return;
             }
             const percentage = (checked.length / checkboxes.length) * 100;
-            document.getElementById('p-bar').style.width = percentage + '%';
-        }
-
-        // לוגיקה משחק ניחושים (עד 100)
-        let secretNumber = Math.floor(Math.random() * 100) + 1;
-        function playGuessGame() {
-            const userGuess = parseInt(document.getElementById('guess-input').value);
-            const hintElement = document.getElementById('guess-hint');
-            
-            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
-                hintElement.innerHTML = '⚠️ אנא בחר מספר חוקי בין 1 ל-100!';
-                hintElement.style.color = '#ff4a4a';
-                return;
-            }
-
-            if (userGuess === secretNumber) {
-                hintElement.innerHTML = '🎉 בול! כל הכבוד, ניחשת נכון!';
-                hintElement.style.color = '#28a745';
-                secretNumber = Math.floor(Math.random() * 100) + 1;
-            } else if (userGuess > secretNumber) {
-                hintElement.innerHTML = '📉 גבוה מדי! נסה מספר קטן יותר.';
-                hintElement.style.color = '#ff4a4a';
-            } else {
-                hintElement.innerHTML = '📈 נמוך מדי! נסה מספר גדול יותר.';
-                hintElement.style.color = '#ff4a4a';
-            }
-        }
-
-        // לוגיקה משחק זיכרון
-        const icons = ['🍎', '🍎', '⚽', '⚽', '🧠', '🧠', '🎒', '🎒', '🎨', '🎨', '📚', '📚', '📝', '📝', '⭐', '⭐'];
-        let flippedCards = [];
-        let matchedCount = 0;
-
-        function resetMemoryGame() {
-            const board = document.getElementById('mem-board');
-            board.innerHTML = '';
-            flippedCards = [];
-            matchedCount = 0;
-            const shuffled = icons.sort(() => 0.5 - Math.random());
-            shuffled.forEach((icon, index) => {
-                const card = document.createElement('div');
-                card.classList.add('memory-card');
-                card.dataset.icon = icon;
-                card.dataset.id = index;
-                card.innerText = icon;
-                card.addEventListener('click', flipCard);
-                board.appendChild(card);
-            });
-        }
-
-        function flipCard() {
-            if (flippedCards.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) return;
-            this.classList.add('flipped');
-            flippedCards.push(this);
-            if (flippedCards.length === 2) {
-                if (flippedCards[0].dataset.icon === flippedCards[1].dataset.icon) {
-                    flippedCards[0].classList.add('matched');
-                    flippedCards[1].classList.add('matched');
-                    matchedCount += 2;
-                    flippedCards = [];
-                    if (matchedCount === icons.length) { alert('🏆 ניצחת במשחק הזיכרון! אלוף!'); }
-                } else {
-                    setTimeout(() => {
-                        flippedCards[0].classList.remove('flipped');
-                        flippedCards[1].classList.remove('flipped');
-                        flippedCards = [];
-                    }, 1000);
-                }
-            }
-        }
-    </script>
-</body>
-</html>
+            document.getElementById('p-bar').style.width = percentage
