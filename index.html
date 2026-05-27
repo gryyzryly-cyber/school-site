@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מערכת הפעלה - חיי בית הספר</title>
     <style>
-        /* עיצוב בסיסי לכל הדף - שחור ומסך מלא */
+        /* עיצוב כללי - מסך מלא שחור מהרגע הראשון */
         html, body {
             margin: 0;
             padding: 0;
@@ -14,31 +14,29 @@
             background-color: #121212;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
         }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-        }
-
-        /* מסך נעילה קטן וממורכז בהתחלה */
+        /* מסך נעילה - ממורכז פיקס באמצע הדף השחור */
         #lock-screen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
             background: #1e1e1e;
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.7);
             border: 2px solid #333;
-            margin-top: 15vh;
-            width: 320px;
+            width: 300px;
+            z-index: 9999; /* דואג שזה יהיה מעל הכל */
         }
 
         #lock-screen h1 {
             font-size: 2rem;
             margin-bottom: 20px;
             color: #00adb5;
+            margin-top: 0;
         }
 
         .pin-input {
@@ -71,7 +69,7 @@
             box-shadow: 0 0 15px #00adb5;
         }
 
-        /* מערכת הפעלה ראשית - תופסת 100% מהמסך מקצה לקצה! */
+        /* מערכת הפעלה ראשית - מוסתרת בהתחלה ותופסת את כל המסך אחרי כניסה */
         #main-os {
             display: none;
             width: 100%;
@@ -79,7 +77,7 @@
             background-color: #121212;
         }
 
-        /* סרגל עליון נמתח לכל הרוחב */
+        /* סרגל עליון נמתח */
         .top-bar {
             background-color: #1e1e1e;
             padding: 20px 30px;
@@ -127,7 +125,7 @@
             box-shadow: 0 0 10px rgba(0, 173, 181, 0.4);
         }
 
-        /* אזור התוכן - נפתח לרוחב מלא עם מרווחים יפים מהקצוות */
+        /* אזור התוכן לרוחב מלא */
         .content-section {
             display: none;
             padding: 40px;
@@ -137,7 +135,6 @@
             display: block;
         }
 
-        /* כרטיסיות גדולות שתופסות את רוב המסך */
         .card {
             background: #1e1e1e;
             border-radius: 15px;
@@ -169,7 +166,7 @@
             box-shadow: 0 0 10px #00adb5;
         }
 
-        /* פריטי הלו"ז והמשימות */
+        /* רשימות */
         .timeline-item {
             display: flex;
             align-items: center;
@@ -237,7 +234,7 @@
             font-size: 1rem;
         }
 
-        /* רשת המשחקים במסך רחב */
+        /* משחקים */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -248,7 +245,6 @@
             .games-grid { grid-template-columns: 1fr; }
         }
 
-        /* משחק זיכרון */
         .memory-board {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -282,11 +278,163 @@
             cursor: default;
         }
 
-        /* משחק ניחושים */
         .guess-box {
             text-align: center;
             padding: 20px;
         }
 
         .game-input {
-            width: 120
+            width: 120px;
+            font-size: 1.8rem;
+            padding: 8px;
+            text-align: center;
+            border-radius: 8px;
+            border: 2px solid #444;
+            background: #121212;
+            color: #fff;
+            margin-left: 15px;
+        }
+
+        .settings-btn {
+            background: #252525;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .settings-btn:hover {
+            background-color: #00adb5;
+            box-shadow: 0 0 10px #00adb5;
+        }
+
+        .error-msg {
+            color: #ff4a4a;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="lock-screen">
+        <h1>🔒 מערכת הפעלה</h1>
+        <p>הקש קוד גישה:</p>
+        <input type="password" id="pin-code" class="pin-input" maxlength="4" placeholder="••••">
+        <br>
+        <button class="pin-btn" onclick="checkPin()">כניסה</button>
+        <div id="lock-error" class="error-msg"></div>
+    </div>
+
+    <div id="main-os">
+        <div class="top-bar">
+            <h2>⚡ SCHOOL OS v4.5</h2>
+            <button class="settings-btn" onclick="toggleAdminMode()">⚙️ מרכז שליטה סודי</button>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('my-day')">📅 היום שלי</button>
+            <button class="tab-btn" onclick="switchTab('my-tasks')">🚀 משימות</button>
+            <button class="tab-btn" onclick="switchTab('my-games')">🎮 משחקי חשיבה</button>
+        </div>
+
+        <div id="admin-panel" style="padding: 20px 40px 0 40px; display: none;">
+            <div class="admin-controls" id="day-controls">
+                <h4>➕ הוספת אירוע ללו"ז:</h4>
+                שעה: <input type="text" id="new-time" class="admin-input" placeholder="08:00" style="width: 80px;">
+                פעילות: <input type="text" id="new-activity" class="admin-input" placeholder="שיעור חשבון" style="width: 250px;">
+                <button class="pin-btn" style="padding: 8px 20px; font-size: 1rem;" onclick="addTimelineItem()">הוסף</button>
+            </div>
+            <div class="admin-controls" id="task-controls">
+                <h4>➕ הוספת משימה חדשה:</h4>
+                תיאור: <input type="text" id="new-task-text" class="admin-input" placeholder="לסיים חוברת..." style="width: 300px;">
+                <button class="pin-btn" style="padding: 8px 20px; font-size: 1rem;" onclick="addTaskItem()">הוסף</button>
+            </div>
+        </div>
+
+        <div id="my-day" class="content-section active">
+            <div class="card">
+                <h3>⏰ לו"ז ימי ויזואלי</h3>
+                <div id="timeline-list">
+                    <div class="timeline-item">
+                        <div class="timeline-main"><div class="timeline-time">08:00</div> <span>🎒 הגעה וארגון כיתה</span></div>
+                        <button class="delete-btn" onclick="this.parentElement.remove()">🗑️</button>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-main"><div class="timeline-time">08:15</div> <span>🧠 שיעור חשבון</span></div>
+                        <button class="delete-btn" onclick="this.parentElement.remove()">🗑️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="my-tasks" class="content-section">
+            <div class="card">
+                <h3>⭐ מד התקדמות המשימות שלי</h3>
+                <div class="progress-container">
+                    <div id="p-bar" class="progress-bar"></div>
+                </div>
+                
+                <div id="tasks-list" style="margin-top: 20px;">
+                    <div class="task-item">
+                        <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📝 לסיים עמוד 12 בחשבון</label>
+                        <button class="delete-btn" onclick="this.parentElement.remove(); updateProgress();">🗑️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="my-games" class="content-section">
+            <div class="games-grid">
+                <div class="card">
+                    <h3>🧩 משחק הזיכרון המהיר</h3>
+                    <div class="memory-board" id="mem-board"></div>
+                    <button class="pin-btn" style="font-size:1rem; padding:8px 20px;" onclick="resetMemoryGame()">התחל מחדש</button>
+                </div>
+
+                <div class="card">
+                    <h3>🔢 ניחוש המספר הסודי</h3>
+                    <p>אני חושב על מספר בין 1 ל-100. מצליח לנחש?</p>
+                    <div class="guess-box">
+                        <input type="number" id="guess-input" class="game-input" min="1" max="100">
+                        <button class="pin-btn" style="padding: 8px 20px; font-size: 1rem;" onclick="playGuessGame()">ניחוש!</button>
+                        <p id="guess-hint" style="margin-top: 15px; font-weight: bold; color: #00adb5;">הקש מספר</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let secretPin = '1234';
+        let isAdmin = false;
+
+        function checkPin() {
+            const enteredPin = document.getElementById('pin-code').value;
+            if (enteredPin === secretPin) {
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('main-os').style.display = 'block';
+                resetMemoryGame();
+                updateProgress();
+            } else {
+                document.getElementById('lock-error').innerText = '❌ קוד שגוי!';
+            }
+        }
+
+        function toggleAdminMode() {
+            if (!isAdmin) {
+                const pass = prompt("🔐 הקש סיסמה (1234) כדי לערוך את הלו\"ז והמשימות:");
+                if (pass === secretPin) {
+                    isAdmin = true;
+                    document.getElementById('admin-panel').style.display = 'block';
+                    document.querySelectorAll('.admin-controls').forEach(el => el.style.display = 'block');
+                    document.querySelectorAll('.delete-btn').forEach(el => el.style.display = 'inline-block');
+                } else {
+                    alert("❌ סיסמה שגויה!");
+                }
+            } else {
+                isAdmin = false;
+                document.getElementById('admin-panel
