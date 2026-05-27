@@ -3,213 +3,460 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>האתר של הלל</title>
+    <title>מערכת הפעלה - חיי בית הספר</title>
     <style>
-        :root { --blue: #4A90E2; --green: #50C878; --yellow: #FFD700; --red: #FF6B6B; --purple: #9B5DE5; --bg: #F0F4F8; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; justify-content: center; box-sizing: border-box; }
-        .login-box { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 95%; box-sizing: border-box; }
-        .login-input { width: 100%; padding: 12px; border-radius: 10px; border: 2px solid #ccc; font-size: 1.2rem; text-align: center; box-sizing: border-box; margin-bottom: 15px; }
-        .login-btn { background: var(--blue); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; }
-        .main-container { display: none; width: 100%; flex-direction: column; align-items: center; }
-        .page { display: none; width: 100%; max-width: 700px; flex-direction: column; align-items: center; }
-        .page.active { display: flex; }
-        header { text-align: center; margin-bottom: 15px; }
-        h1 { color: #333; font-size: 2.2rem; margin: 10px 0; }
-        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; padding: 10px; box-sizing: border-box; }
-        .card { background: white; border-radius: 20px; padding: 20px 10px; text-align: center; cursor: pointer; box-shadow: 0 6px 12px rgba(0,0,0,0.08); border: 6px solid transparent; }
-        .card i { font-size: 2.8rem; display: block; margin-bottom: 5px; }
-        .card span { font-size: 1.3rem; font-weight: bold; color: #333; }
-        .card.blue { border-color: var(--blue); }
-        .card.green { border-color: var(--green); }
-        .card.yellow { border-color: var(--yellow); }
-        .card.red { border-color: var(--red); }
-        .games-section { width: 100%; margin-top: 20px; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 6px 12px rgba(0,0,0,0.08); text-align: center; box-sizing: border-box; }
-        .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
-        @media(max-width: 500px) { .games-grid { grid-template-columns: 1fr; } }
-        .game-box { background: #F8F9FA; border: 2px solid #E9ECEF; border-radius: 15px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        .memory-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-width: 220px; margin-top: 8px; }
-        .memory-card { width: 45px; height: 45px; background: var(--purple); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; cursor: pointer; }
-        .memory-card.flipped { background: white; border: 2px solid var(--purple); color: black; }
-        .guess-input { width: 70px; padding: 8px; border-radius: 8px; border: 2px solid #ccc; text-align: center; margin-top: 8px; }
-        .guess-btn { background: var(--purple); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; margin-top: 8px; font-weight: bold; }
-        .content-box { background: white; border-radius: 20px; padding: 20px; width: 100%; box-shadow: 0 6px 15px rgba(0,0,0,0.05); box-sizing: border-box; margin-top: 15px; }
-        .list-item { display: flex; align-items: center; background: #F8F9FA; padding: 15px; border-radius: 15px; margin-bottom: 10px; border-right: 6px solid var(--blue); }
-        .list-item i { font-size: 1.8rem; margin-left: 15px; }
-        .list-item .text { flex-grow: 1; text-align: right; }
-        .list-item .time { font-weight: bold; color: #666; margin-left: 15px; }
-        .back-btn { background: #333; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 15px; display: inline-block; }
-        .vote-btn { background: var(--yellow); border: none; padding: 12px 20px; border-radius: 15px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin: 8px; width: 90%; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
-        .report-btn { background: var(--red); color: white; border: none; padding: 12px 20px; border-radius: 15px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin: 8px; width: 90%; }
-        .settings-btn { position: fixed; top: 10px; right: 10px; background: white; padding: 8px; border-radius: 50%; font-size: 1.4rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); cursor: pointer; z-index: 100; }
-        .settings-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 90%; max-width: 400px; z-index: 101; box-sizing: border-box; }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 100; }
-        textarea { width: 100%; height: 60px; border-radius: 8px; border: 2px solid #ccc; padding: 8px; font-family: inherit; resize: none; box-sizing: border-box; margin-bottom: 10px; }
+        /* עיצוב כללי - רקע שחור קוזמי */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* מסך נעילה */
+        #lock-screen {
+            text-align: center;
+            background: #1e1e1e;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            border: 2px solid #333;
+        }
+
+        #lock-screen h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #00adb5;
+        }
+
+        .pin-input {
+            font-size: 2rem;
+            width: 150px;
+            text-align: center;
+            border: 2px solid #444;
+            background-color: #2d2d2d;
+            color: #fff;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            outline: none;
+            letter-spacing: 5px;
+        }
+
+        .pin-btn {
+            background-color: #00adb5;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .pin-btn:hover {
+            background-color: #00f5ff;
+            box-shadow: 0 0 15px #00adb5;
+        }
+
+        /* מערכת הפעלה ראשית */
+        #main-os {
+            display: none;
+            width: 90%;
+            max-width: 1000px;
+            background: #1e1e1e;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            border: 1px solid #333;
+            overflow: hidden;
+        }
+
+        /* סרגל עליון */
+        .top-bar {
+            background-color: #2d2d2d;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .top-bar h2 {
+            margin: 0;
+            color: #00adb5;
+        }
+
+        /* תפריט ניווט */
+        .nav-tabs {
+            display: flex;
+            background-color: #252525;
+            padding: 10px;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .tab-btn.active {
+            background-color: #00adb5;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* תוכן העמודים */
+        .content-section {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* אלמנטים ויזואליים וכרטיסיות */
+        .card {
+            background: #252525;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+
+        h3 {
+            color: #eee;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* משימות ולו"ז ויזואלי */
+        .progress-container {
+            background-color: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            background-color: #00adb5;
+            height: 20px;
+            width: 0%;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px #00adb5;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .timeline-time {
+            font-weight: bold;
+            color: #00adb5;
+            min-width: 60px;
+        }
+
+        /* אזור משחקים */
+        .games-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .games-grid { grid-template-columns: 1fr; }
+        }
+
+        /* משחק זיכרון */
+        .memory-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 320px;
+            margin: 20px auto;
+        }
+
+        .memory-card {
+            height: 70px;
+            background-color: #00adb5;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            color: transparent;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+
+        .memory-card.flipped {
+            background-color: #fff;
+            color: #121212;
+        }
+
+        .memory-card.matched {
+            background-color: #28a745;
+            color: white;
+            cursor: default;
+        }
+
+        /* משחק ניחושים */
+        .guess-box {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .game-input {
+            width: 80px;
+            font-size: 1.5rem;
+            padding: 5px;
+            text-align: center;
+            border-radius: 8px;
+            border: 2px solid #444;
+            background: #2d2d2d;
+            color: #fff;
+            margin-left: 10px;
+        }
+
+        /* הגדרות קלילות (פינת ההורים חסומה) */
+        .settings-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: transform 0.3s;
+        }
+
+        .settings-btn:hover {
+            transform: rotate(45deg);
+            color: #fff;
+        }
+
+        .error-msg {
+            color: #ff4a4a;
+            margin-top: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-    <div class="login-box" id="loginBox">
-        <h2 style="margin-top:0;">🔒 אתר בית הספר של הלל</h2>
-        <p>הקש את הסיסמה הסודית כדי להיכנס:</p>
-        <input type="password" class="login-input" id="passwordInput" placeholder="סיסמה...">
-        <button class="login-btn" onclick="checkPassword()">🔓 כניסה</button>
-        <div id="errorMsg" style="color:var(--red); font-weight:bold; margin-top:10px; display:none;">❌ סיסמה שגויה!</div>
+    <!-- מסך כניסה (נעילה) -->
+    <div id="lock-screen">
+        <h1>🔒 מערכת הפעלה סודית</h1>
+        <p>הקש קוד גישה כדי להיכנס למערכת המשחקים:</p>
+        <input type="password" id="pin-code" class="pin-input" maxlength="4" placeholder="••••">
+        <br>
+        <button class="pin-btn" onclick="checkPin()">כניסה למערכת</button>
+        <div id="lock-error" class="error-msg"></div>
     </div>
 
-    <div class="main-container" id="mainContainer">
-        
-        <div class="settings-btn" onclick="openSettings()">⚙️</div>
-        <div class="modal-overlay" id="overlay" onclick="closeSettings()"></div>
-        <div class="settings-modal" id="modal">
-            <h3 style="margin-top:0;">⚙️ הגדרות</h3>
-            <p>סדר יום (שעה | שיעור | אייקון)</p>
-            <textarea id="scheduleInput"></textarea>
-            <p>משימות (אייקון | משימה)</p>
-            <textarea id="tasksInput"></textarea>
-            <button class="login-btn" onclick="saveSettings()">💾 שמור</button>
+    <!-- מערכת ההפעלה המרכזית -->
+    <div id="main-os">
+        <div class="top-bar">
+            <h2>⚡ SCHOOL OS v2.0</h2>
+            <button class="settings-btn" onclick="openAdultsCorner()">⚙️</button>
         </div>
 
-        <div class="page active" id="page-home">
-            <header><h1>מה עושים היום?</h1></header>
-            <div class="grid-container">
-                <div class="card blue" onclick="navigateTo('page-today')"><i>📅</i><span>היום שלי</span></div>
-                <div class="card green" onclick="navigateTo('page-tasks')"><i>✅</i><span>המשימות שלי</span></div>
-                <div class="card yellow" onclick="navigateTo('page-social')"><i>🎈</i><span>הקול קובע</span></div>
-                <div class="card red" onclick="navigateTo('page-help')"><i>🛠️</i><span>דיווח ועזרה</span></div>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('my-day')">📅 היום שלי</button>
+            <button class="tab-btn" onclick="switchTab('my-tasks')">🚀 משימות</button>
+            <button class="tab-btn" onclick="switchTab('my-games')">🎮 משחקי חשיבה</button>
+        </div>
+
+        <!-- עמוד 1: היום שלי -->
+        <div id="my-day" class="content-section active">
+            <div class="card">
+                <h3>⏰ לו"ז ימי ויזואלי</h3>
+                <div class="timeline-item"><div class="timeline-time">08:00</div> <span>🎒 הגעה וארגון כיתה</span></div>
+                <div class="timeline-item"><div class="timeline-time">08:15</div> <span>🧠 שיעור חשבון (להוציא מחשבונים!)</span></div>
+                <div class="timeline-item"><div class="timeline-time">09:45</div> <span>🍎 הפסקת אוכל ומשחקים</span></div>
+                <div class="timeline-item"><div class="timeline-time">10:15</div> <span>📚 שיעור שפה וקריאה</span></div>
+                <div class="timeline-item"><div class="timeline-time">12:00</div> <span>⚽ הפסקה גדולה בחצר</span></div>
             </div>
-            
-            <div class="games-section">
-                <h2 style="color:var(--purple); margin-top:0;">🧩 משחקי חשיבה</h2>
-                <div class="games-grid">
-                    <div class="game-box">
-                        <h3 style="margin:0;">🧠 משחק הזיכרון</h3>
-                        <div class="memory-board" id="memoryBoard"></div>
-                    </div>
-                    <div class="game-box">
-                        <h3 style="margin:0;">🔢 נחש מספר (1-100)</h3>
-                        <input type="number" class="guess-input" id="guessInput">
-                        <button class="guess-btn" onclick="playGuessGame()">בדוק</button>
-                        <div id="guessFeedback" style="margin-top:5px; font-weight:bold; font-size:0.9rem;"></div>
-                    </div>
+        </div>
+
+        <!-- עמוד 2: משימות ומד התקדמות -->
+        <div id="my-tasks" class="content-section">
+            <div class="card">
+                <h3>⭐ מד התקדמות המשימות שלי</h3>
+                <p>סמן משימות שסיימת כדי למלא את מד כוכבי הזהב!</p>
+                <div class="progress-container">
+                    <div id="p-bar" class="progress-bar"></div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📝 לסיים עמוד 12 בחוברת חשבון</label><br><br>
+                    <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📖 לקרוא פרק 3 בספר הקריאה</label><br><br>
+                    <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 🎨 להכין את הציור לשיעור אמנות</label>
                 </div>
             </div>
         </div>
 
-        <div class="page" id="page-today">
-            <header><h1>📅 סדר היום שלי</h1></header>
-            <div class="content-box" id="scheduleContainer"></div>
-            <div class="back-btn" onclick="navigateTo('page-home')">🔙 חזרה</div>
-        </div>
+        <!-- עמוד 3: משחקי חשיבה -->
+        <div id="my-games" class="content-section">
+            <div class="games-grid">
+                <!-- משחק 1: זיכרון -->
+                <div class="card">
+                    <h3>🧩 משחק הזיכרון המהיר</h3>
+                    <p>מצא את כל הזוגות התואמים בהכי מעט לחיצות!</p>
+                    <div class="memory-board" id="mem-board"></div>
+                    <button class="pin-btn" style="font-size:1fr; padding:5px 15px;" onclick="resetMemoryGame()">התחל מחדש</button>
+                </div>
 
-        <div class="page" id="page-tasks">
-            <header><h1>✅ המשימות להיום</h1></header>
-            <div class="content-box" id="tasksContainer"></div>
-            <div class="back-btn" onclick="navigateTo('page-home')">🔙 חזרה</div>
-        </div>
-
-        <div class="page" id="page-social">
-            <header><h1>🎈 הקול שלי קובע!</h1></header>
-            <div class="content-box" style="text-align:center;">
-                <button class="vote-btn" onclick="vote('כדורגל')">⚽ כדורגל (<span id="v1">0</span>)</button>
-                <button class="vote-btn" onclick="vote('טאקי')">🃏 טאקי (<span id="v2">0</span>)</button>
-                <button class="vote-btn" onclick="vote('ציור')">🎨 פינת ציור (<span id="v3">0</span>)</button>
+                <!-- משחק 2: ניחוש מספר -->
+                <div class="card">
+                    <h3>🔢 ניחוש המספר הסודי</h3>
+                    <p>אני חושב על מספר בין 1 ל-20. מצליח לנחש?</p>
+                    <div class="guess-box">
+                        <input type="number" id="guess-input" class="game-input" min="1" max="20">
+                        <button class="pin-btn" style="padding: 6px 15px; font-size: 1rem;" onclick="playGuessGame()">ניחוש!</button>
+                        <p id="guess-hint" style="margin-top: 15px; font-weight: bold; color: #00adb5;"></p>
+                    </div>
+                </div>
             </div>
-            <div class="back-btn" onclick="navigateTo('page-home')">🔙 חזרה</div>
         </div>
-
-        <div class="page" id="page-help">
-            <header><h1>🛠️ מרכז דיווח ועזרה</h1></header>
-            <div class="content-box" style="text-align:center;">
-                <button class="report-btn" onclick="report('משחק שבור')">💔 משחק שבור במועדונית</button>
-                <button class="report-btn" onclick="report('חסרים דפים')">📝 חסרים דפי צביעה</button>
-            </div>
-            <div class="back-btn" onclick="navigateTo('page-home')">🔙 חזרה</div>
-        </div>
-
     </div>
 
     <script>
-        const SECRET_PASSWORD = "1234";
-
-        function checkPassword() {
-            if (document.getElementById('passwordInput').value === SECRET_PASSWORD) {
-                document.getElementById('loginBox').style.display = 'none';
-                document.getElementById('mainContainer').style.display = 'flex';
-                initMemoryGame();
-                loadData();
+        // בדיקת סיסמה סודית בכניסה
+        function checkPin() {
+            const enteredPin = document.getElementById('pin-code').value;
+            if (enteredPin === '1234') {
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('main-os').style.display = 'block';
+                resetMemoryGame(); // טוען את משחק הזיכרון
             } else {
-                document.getElementById('errorMsg').style.display = 'block';
-                document.getElementById('passwordInput').value = '';
+                document.getElementById('lock-error').innerText = '❌ קוד שגוי! נסה שוב סוכן סודי.';
             }
         }
 
-        function navigateTo(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
+        // ניווט בין עמודים (טאבים)
+        function switchTab(tabId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
         }
 
-        const defaultSchedule = "08:00 - 09:30 | שיעור 1: חשבון | 🧮\n09:30 - 10:00 | הפסקת אוכל | 🍎\n10:00 - 11:30 | פעילות במועדונית | 🎲";
-        const defaultTasks = "📖 | לסיים עמוד 12 בחוברת עברית\n👟 | להביא בגדי ספורט למחר";
-
-        function loadData() {
-            const sched = localStorage.getItem('userSchedule') || defaultSchedule;
-            document.getElementById('scheduleContainer').innerHTML = sched.split('\n').map(line => {
-                const parts = line.split('|');
-                if(parts.length < 2) return '';
-                return '<div class="list-item"><span class="time">'+parts[0].trim()+'</span><i>'+(parts[2]?.trim()||'📅')+'</i><span class="text"><b>'+parts[1].trim()+'</b></span></div>';
-            }).join('');
-
-            const tasks = localStorage.getItem('userTasks') || defaultTasks;
-            document.getElementById('tasksContainer').innerHTML = tasks.split('\n').map(line => {
-                const parts = line.split('|');
-                if(parts.length < 2) return '';
-                return '<div class="list-item" style="border-color:var(--green)"><i>'+parts[0].trim()+'</i><span class="text"><b>'+parts[1].trim()+'</b></span></div>';
-            }).join('');
+        // עדכון מד התקדמות משימות
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.task-check');
+            const checked = document.querySelectorAll('.task-check:checked');
+            const percentage = (checked.length / checkboxes.length) * 100;
+            document.getElementById('p-bar').style.width = percentage + '%';
         }
 
-        function openSettings() {
-            document.getElementById('modal').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('scheduleInput').value = localStorage.getItem('userSchedule') || defaultSchedule;
-            document.getElementById('tasksInput').value = localStorage.getItem('userTasks') || defaultTasks;
-        }
-        function closeSettings() { document.getElementById('modal').style.display='none'; document.getElementById('overlay').style.display='none'; }
-        function saveSettings() {
-            localStorage.setItem('userSchedule', document.getElementById('scheduleInput').value);
-            localStorage.setItem('userTasks', document.getElementById('tasksInput').value);
-            loadData(); closeSettings(); alert('השינויים נשמרו!');
+        // פינת מבוגרים מוגנת (כרגע חסומה בהדמיה)
+        function openAdultsCorner() {
+            alert("🔒 אזור נעול! כניסה למורים והורים בלבד עם סיסמת מנהל.");
         }
 
-        const emojis = ['🦁', '🦁', '🤖', '🤖', '🍕', '🍕', '🚀', '🚀', '🎸', '🎸', '💎', '💎', '🎈', '🎈', '👻', '👻'];
-        let flipped = [];
-        function initMemoryGame() {
-            const b = document.getElementById('memoryBoard'); b.innerHTML = ''; flipped = [];
-            emojis.sort(() => 0.5 - Math.random()).forEach((em) => {
-                const c = document.createElement('div'); c.className = 'memory-card'; c.dataset.emoji = em; c.innerText = '*';
-                c.onclick = () => {
-                    if (flipped.length >= 2 || c.classList.contains('flipped')) return;
-                    c.classList.add('flipped'); c.innerText = em; flipped.push(c);
-                    if (flipped.length === 2) {
-                        if (flipped[0].dataset.emoji === flipped[1].dataset.emoji) { flipped = []; }
-                        else { setTimeout(() => { flipped[0].innerText='*'; flipped[1].innerText='*'; flipped[0].classList.remove('flipped'); flipped[1].classList.remove('flipped'); flipped=[]; }, 800); }
-                    }
-                };
-                b.appendChild(c);
+        // לוגיקה משחק ניחושים
+        const secretNumber = Math.floor(Math.random() * 20) + 1;
+        function playGuessGame() {
+            const userGuess = parseInt(document.getElementById('guess-input').value);
+            const hintElement = document.getElementById('guess-hint');
+            
+            if (userGuess === secretNumber) {
+                hintElement.innerHTML = '🎉 בול! כל הכבוד, ניחשת נכון!';
+                hintElement.style.color = '#28a745';
+            } else if (userGuess > secretNumber) {
+                hintElement.innerHTML = '📉 גבוה מדי! נסה מספר קטן יותר.';
+                hintElement.style.color = '#ff4a4a';
+            } else {
+                hintElement.innerHTML = '📈 נמוך מדי! נסה מספר גדול יותר.';
+                hintElement.style.color = '#ff4a4a';
+            }
+        }
+
+        // לוגיקה משחק זיכרון
+        const icons = ['🍎', '🍎', '⚽', '⚽', '🧠', '🧠', '🎒', '🎒', '🎨', '🎨', '📚', '📚', '📝', '📝', '⭐', '⭐'];
+        let flippedCards = [];
+        let matchedCount = 0;
+
+        function resetMemoryGame() {
+            const board = document.getElementById('mem-board');
+            board.innerHTML = '';
+            flippedCards = [];
+            matchedCount = 0;
+            
+            // ערבוב קלפים
+            const shuffled = icons.sort(() => 0.5 - Math.random());
+            
+            shuffled.forEach((icon, index) => {
+                const card = document.createElement('div');
+                card.classList.add('memory-card');
+                card.dataset.icon = icon;
+                card.dataset.id = index;
+                card.innerText = icon;
+                card.addEventListener('click', flipCard);
+                board.appendChild(card);
             });
         }
 
-        let secret = Math.floor(Math.random() * 100) + 1;
-        function playGuessGame() {
-            const g = parseInt(document.getElementById('guessInput').value);
-            const f = document.getElementById('guessFeedback');
-            if (g === secret) { f.innerText = "🎉 ניחשת נכון!"; secret = Math.floor(Math.random()*100)+1; }
-            else if (g > secret) f.innerText = "📉 קטן יותר!";
-            else f.innerText = "📈 גדול יותר!";
-        }
+        function flipCard() {
+            if (flippedCards.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) return;
 
-        let counts = {כדורגל:0, טאקי:0, ציור:0};
-        function vote(type) { counts[type]++; document.getElementById('v1').innerText=counts['כדורגל']; document.getElementById('v2').innerText=counts['טאקי']; document.getElementById('v3').innerText=counts['ציור']; }
-        function report(msg) { alert('הדיווח נשלח: ' + msg); }
+            this.classList.add('flipped');
+            flippedCards.push(this);
+
+            if (flippedCards.length === 2) {
+                if (flippedCards[0].dataset.icon === flippedCards[1].dataset.icon) {
+                    flippedCards[0].classList.add('matched');
+                    flippedCards[1].classList.add('matched');
+                    matchedCount += 2;
+                    flippedCards = [];
+                    if (matchedCount === icons.length) {
+                        alert('🏆 ניצחת במשחק הזיכרון! אלוף!');
+                    }
+                } else {
+                    setTimeout(() => {
+                        flippedCards[0].classList.remove('flipped');
+                        flippedCards[1].classList.remove('flipped');
+                        flippedCards = [];
+                    }, 1000);
+                }
+            }
+        }
     </script>
 </body>
 </html>
