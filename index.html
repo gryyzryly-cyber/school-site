@@ -5,21 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מערכת הפעלה - חיי בית הספר</title>
     <style>
-        /* עיצוב כללי - רקע שחור מלא על כל המסך */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+        /* עיצוב בסיסי לכל הדף - שחור ומסך מלא */
+        html, body {
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* מתחיל מלמעלה */
-            min-height: 100vh;
+            width: 100%;
+            height: 100%;
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow-x: hidden;
         }
 
-        /* מסך נעילה - נשאר ממורכז ויפה */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* מסך נעילה קטן וממורכז בהתחלה */
         #lock-screen {
             text-align: center;
             background: #1e1e1e;
@@ -27,11 +31,12 @@
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.7);
             border: 2px solid #333;
-            margin-top: 10vh;
+            margin-top: 15vh;
+            width: 320px;
         }
 
         #lock-screen h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin-bottom: 20px;
             color: #00adb5;
         }
@@ -66,16 +71,15 @@
             box-shadow: 0 0 15px #00adb5;
         }
 
-        /* מערכת הפעלה ראשית - מתפרסת על כל העמוד מקצה לקצה! */
+        /* מערכת הפעלה ראשית - תופסת 100% מהמסך מקצה לקצה! */
         #main-os {
             display: none;
-            width: 100vw; /* 100% מרוחב המסך */
-            min-height: 100vh; /* 100% מגובה המסך */
-            background: #121212; /* צבע הרקע הכללי */
-            overflow: hidden;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #121212;
         }
 
-        /* סרגל עליון - נמתח מקצה לקצה */
+        /* סרגל עליון נמתח לכל הרוחב */
         .top-bar {
             background-color: #1e1e1e;
             padding: 20px 30px;
@@ -91,11 +95,11 @@
             font-size: 1.8rem;
         }
 
-        /* תפריט ניווט - נמתח ומעוצב */
+        /* תפריט הטאבים */
         .nav-tabs {
             display: flex;
             background-color: #181818;
-            padding: 10px 20px;
+            padding: 10px 30px;
             gap: 15px;
             border-bottom: 1px solid #252525;
         }
@@ -109,9 +113,6 @@
             cursor: pointer;
             border-radius: 8px;
             transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .tab-btn:hover {
@@ -126,27 +127,21 @@
             box-shadow: 0 0 10px rgba(0, 173, 181, 0.4);
         }
 
-        /* תוכן העמודים - מרווח ונוח על כל המסך */
+        /* אזור התוכן - נפתח לרוחב מלא עם מרווחים יפים מהקצוות */
         .content-section {
             display: none;
             padding: 40px;
-            animation: fadeIn 0.5s ease;
         }
 
         .content-section.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* כרטיסיות התוכן בתוך העמוד */
+        /* כרטיסיות גדולות שתופסות את רוב המסך */
         .card {
             background: #1e1e1e;
             border-radius: 15px;
-            padding: 25px;
+            padding: 30px;
             margin-bottom: 25px;
             border: 1px solid #333;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -155,18 +150,15 @@
         h3 {
             color: #eee;
             margin-top: 0;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 1.6rem;
         }
 
-        /* משימות ולו"ז ויזואלי */
+        /* מד התקדמות משימות */
         .progress-container {
             background-color: #333;
             border-radius: 10px;
             overflow: hidden;
-            margin: 15px 0;
+            margin: 20px 0;
         }
 
         .progress-bar {
@@ -177,13 +169,14 @@
             box-shadow: 0 0 10px #00adb5;
         }
 
+        /* פריטי הלו"ז והמשימות */
         .timeline-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 15px 0;
             border-bottom: 1px solid #252525;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
         .timeline-main {
@@ -206,22 +199,22 @@
             background: #252525;
             border-radius: 8px;
             margin-bottom: 12px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
         .task-item input[type="checkbox"] {
-            transform: scale(1.3);
-            margin-left: 10px;
+            transform: scale(1.4);
+            margin-left: 15px;
             cursor: pointer;
         }
 
-        /* כפתורי ניהול קטנים */
+        /* כפתורי הניהול והמחיקה */
         .delete-btn {
             background: none;
             border: none;
             color: #ff4a4a;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             display: none;
         }
 
@@ -244,7 +237,7 @@
             font-size: 1rem;
         }
 
-        /* אזור משחקים - מתפרס יפה על מסך רחב */
+        /* רשת המשחקים במסך רחב */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -275,11 +268,7 @@
             color: transparent;
             cursor: pointer;
             user-select: none;
-            transition: background-color 0.3s, transform 0.1s;
-        }
-
-        .memory-card:active {
-            transform: scale(0.95);
+            transition: background-color 0.3s;
         }
 
         .memory-card.flipped {
@@ -300,220 +289,4 @@
         }
 
         .game-input {
-            width: 120px;
-            font-size: 1.8rem;
-            padding: 8px;
-            text-align: center;
-            border-radius: 8px;
-            border: 2px solid #444;
-            background: #121212;
-            color: #fff;
-            margin-left: 15px;
-        }
-
-        /* הגדרות קלילות */
-        .settings-btn {
-            background: #252525;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 8px 15px;
-            font-size: 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .settings-btn:hover {
-            background-color: #00adb5;
-            box-shadow: 0 0 10px #00adb5;
-        }
-
-        .error-msg {
-            color: #ff4a4a;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-
-    <div id="lock-screen">
-        <h1>🔒 מערכת הפעלה סודית</h1>
-        <p>הקש קוד גישה כדי להיכנס למערכת המשחקים:</p>
-        <input type="password" id="pin-code" class="pin-input" maxlength="4" placeholder="••••">
-        <br>
-        <button class="pin-btn" onclick="checkPin()">כניסה למערכת</button>
-        <div id="lock-error" class="error-msg"></div>
-    </div>
-
-    <div id="main-os">
-        <div class="top-bar">
-            <h2>⚡ SCHOOL OS v3.5</h2>
-            <button class="settings-btn" onclick="toggleAdminMode()" title="מצב עריכת לוז ומשימות">⚙️ מרכז שליטה סודי</button>
-        </div>
-
-        <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('my-day')">📅 היום שלי</button>
-            <button class="tab-btn" onclick="switchTab('my-tasks')">🚀 משימות</button>
-            <button class="tab-btn" onclick="switchTab('my-games')">🎮 משחקי חשיבה</button>
-        </div>
-
-        <div id="admin-panel" style="padding: 20px 40px 0 40px; display: none;">
-            <div class="admin-controls" id="day-controls">
-                <h4>➕ הוספת אירוע ללו"ז:</h4>
-                שעה: <input type="text" id="new-time" class="admin-input" placeholder="08:00" style="width: 80px;">
-                פעילות: <input type="text" id="new-activity" class="admin-input" placeholder="שיעור חשבון" style="width: 250px;">
-                <button class="pin-btn" style="padding: 8px 20px; font-size: 1rem;" onclick="addTimelineItem()">הוסף ללו"ז</button>
-            </div>
-            <div class="admin-controls" id="task-controls">
-                <h4>➕ הוספת משימה חדשה:</h4>
-                תיאור המשימה: <input type="text" id="new-task-text" class="admin-input" placeholder="לסיים שיעורי בית..." style="width: 300px;">
-                <button class="pin-btn" style="padding: 8px 20px; font-size: 1rem;" onclick="addTaskItem()">הוסף משימה</button>
-            </div>
-        </div>
-
-        <div id="my-day" class="content-section active">
-            <div class="card">
-                <h3>⏰ לו"ז ימי ויזואלי</h3>
-                <div id="timeline-list">
-                    <div class="timeline-item">
-                        <div class="timeline-main"><div class="timeline-time">08:00</div> <span>🎒 הגעה וארגון כיתה</span></div>
-                        <button class="delete-btn" onclick="this.parentElement.remove()">🗑️</button>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-main"><div class="timeline-time">08:15</div> <span>🧠 שיעור חשבון (להוציא מחשבונים!)</span></div>
-                        <button class="delete-btn" onclick="this.parentElement.remove()">🗑️</button>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-main"><div class="timeline-time">09:45</div> <span>🍎 הפסקת אוכל ומשחקים</span></div>
-                        <button class="delete-btn" onclick="this.parentElement.remove()">🗑️</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="my-tasks" class="content-section">
-            <div class="card">
-                <h3>⭐ מד התקדמות המשימות שלי</h3>
-                <p>סמן משימות שסיימת כדי למלא את מד כוכבי הזהב!</p>
-                <div class="progress-container">
-                    <div id="p-bar" class="progress-bar"></div>
-                </div>
-                
-                <div id="tasks-list" style="margin-top: 20px;">
-                    <div class="task-item">
-                        <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📝 לסיים עמוד 12 בחוברת חשבון</label>
-                        <button class="delete-btn" onclick="this.parentElement.remove(); updateProgress();">🗑️</button>
-                    </div>
-                    <div class="task-item">
-                        <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📖 לקרוא פרק 3 בספר הקריאה</label>
-                        <button class="delete-btn" onclick="this.parentElement.remove(); updateProgress();">🗑️</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="my-games" class="content-section">
-            <div class="games-grid">
-                <div class="card">
-                    <h3>🧩 משחק הזיכרון המהיר</h3>
-                    <p>מצא את כל הזוגות התואמים בהכי מעט לחיצות!</p>
-                    <div class="memory-board" id="mem-board"></div>
-                    <button class="pin-btn" style="font-size:1rem; padding:8px 20px;" onclick="resetMemoryGame()">התחל מחדש</button>
-                </div>
-
-                <div class="card">
-                    <h3>🔢 ניחוש המספר הסודי</h3>
-                    <p>אני חושב על מספר בין 1 ל-100. מצליח לנחש?</p>
-                    <div class="guess-box">
-                        <input type="number" id="guess-input" class="game-input" min="1" max="100">
-                        <button class="pin-btn" style="padding: 8px 20px; font-size: 1rem;" onclick="playGuessGame()">ניחוש!</button>
-                        <p id="guess-hint" style="margin-top: 15px; font-weight: bold; color: #00adb5;">הקש מספר ולחץ ניחוש</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let secretPin = '1234';
-        let isAdmin = false;
-
-        function checkPin() {
-            const enteredPin = document.getElementById('pin-code').value;
-            if (enteredPin === secretPin) {
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('main-os').style.display = 'block';
-                resetMemoryGame();
-                updateProgress();
-            } else {
-                document.getElementById('lock-error').innerText = '❌ קוד שגוי! נסה שוב סוכן סודי.';
-            }
-        }
-
-        function toggleAdminMode() {
-            if (!isAdmin) {
-                const pass = prompt("🔐 הקש את סיסמת המערכת (1234) כדי להיכנס למצב עריכת לו\"ז ומשימות:");
-                if (pass === secretPin) {
-                    isAdmin = true;
-                    document.getElementById('admin-panel').style.display = 'block';
-                    document.querySelectorAll('.admin-controls').forEach(el => el.style.display = 'block');
-                    document.querySelectorAll('.delete-btn').forEach(el => el.style.display = 'inline-block');
-                } else {
-                    alert("❌ סיסמה שגויה!");
-                }
-            } else {
-                isAdmin = false;
-                document.getElementById('admin-panel').style.display = 'none';
-                document.querySelectorAll('.admin-controls').forEach(el => el.style.display = 'none');
-                document.querySelectorAll('.delete-btn').forEach(el => el.style.display = 'none');
-            }
-        }
-
-        function addTimelineItem() {
-            const time = document.getElementById('new-time').value;
-            const activity = document.getElementById('new-activity').value;
-            if(!time || !activity) return;
-            const list = document.getElementById('timeline-list');
-            const newItem = document.createElement('div');
-            newItem.classList.add('timeline-item');
-            newItem.innerHTML = `
-                <div class="timeline-main"><div class="timeline-time">${time}</div> <span>${activity}</span></div>
-                <button class="delete-btn" style="display: inline-block;" onclick="this.parentElement.remove()">🗑️</button>
-            `;
-            list.appendChild(newItem);
-            document.getElementById('new-time').value = '';
-            document.getElementById('new-activity').value = '';
-        }
-
-        function addTaskItem() {
-            const taskText = document.getElementById('new-task-text').value;
-            if(!taskText) return;
-            const list = document.getElementById('tasks-list');
-            const newItem = document.createElement('div');
-            newItem.classList.add('task-item');
-            newItem.innerHTML = `
-                <label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📝 ${taskText}</label>
-                <button class="delete-btn" style="display: inline-block;" onclick="this.parentElement.remove(); updateProgress();">🗑️</button>
-            `;
-            list.appendChild(newItem);
-            document.getElementById('new-task-text').value = '';
-            updateProgress();
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
-        function updateProgress() {
-            const checkboxes = document.querySelectorAll('.task-check');
-            const checked = document.querySelectorAll('.task-check:checked');
-            if(checkboxes.length === 0) {
-                document.getElementById('p-bar').style.width = '0%';
-                return;
-            }
-            const percentage = (checked.length / checkboxes.length) * 100;
-            document.getElementById('p-bar').style.width = percentage
+            width: 120
