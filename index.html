@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מערכת הפעלה - חיי בית הספר</title>
     <style>
-        /* עיצוב בסיסי ומסך שחור */
         html, body {
             margin: 0;
             padding: 0;
@@ -16,7 +15,6 @@
             font-family: Arial, sans-serif;
         }
 
-        /* מסך נעילה במרכז בדיוק */
         #lock-screen {
             position: fixed;
             top: 50%;
@@ -53,11 +51,8 @@
             font-size: 1.1rem;
             border-radius: 8px;
             cursor: pointer;
-            transition: 0.2s;
         }
-        .pin-btn:hover { background-color: #00f5ff; }
 
-        /* מערכת הפעלה ראשית - מוסתרת בהתחלה */
         #main-os {
             display: none;
             width: 100%;
@@ -114,7 +109,6 @@
             margin-bottom: 20px;
         }
 
-        /* מד התקדמות משימות */
         .progress-container {
             background-color: #333;
             border-radius: 5px;
@@ -164,7 +158,6 @@
             margin-left: 10px;
         }
 
-        /* גריד משחקים */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -175,7 +168,6 @@
             .games-grid { grid-template-columns: 1fr; }
         }
 
-        /* משחק הזיכרון */
         .memory-board {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -219,7 +211,6 @@
             border-radius: 5px;
         }
 
-        /* עיצוב משחק סנייק החדש */
         #snake-canvas {
             background-color: #000000;
             display: block;
@@ -263,26 +254,26 @@
 
     <div id="main-os">
         <div class="top-bar">
-            <h2>⚡ SCHOOL OS v7.0</h2>
+            <h2>⚡ SCHOOL OS v8.0</h2>
             <button class="pin-btn" onclick="toggleAdminMode()" style="background:#252525; border:1px solid #333; font-size: 0.9rem; padding: 8px 15px;">⚙️ מרכז שליטה סודי</button>
         </div>
 
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('my-day')">📅 היום שלי</button>
-            <button class="tab-btn" onclick="switchTab('my-tasks')">🚀 משימות</button>
-            <button class="tab-btn" onclick="switchTab('my-games')">🎮 משחקים וסנייק</button>
+            <button id="btn-day" class="tab-btn active" onclick="switchTab('my-day', 'btn-day')">📅 היום שלי</button>
+            <button id="btn-tasks" class="tab-btn" onclick="switchTab('my-tasks', 'btn-tasks')">🚀 mשונות</button>
+            <button id="btn-games" class="tab-btn" onclick="switchTab('my-games', 'btn-games')">🎮 משחקים וסנייק</button>
         </div>
 
         <div id="admin-panel" style="padding: 10px 25px 0 25px; display: none;">
             <div class="admin-controls" id="day-controls">
                 <h5>➕ הוספת אירוע ללו"ז:</h5>
                 שעה: <input type="text" id="new-time" class="admin-input" placeholder="08:00" style="width: 60px;">
-                פעילות: <input type="text" id="new-activity" class="admin-input" placeholder="שיעור חשבון">
+                פעילות: <input type="text" id="new-activity" class="admin-input" placeholder="שיעור">
                 <button class="pin-btn" style="padding: 5px 15px; font-size: 0.9rem;" onclick="addTimelineItem()">הוסף</button>
             </div>
             <div class="admin-controls" id="task-controls">
                 <h5>➕ הוספת משימה:</h5>
-                תיאור: <input type="text" id="new-task-text" class="admin-input" placeholder="לסיים שיעורי בית...">
+                תיאור: <input type="text" id="new-task-text" class="admin-input" placeholder="משימה...">
                 <button class="pin-btn" style="padding: 5px 15px; font-size: 0.9rem;" onclick="addTaskItem()">הוסף</button>
             </div>
         </div>
@@ -322,18 +313,17 @@
                 
                 <div class="card">
                     <h3>🔢 ניחוש מספר (1-100)</h3>
-                    <p>נחש מספר קסם:</p>
                     <input type="number" id="guess-input" class="game-input">
                     <button class="pin-btn" style="padding: 5px 15px; font-size: 0.9rem;" onclick="playGuessGame()">ניחוש</button>
-                    <p id="guess-hint" style="margin-top: 15px; color: #00adb5; font-weight: bold;">בחר מספר ולחץ על הכפתור</p>
+                    <p id="guess-hint" style="margin-top: 15px; color: #00adb5; font-weight: bold;">בחר מספר</p>
                 </div>
 
-                <div class="card" style="grid-column: span 1;">
+                <div class="card">
                     <h3>🐍 משחק הנחש (Snake)</h3>
                     <p>ניקוד: <span id="snake-score" style="color:#00adb5; font-weight:bold; font-size: 1.2rem;">0</span></p>
                     <canvas id="snake-canvas" width="240" height="240"></canvas>
                     <div style="text-align: center; margin-bottom: 10px;">
-                        <button class="pin-btn" onclick="startSnakeGame()" style="padding: 6px 15px; font-size: 0.9rem; background-color: #28a745;">התחל / אפס משחק</button>
+                        <button class="pin-btn" onclick="startSnakeGame()" style="padding: 6px 15px; font-size: 0.9rem; background-color: #28a745;">התחל / אפס</button>
                     </div>
                     <div class="snake-controls">
                         <div></div><div class="snake-btn" onclick="changeSnakeDir('UP')">▲</div><div></div>
@@ -349,32 +339,28 @@
         const secretPin = '1234';
         let isAdmin = false;
 
-        // פונקציית כניסה מתוקנת ובטוחה ב-100%
         function checkPin() {
             const enteredPin = document.getElementById('pin-code').value;
             if (enteredPin === secretPin) {
                 document.getElementById('lock-screen').style.display = 'none';
                 document.getElementById('main-os').style.display = 'block';
                 
-                // טעינת המשחקים בצורה בטוחה מיד לאחר הכניסה
                 resetMemoryGame();
                 updateProgress();
                 startSnakeGame();
             } else {
-                document.getElementById('lock-error').innerText = '❌ קוד שגוי! נסה שוב.';
+                document.getElementById('lock-error').innerText = '❌ קוד שגוי!';
             }
         }
 
         function toggleAdminMode() {
             if (!isAdmin) {
-                const pass = prompt("🔐 הקש סיסמה (1234) לפתיחת אפשרויות עריכה:");
+                const pass = prompt("🔐 הקש סיסמה (1234):");
                 if (pass === secretPin) {
                     isAdmin = true;
                     document.getElementById('admin-panel').style.display = 'block';
                     document.querySelectorAll('.admin-controls').forEach(el => el.style.display = 'block');
                     document.querySelectorAll('.delete-btn').forEach(el => el.style.display = 'inline-block');
-                } else {
-                    alert("❌ סיסמה שגויה!");
                 }
             } else {
                 isAdmin = false;
@@ -404,3 +390,128 @@
             const newItem = document.createElement('div');
             newItem.classList.add('task-item');
             newItem.innerHTML = `<label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📝 ${taskText}</label><button class="delete-btn" style="display:inline-block;" onclick="this.parentElement.remove(); updateProgress();">🗑️</button>`;
+            list.appendChild(newItem);
+            document.getElementById('new-task-text').value = '';
+            updateProgress();
+        }
+
+        // פונקציית מעבר לשוניות מתוקנת לחלוטין בלי שגיאות אדומות!
+        function switchTab(tabId, btnId) {
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById(btnId).classList.add('active');
+        }
+
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.task-check');
+            const checked = document.querySelectorAll('.task-check:checked');
+            if(checkboxes.length === 0) { document.getElementById('p-bar').style.width = '0%'; return; }
+            document.getElementById('p-bar').style.width = ((checked.length / checkboxes.length) * 100) + '%';
+        }
+
+        let secretNumber = Math.floor(Math.random() * 100) + 1;
+        function playGuessGame() {
+            const userGuess = parseInt(document.getElementById('guess-input').value);
+            const hint = document.getElementById('guess-hint');
+            if (isNaN(userGuess)) return;
+            if (userGuess === secretNumber) { 
+                hint.innerHTML = '🎉 בול!'; 
+                secretNumber = Math.floor(Math.random() * 100) + 1; 
+            } else if (userGuess > secretNumber) { 
+                hint.innerHTML = '📉 גבוה מדי!'; 
+            } else { 
+                hint.innerHTML = '📈 נמוך מדי!'; 
+            }
+        }
+
+        const icons = ['🍎', '🍎', '⚽', '⚽', '🧠', '🧠', '🎒', '🎒', '🎨', '🎨', '📚', '📚', '📝', '📝', '⭐', '⭐'];
+        let flippedCards = [];
+        let matchedCount = 0;
+
+        function resetMemoryGame() {
+            const board = document.getElementById('mem-board');
+            if(!board) return;
+            board.innerHTML = ''; flippedCards = []; matchedCount = 0;
+            const shuffled = icons.sort(() => 0.5 - Math.random());
+            shuffled.forEach(icon => {
+                const card = document.createElement('div');
+                card.classList.add('memory-card');
+                card.dataset.icon = icon;
+                card.innerText = icon;
+                card.addEventListener('click', flipCard);
+                board.appendChild(card);
+            });
+        }
+
+        function flipCard() {
+            if (flippedCards.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) return;
+            this.classList.add('flipped');
+            flippedCards.push(this);
+            if (flippedCards.length === 2) {
+                if (flippedCards[0].dataset.icon === flippedCards[1].dataset.icon) {
+                    flippedCards[0].classList.add('matched'); flippedCards[1].classList.add('matched');
+                    matchedCount += 2; flippedCards = [];
+                    if (matchedCount === icons.length) { alert('🏆 ניצחת!'); }
+                } else {
+                    setTimeout(() => { flippedCards[0].classList.remove('flipped'); flippedCards[1].classList.remove('flipped'); flippedCards = []; }, 1000);
+                }
+            }
+        }
+
+        /* סנייק */
+        const canvas = document.getElementById("snake-canvas");
+        let ctx, box = 12, snake, food, d, score, snakeGameInterval;
+        if(canvas) ctx = canvas.getContext("2d");
+
+        function startSnakeGame() {
+            if(!canvas || !ctx) return;
+            clearInterval(snakeGameInterval);
+            snake = [{ x: 9 * box, y: 10 * box }];
+            food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 20) * box };
+            score = 0;
+            document.getElementById("snake-score").innerText = score;
+            d = "RIGHT"; 
+            snakeGameInterval = setInterval(drawSnake, 130);
+        }
+
+        function changeSnakeDir(dir) {
+            if (dir === "LEFT" && d !== "RIGHT") d = "LEFT";
+            else if (dir === "UP" && d !== "DOWN") d = "UP";
+            else if (dir === "RIGHT" && d !== "LEFT") d = "RIGHT";
+            else if (dir === "DOWN" && d !== "UP") d = "DOWN";
+        }
+
+        document.addEventListener("keydown", function(e) {
+            if (e.keyCode == 37 && d != "RIGHT") d = "LEFT";
+            else if (e.keyCode == 38 && d != "DOWN") d = "UP";
+            else if (e.keyCode == 39 && d != "LEFT") d = "RIGHT";
+            else if (e.keyCode == 40 && d != "UP") d = "DOWN";
+        });
+
+        function drawSnake() {
+            if(!ctx) return;
+            ctx.fillStyle = "#000000";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < snake.length; i++) {
+                ctx.fillStyle = (i == 0) ? "#00adb5" : "#00f5ff";
+                ctx.fillRect(snake[i].x, snake[i].y, box, box);
+            }
+
+            ctx.fillStyle = "red";
+            ctx.fillRect(food.x, food.y, box, box);
+
+            let snakeX = snake[0].x;
+            let snakeY = snake[0].y;
+
+            if (d == "LEFT") snakeX -= box;
+            if (d == "UP") snakeY -= box;
+            if (d == "RIGHT") snakeX += box;
+            if (d == "DOWN") snakeY += box;
+
+            if (snakeX == food.x && snakeY == food.y) {
+                score++;
+                document.getElementById("snake-score").innerText = score;
+                food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 20) * box
