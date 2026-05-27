@@ -3,77 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מערכת הפעלה - בית ספר</title>
+    <title>האתר החדש של הלל</title>
     <style>
-        body { margin: 0; padding: 0; background-color: #121212; color: #fff; font-family: Arial; text-align: center; }
-        #lock-screen { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1e1e1e; padding: 30px; border-radius: 10px; border: 2px solid #333; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
-        .pin-input { font-size: 2rem; width: 120px; text-align: center; background: #2d2d2d; color: #fff; border: 1px solid #444; padding: 5px; margin-bottom: 10px; border-radius: 5px; }
-        .btn { background-color: #00adb5; color: white; border: none; padding: 10px 20px; font-size: 1.1rem; border-radius: 5px; cursor: pointer; }
-        #main-os { display: none; padding: 20px; }
-        .nav-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { background: #252525; border: 1px solid #444; color: #aaa; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
-        .tab-btn.active { background-color: #00adb5; color: white; }
-        .content { display: none; background: #1e1e1e; padding: 20px; border-radius: 10px; max-width: 500px; margin: 0 auto; border: 1px solid #333; }
-        .content.active { display: block; }
-        #canvas { background: #000; display: block; margin: 10px auto; border: 2px solid #333; }
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #00adb5;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        h1 { color: #00adb5; }
+        #canvas {
+            background: #000;
+            display: block;
+            margin: 20px auto;
+            border: 2px solid #333;
+        }
+        .btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <div id="lock-screen">
-        <h2>🔒 קוד גישה</h2>
-        <input type="password" id="pin" class="pin-input" maxlength="4" placeholder="••••">
-        <br>
-        <button class="btn" onclick="checkPin()">כניסה</button>
-        <p id="err" style="color: red; font-weight: bold;"></p>
-    </div>
-
-    <div id="main-os">
-        <h2>⚡ SCHOOL OS v10.0</h2>
+    <div class="container">
+        <h1>🎉 האתר החדש של הלל מתחיל מפה! 🎉</h1>
+        <p>אם אתה רואה את הדף הזה, הצלחנו לאפס את האתר מהתחלה.</p>
         
-        <div class="nav-tabs">
-            <button id="b1" class="tab-btn active" onclick="tab('day', 'b1')">📅 לו"ז</button>
-            <button id="b2" class="tab-btn" onclick="tab('tasks', 'b2')">🚀 משימות</button>
-            <button id="b3" class="tab-btn" onclick="tab('game', 'b3')">🎮 סנייק</button>
-        </div>
-
-        <div id="day" class="content active">
-            <h3>⏰ הלו"ז היומי</h3>
-            <p>🎒 08:00 - הגעה וארגון כיתה</p>
-        </div>
-
-        <div id="tasks" class="content">
-            <h3>📝 משימות לבצע</h3>
-            <p><input type="checkbox"> להכין מערכת למחר</p>
-        </div>
-
-        <div id="game" class="content">
-            <h3>🐍 משחק הנחש</h3>
-            <p>ניקוד: <span id="score" style="color:#00adb5; font-weight:bold;">0</span></p>
-            <canvas id="canvas" width="240" height="240"></canvas>
-            <button class="btn" onclick="startSnake()" style="background:#28a745;">התחל מחדש</button>
-        </div>
+        <hr style="border: 1px solid #333; margin: 20px 0;">
+        
+        <h3>🐍 משחק הנחש (Snake)</h3>
+        <p>ניקוד: <span id="score" style="color:#00adb5; font-weight:bold;">0</span></p>
+        <canvas id="canvas" width="240" height="240"></canvas>
+        <button class="btn" onclick="startSnake()">התחל משחק</button>
     </div>
 
     <script>
-        function checkPin() {
-            if (document.getElementById('pin').value === '1234') {
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('main-os').style.display = 'block';
-                startSnake();
-            } else {
-                document.getElementById('err').innerText = '❌ קוד שגוי!';
-            }
-        }
-
-        function tab(id, btnId) {
-            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.getElementById(btnId).classList.add('active');
-        }
-
-        /* קוד סנייק פשוט ב-100% */
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
         let box = 12, snake, food, d, score, interval;
