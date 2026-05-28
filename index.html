@@ -3,300 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מערכת הפעלה - חיי בית הספר</title>
+    <title>SCHOOL OS v25.0 - Ultimate Edition</title>
     <style>
+        :root {
+            --bg-main: #030305;
+            --bg-card: #09090d;
+            --bg-input: #010102;
+            --primary: #00adb5;
+            --primary-glow: rgba(0, 173, 181, 0.4);
+            --danger: #ff4a4a;
+            --success: #28a745;
+            --text-main: #e4e6eb;
+            --text-muted: #8f94a0;
+            --border: #161622;
+        }
+
         html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #050508;
-            color: #e4e6eb;
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: var(--bg-main); color: var(--text-main);
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             overflow-x: hidden;
         }
 
-        #main-os {
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+        #main-os { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* בר עליון סייברפאנק */
+        /* בר עליון */
         .top-bar {
-            background: linear-gradient(180deg, #101015 0%, #0a0a0d 100%);
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #00adb5;
-            box-shadow: 0 0 20px rgba(0, 173, 181, 0.2);
+            background-color: var(--bg-card); padding: 15px 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.8);
         }
+        .top-bar h2 { margin: 0; font-size: 1.3rem; color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
 
-        .top-bar h2 {
-            margin: 0;
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-            color: #00adb5;
-            text-shadow: 0 0 10px rgba(0, 173, 181, 0.6);
-        }
-
-        /* טאבים מוארים */
-        .nav-tabs {
-            display: flex;
-            background-color: #08080c;
-            padding: 12px;
-            gap: 12px;
-            border-bottom: 1px solid #161622;
-            justify-content: center;
-        }
-
+        /* ניווט טאבים */
+        .nav-tabs { display: flex; background-color: #060609; padding: 12px; gap: 12px; border-bottom: 1px solid #11111a; justify-content: center; }
         .tab-btn {
-            background: #101015;
-            border: 1px solid #20202e;
-            color: #8f94a0;
-            padding: 12px 26px;
-            font-size: 0.95rem;
-            cursor: pointer;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.25s ease;
+            background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);
+            padding: 12px 26px; font-size: 0.95rem; cursor: pointer; border-radius: 10px; font-weight: 600;
+            transition: all 0.2s ease;
         }
+        .tab-btn:hover { color: #fff; border-color: var(--primary); background-color: #11111a; }
+        .tab-btn.active { background-color: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
 
-        .tab-btn:hover {
-            color: #fff;
-            border-color: #00adb5;
-            box-shadow: 0 0 10px rgba(0, 173, 181, 0.2);
-        }
+        /* אזורי תוכן */
+        .content-section { display: none; padding: 30px 20px; max-width: 850px; width: 100%; box-sizing: border-box; margin: 0 auto; animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-        .tab-btn.active {
-            background-color: #00adb5;
-            color: #ffffff;
-            border-color: #00adb5;
-            box-shadow: 0 0 20px rgba(0, 173, 181, 0.5);
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-        }
+        /* כרטיסיות */
+        .card { background: var(--bg-card); padding: 25px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
+        .card h3 { margin-top: 0; margin-bottom: 20px; font-size: 1.2rem; border-right: 4px solid var(--primary); padding-right: 12px; color: #fff; }
 
-        /* אזורי תוכן באנימציה מהירה */
-        .content-section {
-            display: none;
-            padding: 30px 20px;
-            max-width: 850px;
-            width: 100%;
-            box-sizing: border-box;
-            margin: 0 auto;
-            animation: showUp 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-        }
+        /* מד התקדמות */
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .progress-container { background-color: #11111a; border-radius: 20px; overflow: hidden; margin: 15px 0 25px 0; height: 22px; border: 1px solid #1c1c2b; }
+        .progress-bar { background: linear-gradient(90deg, var(--primary), #00f5ff); height: 100%; width: 0%; transition: width 0.3s ease; box-shadow: 0 0 12px rgba(0, 245, 255, 0.5); }
 
-        @keyframes showUp {
-            from { opacity: 0; transform: scale(0.98) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
+        /* פריטי רשימה */
+        .timeline-item, .task-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 14px; border-bottom: 1px solid #11111a; border-radius: 8px; transition: background 0.15s; }
+        .timeline-item:hover, .task-item:hover { background: #11111a; }
+        .task-item label { cursor: pointer; display: flex; align-items: center; gap: 12px; user-select: none; }
+        .task-item input[type="checkbox"] { accent-color: var(--primary); width: 18px; height: 18px; cursor: pointer; }
 
-        /* כרטיסיות מודולריות */
-        .card {
-            background: #101015;
-            padding: 25px;
-            border-radius: 16px;
-            border: 1px solid #1c1c28;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card h3 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-            border-right: 4px solid #00adb5;
-            padding-right: 12px;
-            color: #fff;
-        }
-
-        /* מד התקדמות משודרג */
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .progress-container {
-            background-color: #161622;
-            border-radius: 20px;
-            overflow: hidden;
-            margin: 15px 0 25px 0;
-            height: 22px;
-            border: 1px solid #252538;
-        }
-
-        .progress-bar {
-            background: linear-gradient(90deg, #00adb5, #00f5ff, #00adb5);
-            background-size: 200% 100%;
-            animation: progressGlow 2s linear infinite;
-            height: 100%;
-            width: 0%;
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 15px rgba(0, 245, 255, 0.6);
-        }
-
-        @keyframes progressGlow {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
-        }
-
-        /* רשימות */
-        .timeline-item, .task-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 14px;
-            border-bottom: 1px solid #161622;
-            transition: all 0.2s;
-            border-radius: 8px;
-        }
-
-        .timeline-item:hover, .task-item:hover {
-            background: #14141f;
-            transform: translateX(-3px);
-        }
-
-        .task-item label {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            user-select: none;
-        }
-
-        .task-item input[type="checkbox"] {
-            accent-color: #00adb5;
-            width: 18px;
-            height: 18px;
-        }
-
-        .delete-btn {
-            background: none;
-            border: none;
-            color: #ff4a4a;
-            cursor: pointer;
-            font-size: 1.1rem;
-            display: none;
-            opacity: 0.6;
-            transition: all 0.2s;
-        }
-        .delete-btn:hover { opacity: 1; transform: scale(1.2) rotate(10deg); }
+        .delete-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.1rem; display: none; opacity: 0.6; transition: transform 0.15s, opacity 0.15s; }
+        .delete-btn:hover { opacity: 1; transform: scale(1.15); }
 
         /* פאנל ניהול */
-        #admin-panel {
-            background: #12121a;
-            padding: 25px;
-            border-radius: 16px;
-            margin: 25px auto;
-            max-width: 550px;
-            width: 90%;
-            border: 2px dashed #00adb5;
-            display: none;
-            box-shadow: 0 0 25px rgba(0, 173, 181, 0.15);
-        }
-
+        #admin-panel { background: #0d0d14; padding: 25px; border-radius: 16px; margin: 25px auto; max-width: 550px; width: 90%; border: 2px dashed var(--primary); display: none; box-shadow: 0 0 20px rgba(0, 173, 181, 0.15); }
         .admin-controls { margin-bottom: 20px; }
-        .admin-controls h5 { margin: 0 0 10px 0; color: #8f94a0; }
-
-        .admin-input {
-            background: #050508;
-            border: 1px solid #252538;
-            color: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 5px;
-        }
-        .admin-input:focus { outline: none; border-color: #00adb5; }
+        .admin-controls h5 { margin: 0 0 10px 0; color: var(--text-muted); font-size: 0.95rem; }
+        .admin-input { background: var(--bg-input); border: 1px solid #1c1c2b; color: #fff; padding: 10px 12px; border-radius: 8px; margin: 5px; font-size: 0.9rem; }
+        .admin-input:focus { outline: none; border-color: var(--primary); }
 
         /* גריד משחקים */
-        .games-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-        }
+        .games-grid { display: grid; grid-template-columns: 1fr; gap: 25px; }
         @media (min-width: 750px) { .games-grid { grid-template-columns: 1fr 1fr; } }
 
-        /* קנבס משחק חלליות מנוער */
-        #space-canvas {
-            background-color: #020204;
-            display: block;
-            margin: 20px auto;
-            border: 2px solid #1c1c28;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.8);
-            transition: transform 0.05s linear; /* לצורך הרעידה */
-        }
-
-        /* אפקט רעידת מסך */
-        .shake {
-            animation: shakeCanvas 0.4s linear;
-        }
-        @keyframes shakeCanvas {
-            0%, 100% { transform: translate(0, 0); }
-            10%, 90% { transform: translate(-3px, 2px); }
-            30%, 70% { transform: translate(3px, -2px); }
-            50% { transform: translate(-3px, -3px); }
-        }
+        /* קנבס משחק חלליות */
+        #space-canvas { background-color: var(--bg-input); display: block; margin: 20px auto; border: 2px solid var(--border); border-radius: 12px; box-shadow: 0 0 25px rgba(0,0,0,0.8); }
+        .shake { animation: shakeCanvas 0.35s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shakeCanvas { 10%, 90% { transform: translate3d(-2px, 0, 0); } 20%, 80% { transform: translate3d(3px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-3px, 0, 0); } 40%, 60% { transform: translate3d(3px, 0, 0); } }
 
         .space-controls { display: flex; justify-content: center; gap: 20px; margin-top: 15px; }
-        .space-btn {
-            background-color: #161622;
-            color: white;
-            border: 1px solid #252538;
-            padding: 14px 35px;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            user-select: none;
-            transition: all 0.1s;
-        }
-        .space-btn:active { background-color: #00adb5; transform: scale(0.95); }
+        .space-btn { background-color: #11111a; color: white; border: 1px solid #1c1c2b; padding: 14px 35px; font-size: 1.1rem; border-radius: 10px; cursor: pointer; font-weight: bold; user-select: none; transition: all 0.1s; }
+        .space-btn:active { background-color: var(--primary); transform: scale(0.96); }
 
-        /* משחק זיכרון ואיקס עיגול */
+        /* פריסת לוחות משחקים */
         .memory-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 260px; margin: 20px auto; }
-        .memory-card {
-            height: 60px; background-color: #00adb5; border-radius: 10px; display: flex; justify-content: center;
-            align-items: center; font-size: 1.6rem; color: transparent; cursor: pointer; user-select: none;
-            transition: transform 0.2s, background-color 0.2s;
-        }
-        .memory-card:hover { transform: scale(1.05); }
+        .memory-card { height: 60px; background-color: var(--primary); border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 1.6rem; color: transparent; cursor: pointer; user-select: none; transition: transform 0.2s, background-color 0.2s; }
+        .memory-card:hover { transform: scale(1.04); }
         .memory-card.flipped { background-color: #fff; color: #121212; transform: rotateY(180deg); }
-        .memory-card.matched { background-color: #28a745; color: white; cursor: default; }
+        .memory-card.matched { background-color: var(--success); color: white; cursor: default; }
 
         .tic-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 190px; margin: 20px auto; }
-        .tic-cell {
-            width: 58px; height: 58px; background-color: #161622; border: 1px solid #252538; border-radius: 10px;
-            font-size: 1.8rem; font-weight: bold; display: flex; justify-content: center; align-items: center;
-            cursor: pointer; user-select: none; transition: background 0.1s;
-        }
-        .tic-cell:hover { background-color: #202030; }
+        .tic-cell { width: 58px; height: 58px; background-color: #11111a; border: 1px solid #1c1c2b; border-radius: 10px; font-size: 1.8rem; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; user-select: none; transition: background 0.1s; }
+        .tic-cell:hover { background-color: #1c1c2b; }
 
-        .game-input {
-            width: 90px; font-size: 1.3rem; text-align: center; background: #050508; color: #fff;
-            border: 1px solid #252538; padding: 8px; border-radius: 8px; margin-left: 10px;
-        }
-
-        .pin-btn {
-            background-color: #00adb5; color: white; border: none; padding: 10px 22px; font-size: 0.95rem;
-            border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s;
-        }
-        .pin-btn:hover { background-color: #008c94; transform: translateY(-1px); }
+        .game-input { width: 90px; font-size: 1.3rem; text-align: center; background: var(--bg-input); color: #fff; border: 1px solid #1c1c2b; padding: 8px; border-radius: 8px; margin-left: 10px; }
+        .pin-btn { background-color: var(--primary); color: white; border: none; padding: 10px 22px; font-size: 0.95rem; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.15s; }
+        .pin-btn:hover { background-color: #008c94; }
     </style>
 </head>
 <body>
 
     <div id="main-os">
         <div class="top-bar">
-            <h2>⚡ SCHOOL OS v23.0</h2>
-            <button class="pin-btn" onclick="toggleAdminMode()" style="background:#161622; border:1px solid #252538; font-size: 1rem; padding: 8px 16px;">⚙️ הגדרות לו"ז ומשימות</button>
+            <h2>⚡ SCHOOL OS v25.0 Ultimate</h2>
+            <button class="pin-btn" onclick="toggleAdminMode()" style="background:#11111a; border:1px solid #1c1c2b; font-size: 1rem; padding: 8px 16px;">⚙️ עריכת לו"ז ומשימות</button>
         </div>
 
         <div class="nav-tabs">
@@ -306,8 +118,8 @@
         </div>
 
         <div id="admin-panel">
-            <h3 style="color: #00adb5; margin-top: 0; border: none;">🛠️ עריכת תכנים באתר</h3>
-            <div class="admin-controls">
+            <h3 style="color: var(--primary); margin: 0; border: none; padding: 0;">🛠️ מערכת ניהול תוכן</h3>
+            <div class="admin-controls" style="margin-top:15px;">
                 <h5>➕ הוספת פעילות ללו"ז:</h5>
                 שעה: <input type="text" id="new-time" class="admin-input" placeholder="08:00" style="width: 65px;">
                 פעילות: <input type="text" id="new-activity" class="admin-input" placeholder="שיעור...">
@@ -331,7 +143,7 @@
             <div class="card">
                 <div class="progress-header">
                     <h3>⭐ מד התקדמות משימות</h3>
-                    <span id="star-count" style="font-size: 1.1rem; font-weight: bold; color: #00adb5;">✨ 0%</span>
+                    <span id="star-count" style="font-size: 1.1rem; font-weight: bold; color: var(--primary);">✨ 0%</span>
                 </div>
                 <div class="progress-container"><div id="p-bar" class="progress-bar"></div></div>
                 <div id="tasks-list"></div>
@@ -352,14 +164,14 @@
                         <input type="number" id="guess-input" class="game-input">
                         <button class="pin-btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="playGuessGame()">ניחוש</button>
                     </div>
-                    <p id="guess-hint" style="color: #00adb5; font-weight: bold; margin: 10px 0 0 0;">בחר מספר להתחלה</p>
+                    <p id="guess-hint" style="color: var(--primary); font-weight: bold; margin: 10px 0 0 0;">בחר מספר להתחלה</p>
                 </div>
 
                 <div class="card" style="text-align: center;">
                     <h3>🚀 קרב חלליות רטרו</h3>
-                    <p style="margin: 5px 0;">ניקוד: <span id="space-score" style="color:#00adb5; font-weight:bold;">0</span></p>
+                    <p style="margin: 5px 0;">ניקוד: <span id="space-score" style="color:var(--primary); font-weight:bold;">0</span></p>
                     <canvas id="space-canvas" width="240" height="180"></canvas>
-                    <button class="pin-btn" onclick="startSpaceGame()" style="background-color: #28a745; padding: 6px 14px; font-size: 0.85rem;">אפס חלליות</button>
+                    <button class="pin-btn" onclick="startSpaceGame()" style="background-color: var(--success); padding: 6px 14px; font-size: 0.85rem;">אפס חלליות</button>
                     <div class="space-controls">
                         <button class="space-btn" id="btn-left">◄ שמאל</button>
                         <button class="space-btn" id="btn-right">ימין ►</button>
@@ -368,7 +180,7 @@
 
                 <div class="card" style="text-align: center;">
                     <h3>❌ משחק איקס עיגול ⭕</h3>
-                    <p id="tic-status" style="color: #00adb5; font-weight: bold; margin-bottom: 15px;">תור השחקן: X</p>
+                    <p id="tic-status" style="color: var(--primary); font-weight: bold; margin-bottom: 15px;">תור השחקן: X</p>
                     <div class="tic-board" id="tic-board"></div>
                     <button class="pin-btn" style="padding: 6px 14px; font-size: 0.85rem;" onclick="resetTicGame()">אפס משחק</button>
                 </div>
@@ -377,335 +189,193 @@
     </div>
 
     <script>
-        let isAdmin = false;
-        let currentTab = 'my-day';
+        // --- ניהול מצב (State Management) ---
+        let state = {
+            isAdmin: false,
+            currentTab: 'my-day',
+            timeline: JSON.parse(localStorage.getItem('schoolOS_timeline')) || [
+                { id: 1, time: "08:00", text: "🎒 הגעה וארגון כיתה" },
+                { id: 2, time: "08:15", text: "📚 שיעור ראשון" }
+            ],
+            tasks: JSON.parse(localStorage.getItem('schoolOS_tasks')) || [
+                { id: 1, text: "להכין מערכת למחר", checked: false }
+            ]
+        };
 
-        // מחולל צלילים דיגיטליים (Web Audio API)
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // --- מנוע קול דיגיטלי ---
+        let audioCtx = null;
         function playSound(type) {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
                 if (type === 'laser') {
-                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.15);
-                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(850, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.12);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.12);
                 } else if (type === 'explosion') {
-                    osc.type = 'triangle'; osc.frequency.setValueAtTime(160, audioCtx.currentTime);
-                    osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.2);
-                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+                    osc.type = 'triangle'; osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(30, audioCtx.currentTime + 0.25);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.25);
                 } else if (type === 'win') {
-                    osc.type = 'sine'; osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-                    osc.frequency.setValueAtTime(600, audioCtx.currentTime + 0.1);
-                    osc.frequency.setValueAtTime(900, audioCtx.currentTime + 0.2);
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(554, audioCtx.currentTime + 0.08);
+                    osc.frequency.setValueAtTime(659, audioCtx.currentTime + 0.16);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.35);
                 }
             } catch(e) {}
         }
 
-        const defaultTimeline = [
-            { time: "08:00", text: "🎒 הגעה וארגון כיתה" },
-            { time: "08:15", text: "📚 שיעור ראשון" }
-        ];
-        const defaultTasks = [
-            { text: "📝 להכין מערכת למחר", checked: false }
-        ];
-
-        document.addEventListener("DOMContentLoaded", function() {
-            loadSavedData();
-            switchTab('my-day', 'tab-day');
-            resetMemoryGame();
-            resetTicGame();
-            setupHoldButtons();
-        });
-
-        function saveToStorage() {
-            const timelineItems = [];
-            document.querySelectorAll('#timeline-list .timeline-item').forEach(item => {
-                const time = item.querySelector('b').innerText;
-                const text = item.querySelector('div').innerText.split(' - ')[1];
-                timelineItems.push({ time, text });
-            });
-            localStorage.setItem('schoolOS_timeline', JSON.stringify(timelineItems));
-
-            const taskItems = [];
-            document.querySelectorAll('#tasks-list .task-item').forEach(item => {
-                const text = item.querySelector('label').innerText.replace('📝 ', '').trim();
-                const checked = item.querySelector('.task-check').checked;
-                taskItems.push({ text, checked });
-            });
-            localStorage.setItem('schoolOS_tasks', JSON.stringify(taskItems));
+        // --- רינדור ממשק (UI Rendering) ---
+        function renderTimeline() {
+            const container = document.getElementById('timeline-list');
+            container.innerHTML = state.timeline.map(item => `
+                <div class="timeline-item">
+                    <div><b>${item.time}</b> - ${item.text}</div>
+                    <button class="delete-btn" style="display: ${state.isAdmin ? 'inline-block' : 'none'}" onclick="deleteTimelineItem(${item.id})">🗑️</button>
+                </div>
+            `).join('');
         }
 
-        function loadSavedData() {
-            const savedTimeline = JSON.parse(localStorage.getItem('schoolOS_timeline')) || defaultTimeline;
-            const tList = document.getElementById('timeline-list'); tList.innerHTML = '';
-            savedTimeline.forEach(item => {
-                const newItem = document.createElement('div'); newItem.classList.add('timeline-item');
-                newItem.innerHTML = `<div><b>${item.time}</b> - ${item.text}</div><button class="delete-btn" onclick="this.parentElement.remove(); saveToStorage();">🗑️</button>`;
-                tList.appendChild(newItem);
-            });
-
-            const savedTasks = JSON.parse(localStorage.getItem('schoolOS_tasks')) || defaultTasks;
-            const tasksList = document.getElementById('tasks-list'); tasksList.innerHTML = '';
-            savedTasks.forEach(item => {
-                const newItem = document.createElement('div'); newItem.classList.add('task-item');
-                newItem.innerHTML = `<label><input type="checkbox" class="task-check" ${item.checked ? 'checked' : ''} onclick="updateProgress(); saveToStorage();"> 📝 ${item.text}</label><button class="delete-btn" onclick="this.parentElement.remove(); updateProgress(); saveToStorage();">🗑️</button>`;
-                tasksList.appendChild(newItem);
-            });
-            updateProgress();
+        function renderTasks() {
+            const container = document.getElementById('tasks-list');
+            container.innerHTML = state.tasks.map(item => `
+                <div class="task-item">
+                    <label>
+                        <input type="checkbox" class="task-check" ${item.checked ? 'checked' : ''} onclick="toggleTask(${item.id})">
+                        <span>📝 ${item.text}</span>
+                    </label>
+                    <button class="delete-btn" style="display: ${state.isAdmin ? 'inline-block' : 'none'}" onclick="deleteTaskItem(${item.id})">🗑️</button>
+                </div>
+            `).join('');
+            updateProgressBar();
         }
 
-        function toggleAdminMode() {
-            isAdmin = !isAdmin;
-            document.getElementById('admin-panel').style.display = isAdmin ? 'block' : 'none';
-            document.querySelectorAll('.delete-btn').forEach(el => el.style.display = isAdmin ? 'inline-block' : 'none');
-        }
-
-        function addTimelineItem() {
-            const time = document.getElementById('new-time').value;
-            const activity = document.getElementById('new-activity').value;
-            if(!time || !activity) return;
-            const newItem = document.createElement('div'); newItem.classList.add('timeline-item');
-            newItem.innerHTML = `<div><b>${time}</b> - ${activity}</div><button class="delete-btn" style="display:${isAdmin?'inline-block':'none'};" onclick="this.parentElement.remove(); saveToStorage();">🗑️</button>`;
-            document.getElementById('timeline-list').appendChild(newItem);
-            document.getElementById('new-time').value = ''; document.getElementById('new-activity').value = '';
-            saveToStorage();
-        }
-
-        function addTaskItem() {
-            const taskText = document.getElementById('new-task-text').value;
-            if(!taskText) return;
-            const newItem = document.createElement('div'); newItem.classList.add('task-item');
-            newItem.innerHTML = `<label><input type="checkbox" class="task-check" onclick="updateProgress(); saveToStorage();"> 📝 ${taskText}</label><button class="delete-btn" style="display:${isAdmin?'inline-block':'none'};" onclick="this.parentElement.remove(); updateProgress(); saveToStorage();">🗑️</button>`;
-            document.getElementById('tasks-list').appendChild(newItem);
-            document.getElementById('new-task-text').value = '';
-            updateProgress(); saveToStorage();
-        }
-
-        function switchTab(tabId, btnId) {
-            currentTab = tabId;
-            if(tabId !== 'my-games') stopSpaceEngine();
-
-            document.querySelectorAll('.content-section').forEach(section => { section.classList.remove('active'); section.style.display = 'none'; });
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            
-            const activeSection = document.getElementById(tabId);
-            if(activeSection) { activeSection.classList.add('active'); activeSection.style.display = 'block'; }
-            const activeBtn = document.getElementById(btnId);
-            if(activeBtn) activeBtn.classList.add('active');
-            
-            if(tabId === 'my-games') startSpaceGame();
-        }
-
-        function updateProgress() {
-            const checkboxes = document.querySelectorAll('.task-check');
-            const checked = document.querySelectorAll('.task-check:checked');
-            if(checkboxes.length === 0) { document.getElementById('p-bar').style.width = '0%'; document.getElementById('star-count').innerText = '✨ 0%'; return; }
-            const percentage = Math.round((checked.length / checkboxes.length) * 100);
+        function updateProgressBar() {
+            const total = state.tasks.length;
+            const checked = state.tasks.filter(t => t.checked).length;
+            const percentage = total === 0 ? 0 : Math.round((checked / total) * 100);
             document.getElementById('p-bar').style.width = percentage + '%';
             
-            if(percentage === 100) {
-                document.getElementById('star-count').innerText = '🌟 100% מושלם!';
-                playSound('win');
+            const starCountEl = document.getElementById('star-count');
+            if(percentage === 100 && total > 0) {
+                if(starCountEl.innerText !== '🌟 100% מושלם!') { starCountEl.innerText = '🌟 100% מושלם!'; playSound('win'); }
             } else {
-                document.getElementById('star-count').innerText = `✨ ${percentage}%`;
+                starCountEl.innerText = `✨ ${percentage}%`;
             }
         }
+
+        // --- פעולות (Actions) ---
+        function toggleAdminMode() { state.isAdmin = !state.isAdmin; document.getElementById('admin-panel').style.display = state.isAdmin ? 'block' : 'none'; renderTimeline(); renderTasks(); }
+        function switchTab(tabId, btnId) { state.currentTab = tabId; if(tabId !== 'my-games') stopSpaceEngine(); document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none'); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(tabId).style.display = 'block'; document.getElementById(btnId).classList.add('active'); if(tabId === 'my-games') startSpaceGame(); }
+        
+        function addTimelineItem() { const time = document.getElementById('new-time').value; const text = document.getElementById('new-activity').value; if(!time || !text) return; state.timeline.push({ id: Date.now(), time, text }); document.getElementById('new-time').value = ''; document.getElementById('new-activity').value = ''; localStorage.setItem('schoolOS_timeline', JSON.stringify(state.timeline)); renderTimeline(); }
+        function deleteTimelineItem(id) { state.timeline = state.timeline.filter(item => item.id !== id); localStorage.setItem('schoolOS_timeline', JSON.stringify(state.timeline)); renderTimeline(); }
+        
+        function addTaskItem() { const text = document.getElementById('new-task-text').value; if(!text) return; state.tasks.push({ id: Date.now(), text, checked: false }); document.getElementById('new-task-text').value = ''; localStorage.setItem('schoolOS_tasks', JSON.stringify(state.tasks)); renderTasks(); }
+        function deleteTaskItem(id) { state.tasks = state.tasks.filter(item => item.id !== id); localStorage.setItem('schoolOS_tasks', JSON.stringify(state.tasks)); renderTasks(); }
+        function toggleTask(id) { const task = state.tasks.find(t => t.id === id); if(task) { task.checked = !task.checked; localStorage.setItem('schoolOS_tasks', JSON.stringify(state.tasks)); updateProgressBar(); } }
 
         /* משחק ניחושים */
         let secretNumber = Math.floor(Math.random() * 100) + 1;
-        function playGuessGame() {
-            const userGuess = parseInt(document.getElementById('guess-input').value);
-            const hint = document.getElementById('guess-hint');
-            if (isNaN(userGuess)) return;
-            if (userGuess === secretNumber) { 
-                hint.innerHTML = '🎉 בול כל הכבוד!'; playSound('win'); secretNumber = Math.floor(Math.random() * 100) + 1; 
-            } else { hint.innerHTML = userGuess > secretNumber ? '📉 גבוה מדי!' : '📈 נמוך מדי!'; }
-        }
+        function playGuessGame() { const val = parseInt(document.getElementById('guess-input').value); const hint = document.getElementById('guess-hint'); if (isNaN(val)) return; if (val === secretNumber) { hint.innerHTML = '🎉 בול כל הכבוד!'; playSound('win'); secretNumber = Math.floor(Math.random() * 100) + 1; } else { hint.innerHTML = val > secretNumber ? '📉 גבוה מדי!' : '📈 נמוך מדי!'; } }
 
         /* משחק זיכרון */
         const icons = ['🍎', '🍎', '⚽', '⚽', '🧠', '🧠', '🎒', '🎒', '🎨', '🎨', '📚', '📚', '📝', '📝', '⭐', '⭐'];
-        let flippedCards = []; let matchedCount = 0;
-        function resetMemoryGame() {
-            const board = document.getElementById('mem-board'); if(!board) return;
-            board.innerHTML = ''; flippedCards = []; matchedCount = 0;
-            const shuffled = icons.sort(() => 0.5 - Math.random());
-            shuffled.forEach(icon => {
-                const card = document.createElement('div'); card.classList.add('memory-card');
-                card.dataset.icon = icon; card.innerText = icon; card.addEventListener('click', flipCard);
-                board.appendChild(card);
-            });
-        }
-        function flipCard() {
-            if (flippedCards.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) return;
-            this.classList.add('flipped'); flippedCards.push(this);
-            if (flippedCards.length === 2) {
-                if (flippedCards[0].dataset.icon === flippedCards[1].dataset.icon) {
-                    flippedCards[0].classList.add('matched'); flippedCards[1].classList.add('matched');
-                    matchedCount += 2; flippedCards = []; if(matchedCount === 16) playSound('win');
-                } else { setTimeout(() => { flippedCards[0].classList.remove('flipped'); flippedCards[1].classList.remove('flipped'); flippedCards = []; }, 800); }
-            }
-        }
+        let flipped = []; let matchedCount = 0;
+        function resetMemoryGame() { const board = document.getElementById('mem-board'); if(!board) return; board.innerHTML = ''; flipped = []; matchedCount = 0; [...icons].sort(() => 0.5 - Math.random()).forEach(icon => { const card = document.createElement('div'); card.classList.add('memory-card'); card.dataset.icon = icon; card.innerText = icon; card.onclick = flipCard; board.appendChild(card); }); }
+        function flipCard() { if (flipped.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) return; this.classList.add('flipped'); flipped.push(this); if (flipped.length === 2) { if (flipped[0].dataset.icon === flipped[1].dataset.icon) { flipped[0].classList.add('matched'); flipped[1].classList.add('matched'); matchedCount += 2; flipped = []; if(matchedCount === 16) playSound('win'); } else { setTimeout(() => { flipped[0].classList.remove('flipped'); flipped[1].classList.remove('flipped'); flipped = []; }, 800); } } }
 
-        /* מנוע חלליות מקצועי עם אפקטים קוליים ורעידת מסך */
-        const sCanvas = document.getElementById("space-canvas");
-        let sCtx = sCanvas ? sCanvas.getContext("2d") : null;
-        let playerX, enemies, lasers, particles, spaceScore, spaceAnimationId = null;
-        let keysHold = { Left: false, Right: false };
+        /* 🚀 מנוע חלליות חצי-מקצועי עם Delta Time ושליטת מקלדת מלאה */
+        const canvas = document.getElementById("space-canvas");
+        const ctx = canvas ? canvas.getContext("2d") : null;
+        let playerX = 110, enemies = [], lasers = [], particles = [], spaceScore = 0, lastTime = 0, spaceAnimationId = null;
+        let keys = { Left: false, Right: false };
 
-        function startSpaceGame() {
-            if(!sCanvas || !sCtx) return;
-            stopSpaceEngine();
-            playerX = sCanvas.width / 2 - 10;
-            enemies = []; lasers = []; particles = []; spaceScore = 0;
-            document.getElementById("space-score").innerText = spaceScore;
-            spaceAnimationId = requestAnimationFrame(updateSpaceGame);
-        }
+        function startSpaceGame() { stopSpaceEngine(); playerX = canvas.width / 2 - 10; enemies = []; lasers = []; particles = []; spaceScore = 0; document.getElementById("space-score").innerText = spaceScore; lastTime = performance.now(); spaceAnimationId = requestAnimationFrame(updateSpaceGame); }
+        function stopSpaceEngine() { if(spaceAnimationId) cancelAnimationFrame(spaceAnimationId); spaceAnimationId = null; }
+        
+        function triggerScreenShake() { canvas.classList.add('shake'); playSound('explosion'); setTimeout(() => canvas.classList.remove('shake'), 350); }
+        function createExplosion(x, y) { playSound('laser'); for(let i=0; i<10; i++) { const angle = Math.random() * Math.PI * 2; const speed = Math.random() * 3 + 1; particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, alpha: 1 }); } }
 
-        function triggerScreenShake() {
-            if(!sCanvas) return;
-            sCanvas.classList.add('shake');
-            playSound('explosion');
-            setTimeout(() => sCanvas.classList.remove('shake'), 400);
-        }
-
-        function stopSpaceEngine() {
-            if(spaceAnimationId) { cancelAnimationFrame(spaceAnimationId); spaceAnimationId = null; }
-        }
-
-        document.addEventListener("keydown", function(e) {
-            if (currentTab === 'my-games') {
-                if(e.key === "ArrowLeft") { keysHold.Left = true; e.preventDefault(); }
-                if(e.key === "ArrowRight") { keysHold.Right = true; e.preventDefault(); }
-            }
-        });
-        document.addEventListener("keyup", function(e) {
-            if(e.key === "ArrowLeft") keysHold.Left = false;
-            if(e.key === "ArrowRight") keysHold.Right = false;
-        });
-
-        function setupHoldButtons() {
-            const btnL = document.getElementById('btn-left'); const btnR = document.getElementById('btn-right');
-            if(!btnL || !btnR) return;
-            const startLeft = (e) => { keysHold.Left = true; e.preventDefault(); };
-            const startRight = (e) => { keysHold.Right = true; e.preventDefault(); };
-            const stopAll = () => { keysHold.Left = false; keysHold.Right = false; };
-            btnL.addEventListener('mousedown', startLeft); btnL.addEventListener('touchstart', startLeft);
-            btnR.addEventListener('mousedown', startRight); btnR.addEventListener('touchstart', startRight);
-            window.addEventListener('mouseup', stopAll); window.addEventListener('touchend', stopAll);
-        }
-
-        function createExplosion(x, y) {
-            playSound('laser');
-            for(let i=0; i<10; i++) {
-                particles.push({
-                    x: x, y: y,
-                    vx: (Math.random() - 0.5) * 5,
-                    vy: (Math.random() - 0.5) * 5,
-                    alpha: 1,
-                    color: Math.random() > 0.5 ? '#00f5ff' : '#ffee55'
-                });
-            }
-        }
-
-        function updateSpaceGame() {
-            if (currentTab !== 'my-games' || !sCtx) { stopSpaceEngine(); return; }
+        function setupControls() {
+            window.addEventListener("keydown", e => { if (state.currentTab === 'my-games') { if(e.key === "ArrowLeft" || e.key === "a") keys.Left = true; if(e.key === "ArrowRight" || e.key === "d") keys.Right = true; if(e.key === " " || e.key === "ArrowUp") { lasers.push({x: playerX + 9, y: canvas.height - 20}); playSound('laser'); e.preventDefault(); } } });
+            window.addEventListener("keyup", e => { if(e.key === "ArrowLeft" || e.key === "a") keys.Left = false; if(e.key === "ArrowRight" || e.key === "d") keys.Right = false; });
             
-            sCtx.fillStyle = "#020204"; sCtx.fillRect(0, 0, sCanvas.width, sCanvas.height);
+            const btnL = document.getElementById('btn-left'), btnR = document.getElementById('btn-right');
+            if(!btnL) return;
+            btnL.addEventListener('mousedown', () => keys.Left = true); btnL.addEventListener('touchstart', () => keys.Left = true);
+            btnR.addEventListener('mousedown', () => keys.Right = true); btnR.addEventListener('touchstart', () => keys.Right = true);
+            const stop = () => { keys.Left = false; keys.Right = false; };
+            window.addEventListener('mouseup', stop); window.addEventListener('touchend', stop);
+        }
 
-            if(keysHold.Left && playerX > 0) playerX -= 4.5;
-            if(keysHold.Right && playerX < sCanvas.width - 20) playerX += 4.5;
+        function updateSpaceGame(timestamp) {
+            if (state.currentTab !== 'my-games' || !ctx) return;
+            let dt = (timestamp - lastTime) / 16.66; // נורמליזציה לפי 60fps
+            lastTime = timestamp;
 
-            // חללית שחקן
-            sCtx.fillStyle = "#00adb5"; sCtx.fillRect(playerX, sCanvas.height - 20, 20, 12);
+            ctx.fillStyle = "#010102"; ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // יצירת לייזרים אוטומטית
-            if(Math.random() < 0.055) { lasers.push({x: playerX + 9, y: sCanvas.height - 20}); }
+            if(keys.Left && playerX > 0) playerX -= 4 * dt;
+            if(keys.Right && playerX < canvas.width - 20) playerX += 4 * dt;
 
-            // ציור לייזרים
-            sCtx.fillStyle = "#00f5ff";
+            ctx.fillStyle = varColor('--primary'); ctx.fillRect(playerX, canvas.height - 20, 20, 12);
+
+            // ירי אוטומטי קל בנוסף לידני
+            if(Math.random() < 0.04) lasers.push({x: playerX + 9, y: canvas.height - 20});
+
+            ctx.fillStyle = "#00f5ff";
             for(let i = lasers.length - 1; i >= 0; i--) {
-                lasers[i].y -= 5; sCtx.fillRect(lasers[i].x, lasers[i].y, 3, 7);
+                lasers[i].y -= 5 * dt; ctx.fillRect(lasers[i].x, lasers[i].y, 3, 7);
                 if(lasers[i].y < 0) lasers.splice(i, 1);
             }
 
-            // יצירת אויבים
-            if(Math.random() < 0.025) { enemies.push({x: Math.random() * (sCanvas.width - 15), y: 0}); }
+            if(Math.random() < 0.02) enemies.push({x: Math.random() * (canvas.width - 15), y: 0});
 
-            // ציור אויבים
-            sCtx.fillStyle = "#ff4a4a";
+            ctx.fillStyle = varColor('--danger');
             for(let i = enemies.length - 1; i >= 0; i--) {
-                enemies[i].y += 1.35; sCtx.fillRect(enemies[i].x, enemies[i].y, 15, 11);
+                enemies[i].y += 1.3 * dt; ctx.fillRect(enemies[i].x, enemies[i].y, 15, 11);
 
-                // אם נפסלת
-                if(enemies[i].y > sCanvas.height) {
-                    triggerScreenShake();
-                    startSpaceGame(); return;
-                }
+                if(enemies[i].y > canvas.height) { triggerScreenShake(); startSpaceGame(); return; }
 
                 for(let j = lasers.length - 1; j >= 0; j--) {
                     if(lasers[j].x > enemies[i].x && lasers[j].x < enemies[i].x + 15 && lasers[j].y > enemies[i].y && lasers[j].y < enemies[i].y + 11) {
-                        createExplosion(enemies[i].x + 7, enemies[i].y + 5);
-                        enemies.splice(i, 1); lasers.splice(j, 1); spaceScore += 10;
-                        document.getElementById("space-score").innerText = spaceScore;
-                        break;
+                        createExplosion(enemies[i].x + 7, enemies[i].y + 5); enemies.splice(i, 1); lasers.splice(j, 1); spaceScore += 10;
+                        document.getElementById("space-score").innerText = spaceScore; break;
                     }
                 }
             }
 
-            // ציור חלקיקים
             for(let i = particles.length - 1; i >= 0; i--) {
-                let p = particles[i]; p.x += p.vx; p.y += p.vy; p.alpha -= 0.04;
+                let p = particles[i]; p.x += p.vx * dt; p.y += p.vy * dt; p.vx *= 0.95; p.vy *= 0.95; p.alpha -= 0.03 * dt;
                 if(p.alpha <= 0) { particles.splice(i, 1); continue; }
-                sCtx.fillStyle = p.color; sCtx.globalAlpha = p.alpha;
-                sCtx.fillRect(p.x, p.y, 2, 2);
+                ctx.fillStyle = `rgba(0, 245, 255, ${p.alpha})`; ctx.fillRect(p.x, p.y, 2, 2);
             }
-            sCtx.globalAlpha = 1.0;
 
             spaceAnimationId = requestAnimationFrame(updateSpaceGame);
         }
+        function varColor(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 
         /* איקס עיגול */
-        let ticBoard = ["", "", "", "", "", "", "", "", ""]; let ticCurrentPlayer = "X"; let ticActive = true;
+        let ticBoard = ["","","","","","","","",""], ticPlayer = "X", ticActive = true;
         function resetTicGame() {
-            ticBoard = ["", "", "", "", "", "", "", "", ""]; ticCurrentPlayer = "X"; ticActive = true;
+            ticBoard = ["","","","","","","","",""]; ticPlayer = "X"; ticActive = true;
             document.getElementById('tic-status').innerText = "תור השחקן: X";
-            const boardDiv = document.getElementById('tic-board'); if(!boardDiv) return;
-            boardDiv.innerHTML = '';
-            for(let i=0; i<9; i++) {
-                const cell = document.createElement('div'); cell.classList.add('tic-cell');
-                cell.dataset.index = i; cell.addEventListener('click', ticCellClick);
-                boardDiv.appendChild(cell);
-            }
+            const b = document.getElementById('tic-board'); if(!b) return; b.innerHTML = '';
+            for(let i=0; i<9; i++) { const c = document.createElement('div'); c.classList.add('tic-cell'); c.dataset.index = i; c.onclick = ticCellClick; b.appendChild(c); }
         }
-        function ticCellClick() {
-            const idx = this.dataset.index;
-            if(ticBoard[idx] !== "" || !ticActive) return;
-            ticBoard[idx] = ticCurrentPlayer; this.innerText = ticCurrentPlayer;
-            this.style.color = ticCurrentPlayer === "X" ? "#00adb5" : "#ff4a4a";
-            checkTicWinner();
-        }
+        function ticCellClick() { const idx = this.dataset.index; if(ticBoard[idx] !== "" || !ticActive) return; ticBoard[idx] = ticPlayer; this.innerText = ticPlayer; this.style.color = ticPlayer === "X" ? varColor('--primary') : varColor('--danger'); checkTicWinner(); }
         function checkTicWinner() {
-            const winPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
-            let won = false;
-            for(let pattern of winPatterns) {
-                if(ticBoard[pattern[0]] !== "" && ticBoard[pattern[0]] === ticBoard[pattern[1]] && ticBoard[pattern[0]] === ticBoard[pattern[2]]) { won = true; break; }
-            }
-            if(won) { document.getElementById('tic-status').innerText = `🏆 שחקן ${ticCurrentPlayer} ניצח!`; playSound('win'); ticActive = false; return; }
+            const patterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]; let won = false;
+            for(let p of patterns) { if(ticBoard[p[0]] !== "" && ticBoard[p[0]] === ticBoard[p[1]] && ticBoard[p[0]] === ticBoard[p[2]]) { won = true; break; } }
+            if(won) { document.getElementById('tic-status').innerText = `🏆 שחקן ${ticPlayer} ניצח!`; playSound('win'); ticActive = false; return; }
             if(!ticBoard.includes("")) { document.getElementById('tic-status').innerText = "🤝 תיקו שווה!"; ticActive = false; return; }
-            ticCurrentPlayer = ticCurrentPlayer === "X" ? "O" : "X";
-            document.getElementById('tic-status').innerText = `תור השחקן: ${ticCurrentPlayer}`;
+            ticPlayer = ticPlayer === "X" ? "O" : "X"; document.getElementById('tic-status').innerText = `תור השחקן: ${ticPlayer}`;
         }
+
+        // אתחול אפליקציה
+        renderTimeline(); renderTasks(); setupControls(); resetMemoryGame(); resetTicGame();
     </script>
 </body>
 </html>
