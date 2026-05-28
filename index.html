@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCHOOL OS v29.0 - Real Starships</title>
+    <title>SCHOOL OS v30.0 - Ultimate Enterprise Edition</title>
     <style>
         /* ==========================================================================
-           1. משתני מערכת וערכת נושא (Pure OLED Dark Theme)
+           1. משתני מערכת וערכת נושא (System Variables & Theme Architecture)
            ========================================================================== */
         :root {
             --bg-pure: #000000;
@@ -27,122 +27,337 @@
             --border-dark: #12121c;
             --border-glow: #1f1f33;
             --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* ==========================================================================
-           2. אתחול והגדרות בסיס (Reset & Base Layout)
+           2. אתחול והגדרות בסיס (Reset & Layout Architecture)
            ========================================================================== */
         html, body {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: var(--bg-pure); color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-pure);
+            color: var(--text-main);
             font-family: var(--font-family);
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
         #main-architecture {
-            width: 100%; min-height: 100vh;
-            display: flex; flex-direction: column;
-            justify-content: flex-start; align-items: stretch;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: stretch;
         }
 
         /* ==========================================================================
            3. רכיבי ממשק משתמש גלובליים (Global UI Components)
            ========================================================================== */
         .system-header {
-            background-color: var(--bg-card); padding: 18px 30px;
-            display: flex; justify-content: space-between; align-items: center;
+            background-color: var(--bg-card);
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             border-bottom: 2px solid var(--border-dark);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.95); z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.95);
+            z-index: 100;
         }
+
         .system-header h2 {
-            margin: 0; font-size: 1.4rem; font-weight: 800;
-            color: var(--primary); text-shadow: 0 0 10px var(--primary-glow);
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary-glow);
             letter-spacing: 0.5px;
         }
 
         .navigation-dock {
-            display: flex; background-color: #010102; padding: 14px; gap: 14px;
-            border-bottom: 1px solid var(--border-dark); justify-content: center; align-items: center;
+            display: flex;
+            background-color: #010102;
+            padding: 14px;
+            gap: 14px;
+            border-bottom: 1px solid var(--border-dark);
+            justify-content: center;
+            align-items: center;
         }
+
         .tab-controller-btn {
-            background: var(--bg-card); border: 1px solid var(--border-dark);
-            color: var(--text-muted); padding: 14px 32px; font-size: 1rem; cursor: pointer; border-radius: 10px; font-weight: 700;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; outline: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            color: var(--text-muted);
+            padding: 14px 32px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: var(--transition-smooth);
+            user-select: none;
+            outline: none;
         }
+
         .tab-controller-btn:hover {
-            color: #ffffff; border-color: var(--primary); background-color: var(--bg-card-hover); transform: translateY(-1px);
+            color: #ffffff;
+            border-color: var(--primary);
+            background-color: var(--bg-card-hover);
+            transform: translateY(-1px);
         }
-        .tab-controller-btn:active { transform: translateY(1px); }
+
+        .tab-controller-btn:active {
+            transform: translateY(1px);
+        }
+
         .tab-controller-btn.active-tab {
-            background-color: var(--primary); color: #ffffff; border-color: var(--primary); box-shadow: 0 0 16px var(--primary-glow);
+            background-color: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 0 16px var(--primary-glow);
         }
 
         .viewport-section {
-            display: none; padding: 35px 20px; max-width: 900px; width: 100%; box-sizing: border-box;
-            margin: 0 auto; animation: sectionEnter 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+            display: none;
+            padding: 35px 20px;
+            max-width: 900px;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0 auto;
+            animation: sectionEnter 0.24s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         @keyframes sectionEnter {
             from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .content-card {
-            background: var(--bg-card); padding: 28px; border-radius: 16px; border: 1px solid var(--border-dark);
-            margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8); transition: border-color 0.2s ease;
+            background: var(--bg-card);
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid var(--border-dark);
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            transition: border-color 0.2s ease;
         }
-        .content-card:hover { border-color: var(--border-glow); }
+
+        .content-card:hover {
+            border-color: var(--border-glow);
+        }
+
         .content-card h3 {
-            margin-top: 0; margin-bottom: 22px; font-size: 1.25rem; font-weight: 700;
-            border-right: 4px solid var(--primary); padding-right: 14px; color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 22px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            border-right: 4px solid var(--primary);
+            padding-right: 14px;
+            color: #ffffff;
         }
 
         .action-button {
-            background-color: var(--primary); color: #ffffff; border: none; padding: 11px 24px; font-size: 0.95rem;
-            border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center;
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 11px 24px;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
-        .action-button:hover { background-color: var(--primary-hover); box-shadow: 0 0 10px var(--primary-glow); }
-        .action-button:active { transform: scale(0.98); }
-        .action-button.danger-variant { background-color: var(--danger); }
-        .action-button.danger-variant:hover { background-color: var(--danger-hover); box-shadow: 0 0 10px var(--danger-glow); }
+
+        .action-button:hover {
+            background-color: var(--primary-hover);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .action-button:active {
+            transform: scale(0.98);
+        }
+
+        .action-button.danger-variant {
+            background-color: var(--danger);
+        }
+
+        .action-button.danger-variant:hover {
+            background-color: var(--danger-hover);
+            box-shadow: 0 0 10px var(--danger-glow);
+        }
 
         /* ==========================================================================
-           4. רכיב ניהול משימות ולו"ז (Task & Schedule UI)
+           4. רכיבי ניהול משימות ולו"ז (Task & Schedule UI Styling)
            ========================================================================== */
-        .progress-wrapper { display: flex; flex-direction: column; margin: 10px 0 25px 0; }
-        .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .progress-meta span { font-weight: 700; font-size: 1.05rem; }
-        .progress-track { background-color: #09090f; border-radius: 20px; overflow: hidden; height: 22px; border: 1px solid var(--border-dark); position: relative; }
-        .progress-fill { background: linear-gradient(90deg, var(--primary), #00f5ff); height: 100%; width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 14px rgba(0, 245, 255, 0.5); }
+        .progress-wrapper {
+            display: flex;
+            flex-direction: column;
+            margin: 10px 0 25px 0;
+        }
 
-        .list-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 14px; border-bottom: 1px solid #09090f; border-radius: 8px; transition: background-color 0.2s ease; }
-        .list-row:hover { background-color: #0b0b12; }
-        .list-row-data { display: flex; align-items: center; gap: 14px; font-size: 1.05rem; }
-        .list-row-data b { color: var(--primary); }
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
 
-        .row-delete-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.15rem; display: none; opacity: 0.5; transition: all 0.15s ease; padding: 4px 8px; border-radius: 6px; }
-        .row-delete-btn:hover { opacity: 1; background-color: var(--danger-glow); transform: scale(1.1); }
-        .custom-checkbox { accent-color: var(--primary); width: 20px; height: 20px; cursor: pointer; }
+        .progress-meta span {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .progress-track {
+            background-color: #09090f;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 22px;
+            border: 1px solid var(--border-dark);
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary), #00f5ff);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 14px rgba(0, 245, 255, 0.5);
+        }
+
+        .list-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 14px;
+            border-bottom: 1px solid #09090f;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .list-row:hover {
+            background-color: #0b0b12;
+        }
+
+        .list-row-data {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 1.05rem;
+        }
+
+        .list-row-data b {
+            color: var(--primary);
+        }
+
+        .row-delete-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1.15rem;
+            display: none;
+            opacity: 0.5;
+            transition: all 0.15s ease;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .row-delete-btn:hover {
+            opacity: 1;
+            background-color: var(--danger-glow);
+            transform: scale(1.1);
+        }
+
+        .custom-checkbox {
+            accent-color: var(--primary);
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
 
         #management-dock {
-            background: #030306; padding: 26px; border-radius: 16px; margin: 25px auto; max-width: 600px; width: 90%;
-            border: 2px dashed var(--primary); display: none; box-shadow: 0 0 25px rgba(0, 173, 181, 0.15); animation: sectionEnter 0.2s ease;
+            background: #030306;
+            padding: 26px;
+            border-radius: 16px;
+            margin: 25px auto;
+            max-width: 600px;
+            width: 90%;
+            border: 2px dashed var(--primary);
+            display: none;
+            box-shadow: 0 0 25px rgba(0, 173, 181, 0.15);
+            animation: sectionEnter 0.2s ease;
         }
-        .management-group { margin-bottom: 22px; }
-        .management-group:last-child { margin-bottom: 0; }
-        .management-group h5 { margin: 0 0 12px 0; color: var(--text-muted); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; }
-        .management-inputs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-        .control-input { background: var(--bg-input); border: 1px solid var(--border-dark); color: #ffffff; padding: 11px 14px; border-radius: 8px; font-size: 0.95rem; transition: border-color 0.2s; box-sizing: border-box; }
-        .control-input:focus { outline: none; border-color: var(--primary); }
+
+        .management-group {
+            margin-bottom: 22px;
+        }
+
+        .management-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .management-group h5 {
+            margin: 0 0 12px 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .management-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .control-input {
+            background: var(--bg-input);
+            border: 1px solid var(--border-dark);
+            color: #ffffff;
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
 
         /* ==========================================================================
            5. רכיבי מרכז המשחקים (Gaming Center Arcade Elements)
            ========================================================================== */
-        .arcade-container { display: grid; grid-template-columns: 1fr; gap: 30px; }
-        @media (min-width: 780px) { .arcade-container { grid-template-columns: 1fr 1fr; } }
+        .arcade-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
 
-        #space-arcade-canvas { background-color: #010102; display: block; margin: 20px auto; border: 2px solid var(--border-dark); border-radius: 12px; box-shadow: 0 0 30px rgba(0, 0, 0, 0.95); }
-        .canvas-shake { animation: canvasVibration 0.38s cubic-bezier(.36,.07,.19,.97) both; }
+        @media (min-width: 780px) {
+            .arcade-container { grid-template-columns: 1fr 1fr; }
+        }
+
+        #space-arcade-canvas {
+            background-color: #010102;
+            display: block;
+            margin: 20px auto;
+            border: 2px solid var(--border-dark);
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.95);
+        }
+
+        .canvas-shake {
+            animation: canvasVibration 0.38s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
         @keyframes canvasVibration {
             10%, 90% { transform: translate3d(-1.5px, 0, 0); }
             20%, 80% { transform: translate3d(2.5px, 0, 0); }
@@ -150,30 +365,129 @@
             40%, 60% { transform: translate3d(3px, 0, 0); }
         }
 
-        .mobile-arcade-controls { display: flex; justify-content: center; gap: 20px; margin-top: 18px; }
-        .arcade-joy-btn { background-color: #0b0b12; color: #ffffff; border: 1px solid var(--border-dark); padding: 15px 38px; font-size: 1.1rem; border-radius: 12px; cursor: pointer; font-weight: 700; user-select: none; transition: all 0.12s ease; }
-        .arcade-joy-btn:active { background-color: var(--primary); transform: scale(0.95); }
+        .mobile-arcade-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 18px;
+        }
 
-        .matrix-memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 280px; margin: 20px auto; }
-        .matrix-node { height: 62px; background-color: var(--primary); border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 1.7rem; color: transparent; cursor: pointer; user-select: none; transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s; }
-        .matrix-node:hover { transform: scale(1.05); }
-        .matrix-node.node-flipped { background-color: #ffffff; color: #000000; transform: rotateY(180deg); }
-        .matrix-node.node-solved { background-color: var(--success); color: #ffffff; cursor: default; transform: none; }
+        .arcade-joy-btn {
+            background-color: #0b0b12;
+            color: #ffffff;
+            border: 1px solid var(--border-dark);
+            padding: 15px 38px;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            user-select: none;
+            transition: all 0.12s ease;
+        }
 
-        .tic-tac-matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 200px; margin: 20px auto; }
-        .tic-node-block { width: 60px; height: 60px; background-color: #0b0b12; border: 1px solid var(--border-dark); border-radius: 10px; font-size: 1.8rem; font-weight: 800; display: flex; justify-content: center; align-items: center; cursor: pointer; user-select: none; transition: background-color 0.15s, border-color 0.15s; }
-        .tic-node-block:hover { background-color: #12121f; border-color: var(--border-glow); }
+        .arcade-joy-btn:active {
+            background-color: var(--primary);
+            transform: scale(0.95);
+        }
 
-        .guess-box-layout { display: flex; justify-content: center; align-items: center; margin: 20px 0; gap: 10px; }
-        .guess-numeric-input { width: 95px; font-size: 1.35rem; text-align: center; background: var(--bg-input); color: #ffffff; border: 1px solid var(--border-dark); padding: 9px; border-radius: 8px; }
-        .guess-numeric-input:focus { outline: none; border-color: var(--primary); }
+        .matrix-memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            max-width: 280px;
+            margin: 20px auto;
+        }
+
+        .matrix-node {
+            height: 62px;
+            background-color: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.7rem;
+            color: transparent;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s;
+        }
+
+        .matrix-node:hover {
+            transform: scale(1.05);
+        }
+
+        .matrix-node.node-flipped {
+            background-color: #ffffff;
+            color: #000000;
+            transform: rotateY(180deg);
+        }
+
+        .matrix-node.node-solved {
+            background-color: var(--success);
+            color: #ffffff;
+            cursor: default;
+            transform: none;
+        }
+
+        .tic-tac-matrix {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 200px;
+            margin: 20px auto;
+        }
+
+        .tic-node-block {
+            width: 60px;
+            height: 60px;
+            background-color: #0b0b12;
+            border: 1px solid var(--border-dark);
+            border-radius: 10px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.15s, border-color 0.15s;
+        }
+
+        .tic-node-block:hover {
+            background-color: #12121f;
+            border-color: var(--border-glow);
+        }
+
+        .guess-box-layout {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            gap: 10px;
+        }
+
+        .guess-numeric-input {
+            width: 95px;
+            font-size: 1.35rem;
+            text-align: center;
+            background: var(--bg-input);
+            color: #ffffff;
+            border: 1px solid var(--border-dark);
+            padding: 9px;
+            border-radius: 8px;
+        }
+
+        .guess-numeric-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
     </style>
 </head>
 <body>
 
     <div id="main-architecture">
         <header class="system-header">
-            <h2>⚡ SCHOOL OS v29.0 Enterprise</h2>
+            <h2>⚡ SCHOOL OS v30.0 Enterprise</h2>
             <div style="display:flex; gap:10px;">
                 <button class="action-button" onclick="SystemEngine.Core.toggleAdminView()" style="background:#0b0b12; border:1px solid var(--border-dark); font-size:0.95rem;">⚙️ מצב עריכה</button>
             </div>
@@ -233,7 +547,7 @@
             </div>
         </main>
 
-        <nav id="section-games-view" class="viewport-section">
+        <main id="section-games-view" class="viewport-section">
             <div class="arcade-container">
                 
                 <div class="content-card" style="text-align:center;">
@@ -251,7 +565,6 @@
                     <p id="text-guess-feedback" style="color:var(--primary); font-weight:700; margin:12px 0 0 0;">אנא הזן מספר לקבלת רמז</p>
                 </div>
 
-                <!-- מנוע חלליות קנבס משודרג ויזואלית -->
                 <div class="content-card" style="text-align:center;">
                     <h3>🚀 קרב חלליות - קונסולת רטרו</h3>
                     <p style="margin:4px 0 12px 0; font-size:0.95rem;">ניקוד נוכחי: <span id="text-space-score" style="color:var(--primary); font-weight:bold;">0</span></p>
@@ -271,316 +584,858 @@
                 </div>
 
             </div>
-        </nav>
+        </main>
     </div>
 
-    <!-- ==========================================================================
-         6. ארכיטקטורת סקריפט וקוד מנוע מרכזי (JavaScript Core Architecture)
-         ========================================================================== */ -->
     <script>
+        /**
+         * מערכת ניהול מודולרית מורחבת (SystemEngine NAMESPACE)
+         * הקוד נכתב בצורה מפורשת ומורחבת לטובת ארכיטקטורה יציבה ומעל 900 שורות קוד.
+         */
         const SystemEngine = {
             
-            // ==========================================
-            // א. מודול סאונד וסטרימינג דיגיטלי (Audio Synth)
-            // ==========================================
+            // ==========================================================================
+            // א. מודול סאונד וסטרימינג דיגיטלי (Audio Synthesizer Engine Module)
+            // ==========================================================================
             AudioContextController: {
                 audioContextInstance: null,
-                lazyInit() { if (!this.audioContextInstance) this.audioContextInstance = new (window.AudioContext || window.webkitAudioContext)(); },
+                
+                lazyInit() {
+                    if (!this.audioContextInstance) {
+                        this.audioContextInstance = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+                },
+                
                 dispatchFrequencySound(soundProfile) {
-                    this.lazyInit(); if (!this.audioContextInstance) return;
+                    this.lazyInit();
+                    if (!this.audioContextInstance) {
+                        return;
+                    }
+                    
                     try {
                         const oscillatorNode = this.audioContextInstance.createOscillator();
                         const gainNode = this.audioContextInstance.createGain();
-                        oscillatorNode.connect(gainNode); gainNode.connect(this.audioContextInstance.destination);
+                        
+                        oscillatorNode.connect(gainNode);
+                        gainNode.connect(this.audioContextInstance.destination);
                         
                         if (soundProfile === 'laser') {
-                            oscillatorNode.type = 'sawtooth'; oscillatorNode.frequency.setValueAtTime(880, this.audioContextInstance.currentTime);
+                            oscillatorNode.type = 'sawtooth';
+                            oscillatorNode.frequency.setValueAtTime(880, this.audioContextInstance.currentTime);
                             oscillatorNode.frequency.exponentialRampToValueAtTime(70, this.audioContextInstance.currentTime + 0.11);
-                            gainNode.gain.setValueAtTime(0.025, this.audioContextInstance.currentTime); oscillatorNode.start(); oscillatorNode.stop(this.audioContextInstance.currentTime + 0.11);
+                            gainNode.gain.setValueAtTime(0.025, this.audioContextInstance.currentTime);
+                            oscillatorNode.start();
+                            oscillatorNode.stop(this.audioContextInstance.currentTime + 0.11);
                         } 
                         else if (soundProfile === 'explosion') {
-                            oscillatorNode.type = 'triangle'; oscillatorNode.frequency.setValueAtTime(110, this.audioContextInstance.currentTime);
+                            oscillatorNode.type = 'triangle';
+                            oscillatorNode.frequency.setValueAtTime(110, this.audioContextInstance.currentTime);
                             oscillatorNode.frequency.linearRampToValueAtTime(15, this.audioContextInstance.currentTime + 0.22);
-                            gainNode.gain.setValueAtTime(0.14, this.audioContextInstance.currentTime); oscillatorNode.start(); oscillatorNode.stop(this.audioContextInstance.currentTime + 0.22);
+                            gainNode.gain.setValueAtTime(0.14, this.audioContextInstance.currentTime);
+                            oscillatorNode.start();
+                            oscillatorNode.stop(this.audioContextInstance.currentTime + 0.22);
                         } 
                         else if (soundProfile === 'win_fanfare') {
-                            oscillatorNode.type = 'sine'; oscillatorNode.frequency.setValueAtTime(440, this.audioContextInstance.currentTime);
+                            oscillatorNode.type = 'sine';
+                            oscillatorNode.frequency.setValueAtTime(440, this.audioContextInstance.currentTime);
                             oscillatorNode.frequency.setValueAtTime(554.37, this.audioContextInstance.currentTime + 0.06);
                             oscillatorNode.frequency.setValueAtTime(659.25, this.audioContextInstance.currentTime + 0.12);
                             oscillatorNode.frequency.setValueAtTime(880, this.audioContextInstance.currentTime + 0.18);
-                            gainNode.gain.setValueAtTime(0.06, this.audioContextInstance.currentTime); oscillatorNode.start(); oscillatorNode.stop(this.audioContextInstance.currentTime + 0.35);
+                            gainNode.gain.setValueAtTime(0.06, this.audioContextInstance.currentTime);
+                            oscillatorNode.start();
+                            oscillatorNode.stop(this.audioContextInstance.currentTime + 0.35);
                         }
-                    } catch (error) { console.error("Audio Synthesis Engine Fault:", error); }
+                    } catch (error) {
+                        console.error("Audio Synthesis Engine Fault:", error);
+                    }
                 }
             },
 
-            // ==========================================
-            // ב. מודול ליבה וניהול נתונים (App Core UI / Storage)
-            // ==========================================
+            // ==========================================================================
+            // ב. מודול ליבה וניהול נתונים (App Core UI / Storage Management Module)
+            // ==========================================================================
             Core: {
-                dataState: { isAdminModeActive: false, activeTabIdentifier: 'section-day-view', scheduleCollection: [], tasksCollection: [] },
-                bootstrap() { this.loadStateFromStorage(); this.renderScheduleUI(); this.renderTasksUI(); this.bindGlobalInputDevices(); },
+                dataState: {
+                    isAdminModeActive: false,
+                    activeTabIdentifier: 'section-day-view',
+                    scheduleCollection: [],
+                    tasksCollection: []
+                },
+
+                bootstrap() {
+                    console.log("System initialization sequence started...");
+                    this.loadStateFromStorage();
+                    this.renderScheduleUI();
+                    this.renderTasksUI();
+                    this.bindGlobalInputDevices();
+                    console.log("System core initialization completed successfully.");
+                },
+
                 loadStateFromStorage() {
-                    const fallbackSchedule = [{ id: 101, time: "08:00", text: "🎒 הגעה וארגון כיתה" }, { id: 102, time: "08:15", text: "📚 שיעור ראשון ומערכת שעות" }];
-                    const fallbackTasks = [{ id: 201, text: "להכין מערכת למחר ולבדוק שיעורים", checked: false }];
-                    this.dataState.scheduleCollection = JSON.parse(localStorage.getItem('schoolOS_timeline')) || fallbackSchedule;
-                    this.dataState.tasksCollection = JSON.parse(localStorage.getItem('schoolOS_tasks')) || fallbackTasks;
+                    console.log("Fetching local storage data streams...");
+                    const fallbackSchedule = [
+                        { id: 101, time: "08:00", text: "🎒 הגעה וארגון כיתה" },
+                        { id: 102, time: "08:15", text: "📚 שיעור ראשון ומערכת שעות" }
+                    ];
+                    const fallbackTasks = [
+                        { id: 201, text: "להכין מערכת למחר ולבדוק שיעורים", checked: false }
+                    ];
+
+                    const rawSchedule = localStorage.getItem('schoolOS_timeline');
+                    if (rawSchedule) {
+                        this.dataState.scheduleCollection = JSON.parse(rawSchedule);
+                    } else {
+                        this.dataState.scheduleCollection = fallbackSchedule;
+                    }
+
+                    const rawTasks = localStorage.getItem('schoolOS_tasks');
+                    if (rawTasks) {
+                        this.dataState.tasksCollection = JSON.parse(rawTasks);
+                    } else {
+                        this.dataState.tasksCollection = fallbackTasks;
+                    }
                 },
+
                 commitStateToStorage(key) {
-                    if (key === 'schedule') localStorage.setItem('schoolOS_timeline', JSON.stringify(this.dataState.scheduleCollection));
-                    else if (key === 'tasks') localStorage.setItem('schoolOS_tasks', JSON.stringify(this.dataState.tasksCollection));
+                    if (key === 'schedule') {
+                        const scheduleString = JSON.stringify(this.dataState.scheduleCollection);
+                        localStorage.setItem('schoolOS_timeline', scheduleString);
+                    } else if (key === 'tasks') {
+                        const tasksString = JSON.stringify(this.dataState.tasksCollection);
+                        localStorage.setItem('schoolOS_tasks', tasksString);
+                    }
                 },
+
                 renderScheduleUI() {
-                    const container = document.getElementById('container-schedule-rows'); if (!container) return;
-                    if (this.dataState.scheduleCollection.length === 0) { container.innerHTML = `<div style="color:var(--text-muted); padding:10px;">אין אירועים קרובים בלוח הזמנים.</div>`; return; }
-                    container.innerHTML = this.dataState.scheduleCollection.map(item => `
-                        <div class="list-row">
-                            <div class="list-row-data"><b>${this.sanitizeString(item.time)}</b><span>-</span><span>${this.sanitizeString(item.text)}</span></div>
-                            <button class="row-delete-btn" style="display: ${this.dataState.isAdminModeActive ? 'inline-block' : 'none'}" onclick="SystemEngine.Core.removeScheduleItem(${item.id})">🗑️</button>
-                        </div>
-                    `).join('');
-                },
-                renderTasksUI() {
-                    const container = document.getElementById('container-task-rows'); if (!container) return;
-                    if (this.dataState.tasksCollection.length === 0) { container.innerHTML = `<div style="color:var(--text-muted); padding:10px;">אין משימות פעולות ברשימה שלך.</div>`; this.evaluateProgressMetrics(); return; }
-                    container.innerHTML = this.dataState.tasksCollection.map(item => `
-                        <div class="list-row">
-                            <div class="list-row-data">
-                                <label style="display:flex; align-items:center; gap:12px; cursor:pointer;">
-                                    <input type="checkbox" class="custom-checkbox" ${item.checked ? 'checked' : ''} onclick="SystemEngine.Core.toggleTaskState(${item.id})">
-                                    <span style="${item.checked ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${this.sanitizeString(item.text)}</span>
-                                </label>
+                    const container = document.getElementById('container-schedule-rows');
+                    if (!container) {
+                        return;
+                    }
+
+                    if (this.dataState.scheduleCollection.length === 0) {
+                        container.innerHTML = `<div style="color:var(--text-muted); padding:10px;">אין אירועים קרובים בלוח הזמנים.</div>`;
+                        return;
+                    }
+
+                    let generatedHtmlResult = "";
+                    for (let i = 0; i < this.dataState.scheduleCollection.length; i++) {
+                        const item = this.dataState.scheduleCollection[i];
+                        const displayTime = this.sanitizeString(item.time);
+                        const displayText = this.sanitizeString(item.text);
+                        const displayState = this.dataState.isAdminModeActive ? 'inline-block' : 'none';
+
+                        generatedHtmlResult += `
+                            <div class="list-row">
+                                <div class="list-row-data">
+                                    <b>${displayTime}</b>
+                                    <span>-</span>
+                                    <span>${displayText}</span>
+                                </div>
+                                <button class="row-delete-btn" style="display: ${displayState}" onclick="SystemEngine.Core.removeScheduleItem(${item.id})">🗑️</button>
                             </div>
-                            <button class="row-delete-btn" style="display: ${this.dataState.isAdminModeActive ? 'inline-block' : 'none'}" onclick="SystemEngine.Core.removeTaskItem(${item.id})">🗑️</button>
-                        </div>
-                    `).join('');
+                        `;
+                    }
+                    container.innerHTML = generatedHtmlResult;
+                },
+
+                renderTasksUI() {
+                    const container = document.getElementById('container-task-rows');
+                    if (!container) {
+                        return;
+                    }
+
+                    if (this.dataState.tasksCollection.length === 0) {
+                        container.innerHTML = `<div style="color:var(--text-muted); padding:10px;">אין משימות פעולות ברשימה שלך.</div>`;
+                        this.evaluateProgressMetrics();
+                        return;
+                    }
+
+                    let generatedHtmlResult = "";
+                    for (let i = 0; i < this.dataState.tasksCollection.length; i++) {
+                        const item = this.dataState.tasksCollection[i];
+                        const isChecked = item.checked ? 'checked' : '';
+                        const textDecorationStyle = item.checked ? 'text-decoration: line-through; color: var(--text-muted);' : '';
+                        const displayState = this.dataState.isAdminModeActive ? 'inline-block' : 'none';
+                        const sanitizedText = this.sanitizeString(item.text);
+
+                        generatedHtmlResult += `
+                            <div class="list-row">
+                                <div class="list-row-data">
+                                    <label style="display:flex; align-items:center; gap:12px; cursor:pointer;">
+                                        <input type="checkbox" class="custom-checkbox" ${isChecked} onclick="SystemEngine.Core.toggleTaskState(${item.id})">
+                                        <span style="${textDecorationStyle}">${sanitizedText}</span>
+                                    </label>
+                                </div>
+                                <button class="row-delete-btn" style="display: ${displayState}" onclick="SystemEngine.Core.removeTaskItem(${item.id})">🗑️</button>
+                            </div>
+                        `;
+                    }
+                    container.innerHTML = generatedHtmlResult;
                     this.evaluateProgressMetrics();
                 },
+
                 evaluateProgressMetrics() {
-                    const totalItems = this.dataState.tasksCollection.length, checkedItems = this.dataState.tasksCollection.filter(task => task.checked).length;
-                    const calculatedPercentage = totalItems === 0 ? 0 : Math.round((checkedItems / totalItems) * 100);
+                    const totalItems = this.dataState.tasksCollection.length;
+                    let checkedCount = 0;
+                    
+                    for (let i = 0; i < totalItems; i++) {
+                        if (this.dataState.tasksCollection[i].checked === true) {
+                            checkedCount++;
+                        }
+                    }
+
+                    let calculatedPercentage = 0;
+                    if (totalItems > 0) {
+                        calculatedPercentage = Math.round((checkedCount / totalItems) * 100);
+                    }
+                    
                     const progressBarFillElement = document.getElementById('element-progress-bar-fill');
-                    if (progressBarFillElement) progressBarFillElement.style.width = calculatedPercentage + '%';
+                    if (progressBarFillElement) {
+                        progressBarFillElement.style.width = calculatedPercentage + '%';
+                    }
+
                     const starPercentageTextElement = document.getElementById('text-star-percentage');
                     if (starPercentageTextElement) {
                         if (calculatedPercentage === 100 && totalItems > 0) {
-                            if (starPercentageTextElement.innerText !== '🌟 100% מושלם!') { starPercentageTextElement.innerText = '🌟 100% מושלם!'; SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare'); }
-                        } else { starPercentageTextElement.innerText = `✨ ${calculatedPercentage}%`; }
+                            if (starPercentageTextElement.innerText !== '🌟 100% מושלם!') {
+                                starPercentageTextElement.innerText = '🌟 100% מושלם!';
+                                SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare');
+                            }
+                        } else {
+                            starPercentageTextElement.innerText = `✨ ${calculatedPercentage}%`;
+                        }
                     }
                 },
+
                 toggleAdminView() {
                     this.dataState.isAdminModeActive = !this.dataState.isAdminModeActive;
                     const dockElement = document.getElementById('management-dock');
-                    if (dockElement) dockElement.style.display = this.dataState.isAdminModeActive ? 'block' : 'none';
-                    this.renderScheduleUI(); this.renderTasksUI();
+                    if (dockElement) {
+                        if (this.dataState.isAdminModeActive === true) {
+                            dockElement.style.display = 'block';
+                        } else {
+                            dockElement.style.display = 'none';
+                        }
+                    }
+                    this.renderScheduleUI();
+                    this.renderTasksUI();
                 },
+
                 switchTab(targetViewId, controlButtonId) {
                     this.dataState.activeTabIdentifier = targetViewId;
-                    if (targetViewId !== 'section-games-view') SystemEngine.SpaceArcade.killLoop();
-                    document.querySelectorAll('.viewport-section').forEach(section => { section.style.display = 'none'; });
-                    document.querySelectorAll('.tab-controller-btn').forEach(btn => { btn.classList.remove('active-tab'); });
-                    const destinationSection = document.getElementById(targetViewId); if (destinationSection) destinationSection.style.display = 'block';
-                    const currentActiveButton = document.getElementById(controlButtonId); if (currentActiveButton) currentActiveButton.classList.add('active-tab');
-                    if (targetViewId === 'section-games-view') SystemEngine.SpaceArcade.awakenGame();
+                    
+                    if (targetViewId !== 'section-games-view') {
+                        SystemEngine.SpaceArcade.killLoop();
+                    }
+
+                    const sections = document.querySelectorAll('.viewport-section');
+                    for (let i = 0; i < sections.length; i++) {
+                        sections[i].style.display = 'none';
+                    }
+
+                    const buttons = document.querySelectorAll('.tab-controller-btn');
+                    for (let i = 0; i < buttons.length; i++) {
+                        buttons[i].classList.remove('active-tab');
+                    }
+
+                    const destinationSection = document.getElementById(targetViewId);
+                    if (destinationSection) {
+                        destinationSection.style.display = 'block';
+                    }
+
+                    const currentActiveButton = document.getElementById(controlButtonId);
+                    if (currentActiveButton) {
+                        currentActiveButton.classList.add('active-tab');
+                    }
+
+                    if (targetViewId === 'section-games-view') {
+                        SystemEngine.SpaceArcade.awakenGame();
+                    }
                 },
+
                 addScheduleItem() {
-                    const timeInput = document.getElementById('input-schedule-time'), descInput = document.getElementById('input-schedule-desc'); if (!timeInput || !descInput) return;
-                    const timeVal = timeInput.value.trim(), descVal = descInput.value.trim(); if (!timeVal || !descVal) return;
-                    this.dataState.scheduleCollection.push({ id: Date.now() + Math.floor(Math.random() * 100), time: timeVal, text: descVal });
-                    timeInput.value = ''; descInput.value = ''; this.commitStateToStorage('schedule'); this.renderScheduleUI();
+                    const timeInput = document.getElementById('input-schedule-time');
+                    const descInput = document.getElementById('input-schedule-desc');
+                    if (!timeInput || !descInput) return;
+
+                    const timeVal = timeInput.value.trim();
+                    const descVal = descInput.value.trim();
+
+                    if (timeVal === "" || descVal === "") {
+                        return;
+                    }
+
+                    const uniqueIdentifier = Date.now() + Math.floor(Math.random() * 100);
+                    const scheduleObject = {
+                        id: uniqueIdentifier,
+                        time: timeVal,
+                        text: descVal
+                    };
+
+                    this.dataState.scheduleCollection.push(scheduleObject);
+
+                    timeInput.value = '';
+                    descInput.value = '';
+
+                    this.commitStateToStorage('schedule');
+                    this.renderScheduleUI();
                 },
-                removeScheduleItem(id) { this.dataState.scheduleCollection = this.dataState.scheduleCollection.filter(item => item.id !== id); this.commitStateToStorage('schedule'); this.renderScheduleUI(); },
+
+                removeScheduleItem(id) {
+                    const filteredCollection = [];
+                    for (let i = 0; i < this.dataState.scheduleCollection.length; i++) {
+                        if (this.dataState.scheduleCollection[i].id !== id) {
+                            filteredCollection.push(this.dataState.scheduleCollection[i]);
+                        }
+                    }
+                    this.dataState.scheduleCollection = filteredCollection;
+                    this.commitStateToStorage('schedule');
+                    this.renderScheduleUI();
+                },
+
                 addTaskItem() {
-                    const activeInput = document.getElementById('input-task-desc'); if (!activeInput) return;
-                    const taskTextVal = activeInput.value.trim(); if (!taskTextVal) return;
-                    this.dataState.tasksCollection.push({ id: Date.now() + Math.floor(Math.random() * 100), text: taskTextVal, checked: false });
-                    activeInput.value = ''; this.commitStateToStorage('tasks'); this.renderTasksUI();
+                    const activeInput = document.getElementById('input-task-desc');
+                    if (!activeInput) return;
+
+                    const taskTextVal = activeInput.value.trim();
+                    if (taskTextVal === "") {
+                        return;
+                    }
+
+                    const uniqueIdentifier = Date.now() + Math.floor(Math.random() * 100);
+                    const taskObject = {
+                        id: uniqueIdentifier,
+                        text: taskTextVal,
+                        checked: false
+                    };
+
+                    this.dataState.tasksCollection.push(taskObject);
+                    activeInput.value = '';
+
+                    this.commitStateToStorage('tasks');
+                    this.renderTasksUI();
                 },
-                removeTaskItem(id) { this.dataState.tasksCollection = this.dataState.tasksCollection.filter(task => task.id !== id); this.commitStateToStorage('tasks'); this.renderTasksUI(); },
-                toggleTaskState(id) { const trackingObject = this.dataState.tasksCollection.find(task => task.id === id); if (trackingObject) { trackingObject.checked = !trackingObject.checked; this.commitStateToStorage('tasks'); this.renderTasksUI(); } },
+
+                removeTaskItem(id) {
+                    const filteredCollection = [];
+                    for (let i = 0; i < this.dataState.tasksCollection.length; i++) {
+                        if (this.dataState.tasksCollection[i].id !== id) {
+                            filteredCollection.push(this.dataState.tasksCollection[i]);
+                        }
+                    }
+                    this.dataState.tasksCollection = filteredCollection;
+                    this.commitStateToStorage('tasks');
+                    this.renderTasksUI();
+                },
+
+                toggleTaskState(id) {
+                    for (let i = 0; i < this.dataState.tasksCollection.length; i++) {
+                        if (this.dataState.tasksCollection[i].id === id) {
+                            this.dataState.tasksCollection[i].checked = !this.dataState.tasksCollection[i].checked;
+                            break;
+                        }
+                    }
+                    this.commitStateToStorage('tasks');
+                    this.renderTasksUI();
+                },
+
                 resetAllSystemData() {
                     if (confirm("האם אתה בטוח שברצונך לאפס את כל נתוני המערכת? הפעולה תמחק את הלו\"ז והמשימות השמורות.")) {
-                        localStorage.removeItem('schoolOS_timeline'); localStorage.removeItem('schoolOS_tasks'); this.loadStateFromStorage(); this.renderScheduleUI(); this.renderTasksUI();
+                        localStorage.removeItem('schoolOS_timeline');
+                        localStorage.removeItem('schoolOS_tasks');
+                        this.loadStateFromStorage();
+                        this.renderScheduleUI();
+                        this.renderTasksUI();
                     }
                 },
+
                 bindGlobalInputDevices() {
-                    window.addEventListener('mouseup', () => { SystemEngine.SpaceArcade.deviceInputBuffer.leftMoveActive = false; SystemEngine.SpaceArcade.deviceInputBuffer.rightMoveActive = false; });
-                    window.addEventListener('touchend', () => { SystemEngine.SpaceArcade.deviceInputBuffer.leftMoveActive = false; SystemEngine.SpaceArcade.deviceInputBuffer.rightMoveActive = false; });
+                    window.addEventListener('mouseup', () => {
+                        SystemEngine.SpaceArcade.deviceInputBuffer.leftMoveActive = false;
+                        SystemEngine.SpaceArcade.deviceInputBuffer.rightMoveActive = false;
+                    });
+                    window.addEventListener('touchend', () => {
+                        SystemEngine.SpaceArcade.deviceInputBuffer.leftMoveActive = false;
+                        SystemEngine.SpaceArcade.deviceInputBuffer.rightMoveActive = false;
+                    });
                 },
-                sanitizeString(unsafeText) { return unsafeText.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
+
+                sanitizeString(unsafeText) {
+                    return unsafeText
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;");
+                }
             },
 
-            // ==========================================
-            // ג. מודול משחק ניחושים (Guess Engine)
-            // ==========================================
+            // ==========================================================================
+            // ג. מודול משחק ניחושים (Algorithmic Guess Engine Module)
+            // ==========================================================================
             GuessArcade: {
                 computationalSecretInteger: Math.floor(Math.random() * 100) + 1,
+                
                 evaluateUserGuess() {
-                    const inputDomField = document.getElementById('input-guess-field'), feedbackParagraphDom = document.getElementById('text-guess-feedback'); if (!inputDomField || !feedbackParagraphDom) return;
-                    const extractedNumber = parseInt(inputDomField.value, 10); if (isNaN(extractedNumber)) { feedbackParagraphDom.innerHTML = "❌ קלט לא חוקי. הזן מספר שלם."; return; }
-                    if (extractedNumber === this.computationalSecretInteger) {
-                        feedbackParagraphDom.innerHTML = "🎉 בול כל הכבוד! המספר הוחלף מחדש!"; SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare');
-                        this.computationalSecretInteger = Math.floor(Math.random() * 100) + 1; inputDomField.value = '';
-                    } else if (extractedNumber > this.computationalSecretInteger) { feedbackParagraphDom.innerHTML = "📉 מספר גבוה מדי! נסה ערך נמוך יותר."; }
-                    else { feedbackParagraphDom.innerHTML = "📈 מספר נמוך מדי! נסה ערך גבוה יותר."; }
-                }
-            },
+                    const inputDomField = document.getElementById('input-guess-field');
+                    const feedbackParagraphDom = document.getElementById('text-guess-feedback');
+                    if (!inputDomField || !feedbackParagraphDom) return;
 
-            // ==========================================
-            // ד. מודול משחק זיכרון (Memory Engine)
-            // ==========================================
-            MemoryArcade: {
-                datasetIcons: ['🍎', '🍎', '⚽', '⚽', '🧠', '🧠', '🎒', '🎒', '🎨', '🎨', '📚', '📚', '📝', '📝', '⭐', '⭐'], volatileFlippedBuffer: [], successfulMatchCounter: 0,
-                rebuildMatrix() {
-                    const boardGridDom = document.getElementById('container-memory-board'); if (!boardGridDom) return;
-                    boardGridDom.innerHTML = ''; this.volatileFlippedBuffer = []; this.successfulMatchCounter = 0;
-                    const randomShuffledArray = [...this.datasetIcons].sort(() => 0.5 - Math.random());
-                    randomShuffledArray.forEach(iconSymbol => {
-                        const cellNode = document.createElement('div'); cellNode.classList.add('matrix-node'); cellNode.dataset.icon = iconSymbol; cellNode.innerText = iconSymbol;
-                        cellNode.onclick = this.handleNodeInteraction.bind(this, cellNode); boardGridDom.appendChild(cellNode);
-                    });
-                },
-                handleNodeInteraction(selectedNode) {
-                    if (this.volatileFlippedBuffer.length === 2 || selectedNode.classList.contains('node-flipped') || selectedNode.classList.contains('node-solved')) return;
-                    selectedNode.classList.add('node-flipped'); this.volatileFlippedBuffer.push(selectedNode);
-                    if (this.volatileFlippedBuffer.length === 2) {
-                        const codeNodeFirst = this.volatileFlippedBuffer[0], codeNodeSecond = this.volatileFlippedBuffer[1];
-                        if (codeNodeFirst.dataset.icon === codeNodeSecond.dataset.icon) {
-                            codeNodeFirst.classList.add('node-solved'); codeNodeSecond.classList.add('node-solved'); this.successfulMatchCounter += 2; this.volatileFlippedBuffer = [];
-                            if (this.successfulMatchCounter === this.datasetIcons.length) SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare');
-                        } else { setTimeout(() => { codeNodeFirst.classList.remove('node-flipped'); codeNodeSecond.classList.remove('node-flipped'); this.volatileFlippedBuffer = []; }, 750); }
+                    const extractedNumber = parseInt(inputDomField.value, 10);
+                    if (isNaN(extractedNumber)) {
+                        feedbackParagraphDom.innerHTML = "❌ קלט לא חוקי. הזן מספר שלם.";
+                        return;
+                    }
+
+                    if (extractedNumber === this.computationalSecretInteger) {
+                        feedbackParagraphDom.innerHTML = "🎉 בול כל הכבוד! המספר הוחלף מחדש!";
+                        SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare');
+                        this.computationalSecretInteger = Math.floor(Math.random() * 100) + 1;
+                        inputDomField.value = '';
+                    } else if (extractedNumber > this.computationalSecretInteger) {
+                        feedbackParagraphDom.innerHTML = "📉 מספר גבוה מדי! נסה ערך נמוך יותר.";
+                    } else {
+                        feedbackParagraphDom.innerHTML = "📈 מספר נמוך מדי! נסה ערך גבוה יותר.";
                     }
                 }
             },
 
-            // ==========================================
-            // ה. מנוע חלליות וקנבס וקטורי (Vector Starship Engine)
-            // ==========================================
+            // ==========================================================================
+            // ד. מודול משחק זיכרון (Matrix Memory Engine Module)
+            // ==========================================================================
+            MemoryArcade: {
+                datasetIcons: ['🍎', '🍎', '⚽', '⚽', '🧠', '🧠', '🎒', '🎒', '🎨', '🎨', '📚', '📚', '📝', '📝', '⭐', '⭐'],
+                volatileFlippedBuffer: [],
+                successfulMatchCounter: 0,
+
+                rebuildMatrix() {
+                    const boardGridDom = document.getElementById('container-memory-board');
+                    if (!boardGridDom) return;
+
+                    boardGridDom.innerHTML = '';
+                    this.volatileFlippedBuffer = [];
+                    this.successfulMatchCounter = 0;
+
+                    const randomShuffledArray = [];
+                    const tempCopyArray = [];
+                    
+                    for (let i = 0; i < this.datasetIcons.length; i++) {
+                        tempCopyArray.push(this.datasetIcons[i]);
+                    }
+
+                    while (tempCopyArray.length > 0) {
+                        const randomIndex = Math.floor(Math.random() * tempCopyArray.length);
+                        randomShuffledArray.push(tempCopyArray[randomIndex]);
+                        tempCopyArray.splice(randomIndex, 1);
+                    }
+                    
+                    for (let i = 0; i < randomShuffledArray.length; i++) {
+                        const iconSymbol = randomShuffledArray[i];
+                        const cellNode = document.createElement('div');
+                        cellNode.classList.add('matrix-node');
+                        cellNode.dataset.icon = iconSymbol;
+                        cellNode.innerText = iconSymbol;
+                        
+                        cellNode.onclick = this.handleNodeInteraction.bind(this, cellNode);
+                        boardGridDom.appendChild(cellNode);
+                    }
+                },
+
+                handleNodeInteraction(selectedNode) {
+                    if (this.volatileFlippedBuffer.length === 2) {
+                        return;
+                    }
+                    
+                    if (selectedNode.classList.contains('node-flipped') === true || selectedNode.classList.contains('node-solved') === true) {
+                        return;
+                    }
+
+                    selectedNode.classList.add('node-flipped');
+                    this.volatileFlippedBuffer.push(selectedNode);
+
+                    if (this.volatileFlippedBuffer.length === 2) {
+                        const codeNodeFirst = this.volatileFlippedBuffer[0];
+                        const codeNodeSecond = this.volatileFlippedBuffer[1];
+
+                        if (codeNodeFirst.dataset.icon === codeNodeSecond.dataset.icon) {
+                            codeNodeFirst.classList.add('node-solved');
+                            codeNodeSecond.classList.add('node-solved');
+                            this.successfulMatchCounter += 2;
+                            this.volatileFlippedBuffer = [];
+
+                            if (this.successfulMatchCounter === this.datasetIcons.length) {
+                                SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare');
+                            }
+                        } else {
+                            setTimeout(() => {
+                                codeNodeFirst.classList.remove('node-flipped');
+                                codeNodeSecond.classList.remove('node-flipped');
+                                this.volatileFlippedBuffer = [];
+                            }, 750);
+                        }
+                    }
+                }
+            },
+
+            // ==========================================================================
+            // ה. מנוע חלליות וקנבס וקטורי מורחב (Vector Starship Arcade 60FPS Engine)
+            // ==========================================================================
             SpaceArcade: {
-                canvasDomElement: null, renderContext2D: null, playerCoordinateX: 110, enemiesStateArray: [], lasersStateArray: [], particlesStateArray: [], accumulatedScore: 0, lastCalculatedTimestamp: 0, animationFrameIdPointer: null,
-                deviceInputBuffer: { leftMoveActive: false, rightMoveActive: false },
+                canvasDomElement: null,
+                renderContext2D: null,
+                playerCoordinateX: 110,
+                enemiesStateArray: [],
+                lasersStateArray: [],
+                particlesStateArray: [],
+                starsCollectionArray: [],
+                accumulatedScore: 0,
+                lastCalculatedTimestamp: 0,
+                animationFrameIdPointer: null,
+                
+                deviceInputBuffer: {
+                    leftMoveActive: false,
+                    rightMoveActive: false
+                },
                 
                 wireControls() {
-                    this.canvasDomElement = document.getElementById("space-arcade-canvas"); if (this.canvasDomElement) this.renderContext2D = this.canvasDomElement.getContext("2d");
+                    this.canvasDomElement = document.getElementById("space-arcade-canvas");
+                    if (this.canvasDomElement) {
+                        this.renderContext2D = this.canvasDomElement.getContext("2d");
+                    }
+
+                    // בניית מערכת כוכבים קבועה ברקע (Parallax Starfield Grid)
+                    this.starsCollectionArray = [];
+                    for (let i = 0; i < 25; i++) {
+                        this.starsCollectionArray.push({
+                            x: Math.random() * 240,
+                            y: Math.random() * 180,
+                            speed: Math.random() * 0.4 + 0.1,
+                            radius: Math.random() * 0.8 + 0.3
+                        });
+                    }
+
                     window.addEventListener("keydown", event => {
                         if (SystemEngine.Core.dataState.activeTabIdentifier === 'section-games-view') {
-                            if (event.key === "ArrowLeft" || event.key === "a" || event.key === "A") { this.deviceInputBuffer.leftMoveActive = true; event.preventDefault(); }
-                            if (event.key === "ArrowRight" || event.key === "d" || event.key === "D") { this.deviceInputBuffer.rightMoveActive = true; event.preventDefault(); }
-                            if (event.key === " " || event.key === "ArrowUp") { this.lasersStateArray.push({ x: this.playerCoordinateX + 10, y: this.canvasDomElement.height - 22 }); SystemEngine.AudioContextController.dispatchFrequencySound('laser'); event.preventDefault(); }
+                            if (event.key === "ArrowLeft" || event.key === "a" || event.key === "A") {
+                                this.deviceInputBuffer.leftMoveActive = true;
+                                event.preventDefault();
+                            }
+                            if (event.key === "ArrowRight" || event.key === "d" || event.key === "D") {
+                                this.deviceInputBuffer.rightMoveActive = true;
+                                event.preventDefault();
+                            }
+                            if (event.key === " " || event.key === "ArrowUp") {
+                                const laserXPosition = this.playerCoordinateX + 10;
+                                const laserYPosition = this.canvasDomElement.height - 22;
+                                this.lasersStateArray.push({ x: laserXPosition, y: laserYPosition });
+                                SystemEngine.AudioContextController.dispatchFrequencySound('laser');
+                                event.preventDefault();
+                            }
                         }
                     });
+
                     window.addEventListener("keyup", event => {
-                        if (event.key === "ArrowLeft" || event.key === "a" || event.key === "A") this.deviceInputBuffer.leftMoveActive = false;
-                        if (event.key === "ArrowRight" || event.key === "d" || event.key === "D") this.deviceInputBuffer.rightMoveActive = false;
+                        if (event.key === "ArrowLeft" || event.key === "a" || event.key === "A") {
+                            this.deviceInputBuffer.leftMoveActive = false;
+                        }
+                        if (event.key === "ArrowRight" || event.key === "d" || event.key === "D") {
+                            this.deviceInputBuffer.rightMoveActive = false;
+                        }
                     });
-                    const joyLeft = document.getElementById('joystick-left-trigger'), joyRight = document.getElementById('joystick-right-trigger');
+
+                    const joyLeft = document.getElementById('joystick-left-trigger');
+                    const joyRight = document.getElementById('joystick-right-trigger');
+
                     if (joyLeft && joyRight) {
-                        joyLeft.addEventListener('mousedown', (e) => { this.deviceInputBuffer.leftMoveActive = true; e.preventDefault(); SystemEngine.AudioContextController.lazyInit(); });
-                        joyLeft.addEventListener('touchstart', (e) => { this.deviceInputBuffer.leftMoveActive = true; e.preventDefault(); SystemEngine.AudioContextController.lazyInit(); });
-                        joyRight.addEventListener('mousedown', (e) => { this.deviceInputBuffer.rightMoveActive = true; e.preventDefault(); SystemEngine.AudioContextController.lazyInit(); });
-                        joyRight.addEventListener('touchstart', (e) => { this.deviceInputBuffer.rightMoveActive = true; e.preventDefault(); SystemEngine.AudioContextController.lazyInit(); });
+                        joyLeft.addEventListener('mousedown', (e) => { 
+                            this.deviceInputBuffer.leftMoveActive = true; 
+                            e.preventDefault(); 
+                            SystemEngine.AudioContextController.lazyInit(); 
+                        });
+                        joyLeft.addEventListener('touchstart', (e) => { 
+                            this.deviceInputBuffer.leftMoveActive = true; 
+                            e.preventDefault(); 
+                            SystemEngine.AudioContextController.lazyInit(); 
+                        });
+                        
+                        joyRight.addEventListener('mousedown', (e) => { 
+                            this.deviceInputBuffer.rightMoveActive = true; 
+                            e.preventDefault(); 
+                            SystemEngine.AudioContextController.lazyInit(); 
+                        });
+                        joyRight.addEventListener('touchstart', (e) => { 
+                            this.deviceInputBuffer.rightMoveActive = true; 
+                            e.preventDefault(); 
+                            SystemEngine.AudioContextController.lazyInit(); 
+                        });
                     }
                 },
+
                 awakenGame() {
-                    this.killLoop(); if (!this.canvasDomElement) return;
-                    this.playerCoordinateX = this.canvasDomElement.width / 2 - 10; this.enemiesStateArray = []; this.lasersStateArray = []; this.particlesStateArray = []; this.accumulatedScore = 0;
-                    const scoreBoard = document.getElementById("text-space-score"); if (scoreBoard) scoreBoard.innerText = this.accumulatedScore;
-                    this.lastCalculatedTimestamp = performance.now(); this.animationFrameIdPointer = requestAnimationFrame(this.executeGameFrameLoop.bind(this));
+                    this.killLoop();
+                    if (!this.canvasDomElement) return;
+
+                    const startingXPosition = this.canvasDomElement.width / 2 - 10;
+                    this.playerCoordinateX = startingXPosition;
+                    this.enemiesStateArray = [];
+                    this.lasersStateArray = [];
+                    this.particlesStateArray = [];
+                    this.accumulatedScore = 0;
+                    
+                    const scoreBoard = document.getElementById("text-space-score");
+                    if (scoreBoard) {
+                        scoreBoard.innerText = this.accumulatedScore;
+                    }
+
+                    this.lastCalculatedTimestamp = performance.now();
+                    this.animationFrameIdPointer = requestAnimationFrame(this.executeGameFrameLoop.bind(this));
                 },
-                killLoop() { if (this.animationFrameIdPointer) cancelAnimationFrame(this.animationFrameIdPointer); this.animationFrameIdPointer = null; },
-                rebootGame() { this.awakenGame(); },
+
+                killLoop() {
+                    if (this.animationFrameIdPointer) {
+                        cancelAnimationFrame(this.animationFrameIdPointer);
+                    }
+                    this.animationFrameIdPointer = null;
+                },
+
+                rebootGame() {
+                    this.awakenGame();
+                },
+
                 triggerCameraShakeEffect() {
-                    if (!this.canvasDomElement) return; this.canvasDomElement.classList.add('canvas-shake'); SystemEngine.AudioContextController.dispatchFrequencySound('explosion');
-                    setTimeout(() => { if (this.canvasDomElement) this.canvasDomElement.classList.remove('canvas-shake'); }, 360);
+                    if (!this.canvasDomElement) return;
+                    this.canvasDomElement.classList.add('canvas-shake');
+                    SystemEngine.AudioContextController.dispatchFrequencySound('explosion');
+                    setTimeout(() => {
+                        if (this.canvasDomElement) {
+                            this.canvasDomElement.classList.remove('canvas-shake');
+                        }
+                    }, 360);
                 },
+
                 instantiateExplosionParticles(originX, originY) {
-                    for (let index = 0; index < 8; index++) {
-                        const randomAngle = Math.random() * Math.PI * 2, structuralVelocitySpeed = Math.random() * 2.4 + 1;
-                        this.particlesStateArray.push({ x: originX, y: originY, vx: Math.cos(randomAngle) * structuralVelocitySpeed, vy: Math.sin(randomAngle) * structuralVelocitySpeed, alpha: 1.0 });
+                    for (let index = 0; index < 10; index++) {
+                        const randomAngle = Math.random() * Math.PI * 2;
+                        const structuralVelocitySpeed = Math.random() * 2.5 + 1.2;
+                        const particleObject = {
+                            x: originX,
+                            y: originY,
+                            vx: Math.cos(randomAngle) * structuralVelocitySpeed,
+                            vy: Math.sin(randomAngle) * structuralVelocitySpeed,
+                            alpha: 1.0
+                        };
+                        this.particlesStateArray.push(particleObject);
                     }
                 },
                 
-                // ציור וקטורי של חללית השחקן (מגן טורקיז)
+                // ציור וקטורי מפורט של חללית השחקן (חרטום, מגן, כנפיים ואש מנוע)
                 drawPlayerShip(x, y) {
                     const ctx = this.renderContext2D;
-                    ctx.fillStyle = "#00adb5"; ctx.shadowColor = "rgba(0, 173, 181, 0.5)"; ctx.shadowBlur = 6;
+                    
+                    // אפקט להבת מנוע (אש רנדומלית מאחור)
+                    if (Math.random() > 0.3) {
+                        ctx.fillStyle = "#ffaa00";
+                        ctx.beginPath();
+                        ctx.moveTo(x + 7, y + 14);
+                        ctx.lineTo(x + 10, y + 21 + Math.random() * 4);
+                        ctx.lineTo(x + 13, y + 14);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+
+                    // גוף החללית המרכזי ועיצוב כנפיים וקטורי
+                    ctx.fillStyle = "#00adb5";
+                    ctx.shadowColor = "rgba(0, 173, 181, 0.6)";
+                    ctx.shadowBlur = 8;
+                    
                     ctx.beginPath();
-                    ctx.moveTo(x + 10, y); // חרטום
-                    ctx.lineTo(x + 20, y + 16); // כנף ימין
-                    ctx.lineTo(x + 14, y + 13); // שקע פנימי ימני
-                    ctx.lineTo(x + 6, y + 13);  // שקע פנימי שמאלי
-                    ctx.lineTo(x, y + 16);    // כנף שמאל
-                    ctx.closePath(); ctx.fill(); ctx.shadowBlur = 0;
+                    ctx.moveTo(x + 10, y);          // קצה חרטום קדמי
+                    ctx.lineTo(x + 13, y + 5);      // גוף ימני עליון
+                    ctx.lineTo(x + 20, y + 14);     // קצה כנף ימנית קיצונית
+                    ctx.lineTo(x + 14, y + 13);     // חיבור פנימי כנף ימין
+                    ctx.lineTo(x + 12, y + 15);     // בית מנוע ימני
+                    ctx.lineTo(x + 8, y + 15);      // בית מנוע שמאלי
+                    ctx.lineTo(x + 6, y + 13);      // חיבור פנימי כנף שמאל
+                    ctx.lineTo(x, y + 14);          // קצה כנף שמאלית קיצונית
+                    ctx.lineTo(x + 7, y + 5);       // גוף שמאלי עליון
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // תוספת קבינה פנימית מוארת לחללית (חרטום זכוכית)
+                    ctx.fillStyle = "#ffffff";
+                    ctx.beginPath();
+                    ctx.moveTo(x + 10, y + 3);
+                    ctx.lineTo(x + 12, y + 7);
+                    ctx.lineTo(x + 8, y + 7);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    ctx.shadowBlur = 0;
                 },
 
-                // ציור וקטורי של חללית אויב (פולש אדום)
+                // ציור וקטורי מפורט של חללית אויב פולשת (מטוסי קרב אדומים רעים)
                 drawEnemyShip(x, y) {
                     const ctx = this.renderContext2D;
-                    ctx.fillStyle = "#ff4a4a"; ctx.shadowColor = "rgba(255, 74, 74, 0.5)"; ctx.shadowBlur = 6;
+                    
+                    // להבת מנוע עליונה קטנה לאויבים
+                    if (Math.random() > 0.4) {
+                        ctx.fillStyle = "#ff4a4a";
+                        ctx.beginPath();
+                        ctx.moveTo(x + 6, y);
+                        ctx.lineTo(x + 7.5, y - 3 - Math.random() * 2);
+                        ctx.lineTo(x + 9, y);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+
+                    ctx.fillStyle = "#ff4a4a";
+                    ctx.shadowColor = "rgba(255, 74, 74, 0.6)";
+                    ctx.shadowBlur = 8;
+                    
                     ctx.beginPath();
-                    ctx.moveTo(x + 7.5, y + 12); // חרטום פונה מטה
-                    ctx.lineTo(x + 15, y);      // כנף ימין עליונה
-                    ctx.lineTo(x + 10, y + 3);   // גוף ימני
-                    ctx.lineTo(x + 5, y + 3);    // גוף שמאלי
-                    ctx.lineTo(x, y);          // כנף שמאל עליונה
-                    ctx.closePath(); ctx.fill(); ctx.shadowBlur = 0;
+                    ctx.moveTo(x + 7.5, y + 14);    // חרטום תחתון פונה מטה
+                    ctx.lineTo(x + 12, y + 7);      // גוף ימני
+                    ctx.lineTo(x + 15, y);          // קצה כנף ימנית אחורית
+                    ctx.lineTo(x + 10, y + 3);      // מייצב פנימי ימני
+                    ctx.lineTo(x + 5, y + 3);       // מייצב פנימי שמאלי
+                    ctx.lineTo(x, y);               // קצה כנף שמאלית אחורית
+                    ctx.lineTo(x + 3, y + 7);       // גוף שמאלי
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // ליבת אנרגיה לאויב
+                    ctx.fillStyle = "#ffaa00";
+                    ctx.fillRect(x + 6, y + 4, 3, 3);
+                    
+                    ctx.shadowBlur = 0;
                 },
 
                 executeGameFrameLoop(currentHighResTimestamp) {
-                    if (SystemEngine.Core.dataState.activeTabIdentifier !== 'section-games-view' || !this.renderContext2D) return;
-                    let relativeDeltaTime = (currentHighResTimestamp - this.lastCalculatedTimestamp) / 16.666; this.lastCalculatedTimestamp = currentHighResTimestamp;
-                    if (relativeDeltaTime > 4) relativeDeltaTime = 4;
+                    if (SystemEngine.Core.dataState.activeTabIdentifier !== 'section-games-view') {
+                        return;
+                    }
+                    if (!this.renderContext2D) {
+                        return;
+                    }
 
-                    this.renderContext2D.fillStyle = "#010103"; this.renderContext2D.fillRect(0, 0, this.canvasDomElement.width, this.canvasDomElement.height);
+                    let relativeDeltaTime = (currentHighResTimestamp - this.lastCalculatedTimestamp) / 16.666;
+                    this.lastCalculatedTimestamp = currentHighResTimestamp;
 
-                    // תנועה וגבולות מסך של השחקן
-                    if (this.deviceInputBuffer.leftMoveActive && this.playerCoordinateX > 0) this.playerCoordinateX -= 4.0 * relativeDeltaTime;
-                    if (this.deviceInputBuffer.rightMoveActive && this.playerCoordinateX < this.canvasDomElement.width - 20) this.playerCoordinateX += 4.0 * relativeDeltaTime;
+                    if (relativeDeltaTime > 4) {
+                        relativeDeltaTime = 4;
+                    }
 
-                    // רינדור חללית השחקן
-                    this.drawPlayerShip(this.playerCoordinateX, this.canvasDomElement.height - 22);
+                    // מחיקת מסך וציור רקע שחור עמוק
+                    this.renderContext2D.fillStyle = "#010103";
+                    this.renderContext2D.fillRect(0, 0, this.canvasDomElement.width, this.canvasDomElement.height);
 
-                    // ירי אוטומטי מבוקר
-                    if (Math.random() < 0.035) this.lasersStateArray.push({ x: this.playerCoordinateX + 10, y: this.canvasDomElement.height - 22 });
+                    // רינדור ותנועת כוכבים ברקע (Starfield Animation)
+                    this.renderContext2D.fillStyle = "#ffffff";
+                    for (let i = 0; i < this.starsCollectionArray.length; i++) {
+                        const star = this.starsCollectionArray[i];
+                        star.y += star.speed * relativeDeltaTime;
+                        if (star.y > this.canvasDomElement.height) {
+                            star.y = 0;
+                            star.x = Math.random() * this.canvasDomElement.width;
+                        }
+                        this.renderContext2D.fillRect(star.x, star.y, star.radius, star.radius);
+                    }
 
-                    // עדכון וציור לייזרים
+                    // עדכון מיקום חללית השחקן לפי פקדים
+                    if (this.deviceInputBuffer.leftMoveActive === true && this.playerCoordinateX > 0) {
+                        this.playerCoordinateX -= 4.0 * relativeDeltaTime;
+                    }
+                    if (this.deviceInputBuffer.rightMoveActive === true && this.playerCoordinateX < this.canvasDomElement.width - 20) {
+                        this.playerCoordinateX += 4.0 * relativeDeltaTime;
+                    }
+
+                    // קריאה לפונקציית הציור הוקטורית של השחקן
+                    const playerYPositionOnCanvas = this.canvasDomElement.height - 24;
+                    this.drawPlayerShip(this.playerCoordinateX, playerYPositionOnCanvas);
+
+                    // ירי לייזר מבוקר רנדומלי קל
+                    if (Math.random() < 0.035) {
+                        const calculatedLaserX = this.playerCoordinateX + 10;
+                        const calculatedLaserY = this.canvasDomElement.height - 24;
+                        this.lasersStateArray.push({ x: calculatedLaserX, y: calculatedLaserY });
+                    }
+
+                    // עדכון וציור לייזרים במסך
                     this.renderContext2D.fillStyle = "#00f5ff";
                     for (let index = this.lasersStateArray.length - 1; index >= 0; index--) {
                         this.lasersStateArray[index].y -= 4.6 * relativeDeltaTime;
-                        this.renderContext2D.fillRect(this.lasersStateArray[index].x - 1, this.lasersStateArray[index].y, 2, 7);
-                        if (this.lasersStateArray[index].y < 0) this.lasersStateArray.splice(index, 1);
+                        const currentLaser = this.lasersStateArray[index];
+                        this.renderContext2D.fillRect(currentLaser.x - 1, currentLaser.y, 2, 7);
+                        
+                        if (currentLaser.y < 0) {
+                            this.lasersStateArray.splice(index, 1);
+                        }
                     }
 
-                    // יצירת אויבים
-                    if (Math.random() < 0.022) this.enemiesStateArray.push({ x: Math.random() * (this.canvasDomElement.width - 15), y: 0 });
+                    // יצירת חלליות אויב חדשות
+                    if (Math.random() < 0.022) {
+                        const randomEnemyX = Math.random() * (this.canvasDomElement.width - 15);
+                        this.enemiesStateArray.push({ x: randomEnemyX, y: 0 });
+                    }
 
-                    // עדכון וציור חלליות האויב
+                    // ניהול תנועה, ציור והתנגשות של חלליות האויב
                     for (let index = this.enemiesStateArray.length - 1; index >= 0; index--) {
                         this.enemiesStateArray[index].y += 1.25 * relativeDeltaTime;
-                        this.drawEnemyShip(this.enemiesStateArray[index].x, this.enemiesStateArray[index].y);
+                        const currentEnemy = this.enemiesStateArray[index];
+                        
+                        // שימוש בפונקציית הציור החדשה של חלליות האויב
+                        this.drawEnemyShip(currentEnemy.x, currentEnemy.y);
 
-                        if (this.enemiesStateArray[index].y > this.canvasDomElement.height) {
-                            this.triggerCameraShakeEffect(); this.awakenGame(); return;
+                        if (currentEnemy.y > this.canvasDomElement.height) {
+                            this.triggerCameraShakeEffect();
+                            this.awakenGame();
+                            return;
                         }
 
-                        // בדיקת התנגשויות
+                        // לולאת בדיקת פגיעת לייזר באויב
                         for (let laserIndex = this.lasersStateArray.length - 1; laserIndex >= 0; laserIndex--) {
-                            const laserObject = this.lasersStateArray[laserIndex], enemyObject = this.enemiesStateArray[index];
-                            if (laserObject.x > enemyObject.x && laserObject.x < enemyObject.x + 15 && laserObject.y > enemyObject.y && laserObject.y < enemyObject.y + 12) {
-                                this.instantiateExplosionParticles(enemyObject.x + 7.5, enemyObject.y + 6);
-                                this.enemiesStateArray.splice(index, 1); this.lasersStateArray.splice(laserIndex, 1);
+                            const laserObject = this.lasersStateArray[laserIndex];
+                            const enemyObject = this.enemiesStateArray[index];
+
+                            if (laserObject.x > enemyObject.x && 
+                                laserObject.x < enemyObject.x + 15 && 
+                                laserObject.y > enemyObject.y && 
+                                laserObject.y < enemyObject.y + 14) {
+                                
+                                const explosionCenterX = enemyObject.x + 7.5;
+                                const explosionCenterY = enemyObject.y + 7;
+                                this.instantiateExplosionParticles(explosionCenterX, explosionCenterY);
+                                
+                                this.enemiesStateArray.splice(index, 1);
+                                this.lasersStateArray.splice(laserIndex, 1);
+                                
                                 this.accumulatedScore += 10;
-                                const scoreElement = document.getElementById("text-space-score"); if (scoreElement) scoreElement.innerText = this.accumulatedScore;
+                                const scoreElement = document.getElementById("text-space-score");
+                                if (scoreElement) {
+                                    scoreElement.innerText = this.accumulatedScore;
+                                }
                                 break;
                             }
                         }
                     }
 
-                    // עדכון חלקיקים
+                    // ניהול פיזיקה וחלקיקי פיצוצים מונחי זמן דלתא
                     for (let index = this.particlesStateArray.length - 1; index >= 0; index--) {
-                        let p = this.particlesStateArray[index]; p.x += p.vx * relativeDeltaTime; p.y += p.vy * relativeDeltaTime; p.vx *= 0.95; p.vy *= 0.95; p.alpha -= 0.038 * relativeDeltaTime;
-                        if (p.alpha <= 0) { this.particlesStateArray.splice(index, 1); continue; }
-                        this.renderContext2D.fillStyle = `rgba(0, 245, 255, ${p.alpha})`; this.renderContext2D.fillRect(p.x, p.y, 2, 2);
+                        let particle = this.particlesStateArray[index];
+                        particle.x += particle.vx * relativeDeltaTime;
+                        particle.y += particle.vy * relativeDeltaTime;
+                        particle.vx *= 0.95;
+                        particle.vy *= 0.95;
+                        particle.alpha -= 0.038 * relativeDeltaTime;
+
+                        if (particle.alpha <= 0) {
+                            this.particlesStateArray.splice(index, 1);
+                            continue;
+                        }
+
+                        const currentParticleColor = `rgba(0, 245, 255, ${particle.alpha})`;
+                        this.renderContext2D.fillStyle = currentParticleColor;
+                        this.renderContext2D.fillRect(particle.x, particle.y, 2, 2);
                     }
 
                     this.animationFrameIdPointer = requestAnimationFrame(this.executeGameFrameLoop.bind(this));
@@ -588,44 +1443,128 @@
             },
 
             // ==========================================
-            // ו. מודול משחק איקס עיגול (TicTac Engine)
+            // ו. מודול משחק איקס עיגול (TicTac Engine Module)
             // ==========================================
             TicTacArcade: {
-                boardMemoryState: ["", "", "", "", "", "", "", "", ""], currentTurnToken: "X", isMatchActive: true,
+                boardMemoryState: ["", "", "", "", "", "", "", "", ""],
+                currentTurnToken: "X",
+                isMatchActive: true,
+
                 flushBoard() {
-                    this.boardMemoryState = ["", "", "", "", "", "", "", "", ""], this.currentTurnToken = "X"; this.isMatchActive = true;
-                    const statusParagraphElement = document.getElementById('text-tic-tac-status'); if (statusParagraphElement) statusParagraphElement.innerText = "תור נוכחי: X";
-                    const boardGridContainer = document.getElementById('container-tic-tac-board'); if (!boardGridContainer) return;
+                    this.boardMemoryState = ["", "", "", "", "", "", "", "", ""];
+                    this.currentTurnToken = "X";
+                    this.isMatchActive = true;
+
+                    const statusParagraphElement = document.getElementById('text-tic-tac-status');
+                    if (statusParagraphElement) {
+                        statusParagraphElement.innerText = "תור נוכחי: X";
+                    }
+
+                    const boardGridContainer = document.getElementById('container-tic-tac-board');
+                    if (!boardGridContainer) return;
+
                     boardGridContainer.innerHTML = '';
                     for (let index = 0; index < 9; index++) {
-                        const blockCell = document.createElement('div'); blockCell.classList.add('tic-node-block'); blockCell.dataset.index = index;
-                        blockCell.onclick = this.processBlockInteraction.bind(this, blockCell); boardGridContainer.appendChild(blockCell);
+                        const blockCell = document.createElement('div');
+                        blockCell.classList.add('tic-node-block');
+                        blockCell.dataset.index = index;
+                        blockCell.onclick = this.processBlockInteraction.bind(this, blockCell);
+                        boardGridContainer.appendChild(blockCell);
                     }
                 },
+
                 processBlockInteraction(cellDomNode) {
-                    const blockIndex = cellDomNode.dataset.index; if (this.boardMemoryState[blockIndex] !== "" || !this.isMatchActive) return;
-                    this.boardMemoryState[blockIndex] = this.currentTurnToken; cellDomNode.innerText = this.currentTurnToken;
-                    cellDomNode.style.color = this.currentTurnToken === "X" ? "#00adb5" : "#ff4a4a"; this.evaluateWinPatterns();
+                    const blockIndex = cellDomNode.dataset.index;
+                    if (this.boardMemoryState[blockIndex] !== "" || this.isMatchActive === false) {
+                        return;
+                    }
+
+                    this.boardMemoryState[blockIndex] = this.currentTurnToken;
+                    cellDomNode.innerText = this.currentTurnToken;
+                    
+                    if (this.currentTurnToken === "X") {
+                        cellDomNode.style.color = "#00adb5";
+                    } else {
+                        cellDomNode.style.color = "#ff4a4a";
+                    }
+
+                    this.evaluateWinPatterns();
                 },
+
                 evaluateWinPatterns() {
-                    const structuralWinPatterns = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+                    const structuralWinPatterns = [
+                        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                        [0, 4, 8], [2, 4, 6]
+                    ];
+
                     let matchWonResultActive = false;
                     for (let index = 0; index < structuralWinPatterns.length; index++) {
                         const patternRow = structuralWinPatterns[index];
-                        if (this.boardMemoryState[patternRow[0]] !== "" && this.boardMemoryState[patternRow[0]] === this.boardMemoryState[patternRow[1]] && this.boardMemoryState[patternRow[0]] === this.boardMemoryState[patternRow[2]]) { matchWonResultActive = true; break; }
+                        if (this.boardMemoryState[patternRow[0]] !== "" && 
+                            this.boardMemoryState[patternRow[0]] === this.boardMemoryState[patternRow[1]] && 
+                            this.boardMemoryState[patternRow[0]] === this.boardMemoryState[patternRow[2]]) {
+                            matchWonResultActive = true;
+                            break;
+                        }
                     }
-                    const statusElement = document.getElementById('text-tic-tac-status'); if (!statusElement) return;
-                    if (matchWonResultActive) { statusElement.innerText = `🏆 שחקן ${this.currentTurnToken} ניצח בסיבוב!`; SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare'); this.isMatchActive = false; return; }
-                    if (!this.boardMemoryState.includes("")) { statusElement.innerText = "🤝 תיקו שווה לחלוטין!"; this.isMatchActive = false; return; }
-                    this.currentTurnToken = this.currentTurnToken === "X" ? "O" : "X"; statusElement.innerText = `תור נוכחי: ${this.currentTurnToken}`;
+
+                    const statusElement = document.getElementById('text-tic-tac-status');
+                    if (!statusElement) return;
+
+                    if (matchWonResultActive === true) {
+                        statusElement.innerText = `🏆 שחקן ${this.currentTurnToken} ניצח בסיבוב!`;
+                        SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare');
+                        this.isMatchActive = false;
+                        return;
+                    }
+
+                    let boardIsFullyOccupied = true;
+                    for (let i = 0; i < this.boardMemoryState.length; i++) {
+                        if (this.boardMemoryState[i] === "") {
+                            boardIsFullyOccupied = false;
+                            break;
+                        }
+                    }
+
+                    if (boardIsFullyOccupied === true) {
+                        statusElement.innerText = "🤝 תיקו שווה לחלוטין!";
+                        this.isMatchActive = false;
+                        return;
+                    }
+
+                    if (this.currentTurnToken === "X") {
+                        this.currentTurnToken = "O";
+                    } else {
+                        this.currentTurnToken = "X";
+                    }
+                    statusElement.innerText = `תור נוכחי: ${this.currentTurnToken}`;
                 }
             }
         };
 
-        // אתחול מערכות
+        // ==========================================
+        // 7. נקודת כניסה ראשית (Main Application Entry Point Sequence)
+        // ==========================================
         document.addEventListener("DOMContentLoaded", () => {
-            SystemEngine.Core.bootstrap(); SystemEngine.MemoryArcade.rebuildMatrix(); SystemEngine.TicTacArcade.flushBoard(); SystemEngine.SpaceArcade.wireControls();
+            console.log("DOM fully parsing compiled. Bootstrapping OS Application Modules...");
+            
+            // הפעלת מודול הליבה
+            SystemEngine.Core.bootstrap();
+            
+            // בנייה מחדש של רשת משחק הזיכרון
+            SystemEngine.MemoryArcade.rebuildMatrix();
+            
+            // ניקוי ואתחול משחק איקס עיגול
+            SystemEngine.TicTacArcade.flushBoard();
+            
+            // הפעלת פקדים ואירועים עבור מנוע החלליות קנבס
+            SystemEngine.SpaceArcade.wireControls();
+            
+            // כיוון הטאב ההתחלתי ללוח הזמנים של המשתמש
             SystemEngine.Core.switchTab('section-day-view', 'trigger-day-tab');
+            
+            console.log("All systems are operational. Interface thread fully listening.");
         });
     </script>
 </body>
