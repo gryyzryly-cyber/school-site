@@ -140,7 +140,6 @@
             margin: 5px;
         }
 
-        /* גריד משופר ל-4 משחקים (2 בטבלה בכל שורה) */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -188,37 +187,36 @@
             margin-left: 10px;
         }
 
-        /* משחק סנייק */
-        #snake-canvas {
-            background-color: #000000;
+        /* קנבס משחק החלליות החדש */
+        #space-canvas {
+            background-color: #050508;
             display: block;
             margin: 15px auto;
             border: 2px solid #333;
             border-radius: 5px;
         }
 
-        .snake-controls {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            width: 140px;
-            margin: 15px auto 0 auto;
-            gap: 6px;
+        .space-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
         }
 
-        .snake-btn {
+        .space-btn {
             background-color: #2d2d2d;
             color: white;
             border: 1px solid #444;
-            padding: 10px;
-            text-align: center;
+            padding: 12px 25px;
+            font-size: 1.2rem;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
             user-select: none;
         }
-        .snake-btn:active { background-color: #00adb5; }
+        .space-btn:active { background-color: #00adb5; }
 
-        /* משחק איקס עיגול חדש */
+        /* משחק איקס עיגול */
         .tic-board {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -241,7 +239,6 @@
             cursor: pointer;
             user-select: none;
         }
-        .tic-cell:hover { background-color: #333; }
         
         .pin-btn {
             background-color: #00adb5;
@@ -259,7 +256,7 @@
 
     <div id="main-os">
         <div class="top-bar">
-            <h2>⚡ SCHOOL OS v15.0</h2>
+            <h2>⚡ SCHOOL OS v16.0</h2>
             <button class="pin-btn" onclick="toggleAdminMode()" style="background:#252525; border:1px solid #333; font-size: 1.1rem; padding: 8px 12px;">⚙️ הגדרות לו"ז ומשימות</button>
         </div>
 
@@ -333,14 +330,13 @@
                 </div>
 
                 <div class="card" style="text-align: center;">
-                    <h3>🐍 משחק הנחש (Snake)</h3>
-                    <p>ניקוד: <span id="snake-score" style="color:#00adb5; font-weight:bold;">0</span></p>
-                    <canvas id="snake-canvas" width="240" height="180"></canvas>
-                    <button class="pin-btn" onclick="startSnakeGame()" style="background-color: #28a745; padding: 5px 12px; font-size: 0.85rem;">אפס נחש</button>
-                    <div class="snake-controls">
-                        <div></div><div class="snake-btn" onclick="changeSnakeDir('UP')">▲</div><div></div>
-                        <div class="snake-btn" onclick="changeSnakeDir('LEFT')">◄</div><div></div><div class="snake-btn" onclick="changeSnakeDir('RIGHT')">►</div>
-                        <div></div><div class="snake-btn" onclick="changeSnakeDir('DOWN')">▼</div><div></div>
+                    <h3>🚀 קרב חלליות רטרו</h3>
+                    <p>ניקוד: <span id="space-score" style="color:#00adb5; font-weight:bold;">0</span></p>
+                    <canvas id="space-canvas" width="240" height="180"></canvas>
+                    <button class="pin-btn" onclick="startSpaceGame()" style="background-color: #28a745; padding: 5px 12px; font-size: 0.85rem;">אפס חלליות</button>
+                    <div class="space-controls">
+                        <div class="space-btn" onclick="moveSpaceShip('LEFT')">◄ שמאל</div>
+                        <div class="space-btn" onclick="moveSpaceShip('RIGHT')">ימין ►</div>
                     </div>
                 </div>
 
@@ -362,7 +358,7 @@
             setTimeout(() => {
                 resetMemoryGame();
                 updateProgress();
-                startSnakeGame();
+                startSpaceGame();
                 resetTicGame();
             }, 100);
         });
@@ -400,7 +396,7 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             document.getElementById(btnId).classList.add('active');
-            if(tabId === 'my-games') startSnakeGame();
+            if(tabId === 'my-games') startSpaceGame();
         }
 
         function updateProgress() {
@@ -447,40 +443,79 @@
             }
         }
 
-        /* משחק סנייק */
-        const canvas = document.getElementById("snake-canvas");
-        let ctx, box = 12, snake, food, d, score, snakeGameInterval;
-        if(canvas) ctx = canvas.getContext("2d");
-        function startSnakeGame() {
-            if(!canvas || !ctx) return; clearInterval(snakeGameInterval);
-            snake = [{ x: 9 * box, y: 7 * box }];
-            food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 15) * box };
-            score = 0; document.getElementById("snake-score").innerText = score; d = "RIGHT"; 
-            snakeGameInterval = setInterval(drawSnake, 140);
+        /* משחק חלליות חדש */
+        const sCanvas = document.getElementById("space-canvas");
+        let sCtx, playerX, enemies, lasers, spaceScore, spaceInterval;
+        if(sCanvas) sCtx = sCanvas.getContext("2d");
+
+        function startSpaceGame() {
+            if(!sCanvas || !sCtx) return;
+            clearInterval(spaceInterval);
+            playerX = sCanvas.width / 2 - 10;
+            enemies = [];
+            lasers = [];
+            spaceScore = 0;
+            document.getElementById("space-score").innerText = spaceScore;
+            spaceInterval = setInterval(updateSpaceGame, 40);
         }
-        function changeSnakeDir(dir) {
-            if (dir === "LEFT" && d !== "RIGHT") d = "LEFT"; else if (dir === "UP" && d !== "DOWN") d = "UP";
-            else if (dir === "RIGHT" && d !== "LEFT") d = "RIGHT"; else if (dir === "DOWN" && d !== "UP") d = "DOWN";
+
+        function moveSpaceShip(dir) {
+            if(dir === 'LEFT' && playerX > 0) playerX -= 15;
+            if(dir === 'RIGHT' && playerX < sCanvas.width - 20) playerX += 15;
         }
+
         document.addEventListener("keydown", function(e) {
-            if (e.keyCode == 37 && d != "RIGHT") d = "LEFT"; else if (e.keyCode == 38 && d != "DOWN") d = "UP";
-            else if (e.keyCode == 39 && d != "LEFT") d = "RIGHT"; else if (e.keyCode == 40 && d != "UP") d = "DOWN";
+            if(e.keyCode == 37 && playerX > 0) playerX -= 12; // חץ שמאלה
+            if(e.keyCode == 39 && playerX < sCanvas.width - 20) playerX += 12; // חץ ימינה
         });
-        function drawSnake() {
-            if(!ctx) return; ctx.fillStyle = "#000000"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < snake.length; i++) { ctx.fillStyle = (i == 0) ? "#00adb5" : "#00f5ff"; ctx.fillRect(snake[i].x, snake[i].y, box, box); }
-            ctx.fillStyle = "red"; ctx.fillRect(food.x, food.y, box, box);
-            let snakeX = snake[0].x; let snakeY = snake[0].y;
-            if (d == "LEFT") snakeX -= box; if (d == "UP") snakeY -= box; if (d == "RIGHT") snakeX += box; if (d == "DOWN") snakeY += box;
-            if (snakeX == food.x && snakeY == food.y) {
-                score++; document.getElementById("snake-score").innerText = score;
-                food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 15) * box };
-            } else { snake.pop(); }
-            let newHead = { x: snakeX, y: snakeY };
-            if (snakeX < 0 || snakeX >= canvas.width || snakeY < 0 || snakeY >= canvas.height || collision(newHead, snake)) { clearInterval(snakeGameInterval); alert("💥 משחק נגמר! ניקוד: " + score); return; }
-            snake.unshift(newHead);
+
+        function updateSpaceGame() {
+            sCtx.fillStyle = "#050508";
+            sCtx.fillRect(0, 0, sCanvas.width, sCanvas.height);
+
+            // ציור שחקן
+            sCtx.fillStyle = "#00adb5";
+            sCtx.fillRect(playerX, sCanvas.height - 20, 20, 12);
+
+            // יצירת לייזרים אוטומטית בקצב רגוע
+            if(Math.random() < 0.07) { lasers.push({x: playerX + 9, y: sCanvas.height - 20}); }
+
+            // עדכון וציור לייזרים
+            sCtx.fillStyle = "#00f5ff";
+            for(let i = lasers.length - 1; i >= 0; i--) {
+                lasers[i].y -= 4;
+                sCtx.fillRect(lasers[i].x, lasers[i].y, 3, 7);
+                if(lasers[i].y < 0) lasers.splice(i, 1);
+            }
+
+            // יצירת אויבים
+            if(Math.random() < 0.03) { enemies.push({x: Math.random() * (sCanvas.width - 15), y: 0}); }
+
+            // עדכון וציור אויבים
+            sCtx.fillStyle = "#ff4a4a";
+            for(let i = enemies.length - 1; i >= 0; i--) {
+                enemies[i].y += 1.5;
+                sCtx.fillRect(enemies[i].x, enemies[i].y, 15, 11);
+
+                // בדיקה אם אויב הגיע לתחתית
+                if(enemies[i].y > sCanvas.height) {
+                    clearInterval(spaceInterval);
+                    alert("💥 אויבים פלשו למערכת! משחק נגמר. ניקוד: " + spaceScore);
+                    return;
+                }
+
+                // פגיעת לייזר באויב
+                for(let j = lasers.length - 1; j >= 0; j--) {
+                    if(lasers[j].x > enemies[i].x && lasers[j].x < enemies[i].x + 15 && lasers[j].y > enemies[i].y && lasers[j].y < enemies[i].y + 11) {
+                        enemies.splice(i, 1);
+                        lasers.splice(j, 1);
+                        spaceScore += 10;
+                        document.getElementById("space-score").innerText = spaceScore;
+                        break;
+                    }
+                }
+            }
         }
-        function collision(head, array) { for (let i = 0; i < array.length; i++) { if (head.x == array[i].x && head.y == array[i].y) return true; } return false; }
 
         /* משחק איקס עיגול */
         let ticBoard = ["", "", "", "", "", "", "", "", ""]; let ticCurrentPlayer = "X"; let ticActive = true;
@@ -506,13 +541,4 @@
             const winPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
             let won = false;
             for(let pattern of winPatterns) {
-                if(ticBoard[pattern[0]] !== "" && ticBoard[pattern[0]] === ticBoard[pattern[1]] && ticBoard[pattern[0]] === ticBoard[pattern[2]]) { won = true; break; }
-            }
-            if(won) { document.getElementById('tic-status').innerText = `🏆 שחקן ${ticCurrentPlayer} ניצח!`; ticActive = false; return; }
-            if(!ticBoard.includes("")) { document.getElementById('tic-status').innerText = "🤝 תיקו שווה!"; ticActive = false; return; }
-            ticCurrentPlayer = ticCurrentPlayer === "X" ? "O" : "X";
-            document.getElementById('tic-status').innerText = `תור השחקן: ${ticCurrentPlayer}`;
-        }
-    </script>
-</body>
-</html>
+                if(ticBoard[pattern[0]] !== "" && ticBoard[pattern[0]] === ticBoard[pattern[1]]
