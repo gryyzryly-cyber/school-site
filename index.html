@@ -18,7 +18,7 @@
         #main-os {
             width: 100%;
             min-height: 100vh;
-            display: block; /* מבטיח שהאתר תמיד יוצג */
+            display: block;
         }
 
         .top-bar {
@@ -58,7 +58,7 @@
         .content-section {
             display: none;
             padding: 25px;
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
@@ -140,6 +140,7 @@
             margin: 5px;
         }
 
+        /* גריד משופר ל-4 משחקים (2 בטבלה בכל שורה) */
         .games-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -150,37 +151,30 @@
             .games-grid { grid-template-columns: 1fr 1fr; }
         }
 
+        /* משחק זיכרון */
         .memory-board {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
-            max-width: 280px;
+            max-width: 240px;
             margin: 15px auto;
         }
 
         .memory-card {
-            height: 60px;
+            height: 55px;
             background-color: #00adb5;
             border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: transparent;
             cursor: pointer;
             user-select: none;
         }
 
-        .memory-card.flipped {
-            background-color: #fff;
-            color: #121212;
-        }
-
-        .memory-card.matched {
-            background-color: #28a745;
-            color: white;
-            cursor: default;
-        }
+        .memory-card.flipped { background-color: #fff; color: #121212; }
+        .memory-card.matched { background-color: #28a745; color: white; cursor: default; }
 
         .game-input {
             width: 80px;
@@ -194,6 +188,7 @@
             margin-left: 10px;
         }
 
+        /* משחק סנייק */
         #snake-canvas {
             background-color: #000000;
             display: block;
@@ -205,7 +200,7 @@
         .snake-controls {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            width: 150px;
+            width: 140px;
             margin: 15px auto 0 auto;
             gap: 6px;
         }
@@ -214,7 +209,7 @@
             background-color: #2d2d2d;
             color: white;
             border: 1px solid #444;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
             border-radius: 6px;
             cursor: pointer;
@@ -222,6 +217,31 @@
             user-select: none;
         }
         .snake-btn:active { background-color: #00adb5; }
+
+        /* משחק איקס עיגול חדש */
+        .tic-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            max-width: 180px;
+            margin: 15px auto;
+        }
+
+        .tic-cell {
+            width: 55px;
+            height: 55px;
+            background-color: #252525;
+            border: 1px solid #444;
+            border-radius: 8px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        .tic-cell:hover { background-color: #333; }
         
         .pin-btn {
             background-color: #00adb5;
@@ -239,7 +259,7 @@
 
     <div id="main-os">
         <div class="top-bar">
-            <h2>⚡ SCHOOL OS v14.0</h2>
+            <h2>⚡ SCHOOL OS v15.0</h2>
             <button class="pin-btn" onclick="toggleAdminMode()" style="background:#252525; border:1px solid #333; font-size: 1.1rem; padding: 8px 12px;">⚙️ הגדרות לו"ז ומשימות</button>
         </div>
 
@@ -264,7 +284,6 @@
             </div>
         </div>
 
-        <!-- לשונית 1: לו"ז -->
         <div id="my-day" class="content-section active">
             <div class="card">
                 <h3>⏰ הלו"ז היומי שלי</h3>
@@ -281,7 +300,6 @@
             </div>
         </div>
 
-        <!-- לשונית 2: משימות -->
         <div id="my-tasks" class="content-section">
             <div class="card">
                 <div class="progress-header">
@@ -298,33 +316,39 @@
             </div>
         </div>
 
-        <!-- לשונית 3: שלושת המשחקים -->
         <div id="my-games" class="content-section">
             <div class="games-grid">
                 
                 <div class="card" style="text-align: center;">
                     <h3>🧩 משחק הזיכרון</h3>
                     <div class="memory-board" id="mem-board"></div>
-                    <button class="pin-btn" style="padding: 6px 15px; font-size: 0.9rem;" onclick="resetMemoryGame()">התחל מחדש</button>
+                    <button class="pin-btn" style="padding: 5px 12px; font-size: 0.85rem;" onclick="resetMemoryGame()">התחל מחדש</button>
                 </div>
                 
                 <div class="card" style="text-align: center;">
                     <h3>🔢 ניחוש מספר (1-100)</h3>
                     <input type="number" id="guess-input" class="game-input">
-                    <button class="pin-btn" style="padding: 6px 15px; font-size: 0.9rem;" onclick="playGuessGame()">ניחוש</button>
+                    <button class="pin-btn" style="padding: 5px 12px; font-size: 0.85rem;" onclick="playGuessGame()">ניחוש</button>
                     <p id="guess-hint" style="margin-top: 15px; color: #00adb5; font-weight: bold;">בחר מספר</p>
                 </div>
 
                 <div class="card" style="text-align: center;">
                     <h3>🐍 משחק הנחש (Snake)</h3>
                     <p>ניקוד: <span id="snake-score" style="color:#00adb5; font-weight:bold;">0</span></p>
-                    <canvas id="snake-canvas" width="240" height="240"></canvas>
-                    <button class="pin-btn" onclick="startSnakeGame()" style="background-color: #28a745; padding: 6px 15px; font-size: 0.9rem;">אפס נחש</button>
+                    <canvas id="snake-canvas" width="240" height="180"></canvas>
+                    <button class="pin-btn" onclick="startSnakeGame()" style="background-color: #28a745; padding: 5px 12px; font-size: 0.85rem;">אפס נחש</button>
                     <div class="snake-controls">
                         <div></div><div class="snake-btn" onclick="changeSnakeDir('UP')">▲</div><div></div>
                         <div class="snake-btn" onclick="changeSnakeDir('LEFT')">◄</div><div></div><div class="snake-btn" onclick="changeSnakeDir('RIGHT')">►</div>
                         <div></div><div class="snake-btn" onclick="changeSnakeDir('DOWN')">▼</div><div></div>
                     </div>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <h3>❌ משחק איקס עיגול ⭕</h3>
+                    <p id="tic-status" style="color: #00adb5; font-weight: bold; margin-bottom: 5px;">תור השחקן: X</p>
+                    <div class="tic-board" id="tic-board"></div>
+                    <button class="pin-btn" style="padding: 5px 12px; font-size: 0.85rem;" onclick="resetTicGame()">אפס משחק</button>
                 </div>
 
             </div>
@@ -334,47 +358,39 @@
     <script>
         let isAdmin = false;
 
-        // תיקון: הפעלת המשחקים רק אחרי שהדף נטען לחלוטין ומבלי לחסום את התצוגה
         document.addEventListener("DOMContentLoaded", function() {
             setTimeout(() => {
                 resetMemoryGame();
                 updateProgress();
                 startSnakeGame();
+                resetTicGame();
             }, 100);
         });
 
         function toggleAdminMode() {
             isAdmin = !isAdmin;
-            if (isAdmin) {
-                document.getElementById('admin-panel').style.display = 'block';
-                document.querySelectorAll('.delete-btn').forEach(el => el.style.display = 'inline-block');
-            } else {
-                document.getElementById('admin-panel').style.display = 'none';
-                document.querySelectorAll('.delete-btn').forEach(el => el.style.display = 'none');
-            }
+            document.getElementById('admin-panel').style.display = isAdmin ? 'block' : 'none';
+            document.querySelectorAll('.delete-btn').forEach(el => el.style.display = isAdmin ? 'inline-block' : 'none');
         }
 
         function addTimelineItem() {
             const time = document.getElementById('new-time').value;
             const activity = document.getElementById('new-activity').value;
             if(!time || !activity) return;
-            const list = document.getElementById('timeline-list');
             const newItem = document.createElement('div');
             newItem.classList.add('timeline-item');
             newItem.innerHTML = `<div><b>${time}</b> - ${activity}</div><button class="delete-btn" style="display:inline-block;" onclick="this.parentElement.remove()">🗑️</button>`;
-            list.appendChild(newItem);
-            document.getElementById('new-time').value = '';
-            document.getElementById('new-activity').value = '';
+            document.getElementById('timeline-list').appendChild(newItem);
+            document.getElementById('new-time').value = ''; document.getElementById('new-activity').value = '';
         }
 
         function addTaskItem() {
             const taskText = document.getElementById('new-task-text').value;
             if(!taskText) return;
-            const list = document.getElementById('tasks-list');
             const newItem = document.createElement('div');
             newItem.classList.add('task-item');
             newItem.innerHTML = `<label><input type="checkbox" class="task-check" onclick="updateProgress()"> 📝 ${taskText}</label><button class="delete-btn" style="display:inline-block;" onclick="this.parentElement.remove(); updateProgress();">🗑️</button>`;
-            list.appendChild(newItem);
+            document.getElementById('tasks-list').appendChild(newItem);
             document.getElementById('new-task-text').value = '';
             updateProgress();
         }
@@ -403,124 +419,99 @@
             const hint = document.getElementById('guess-hint');
             if (isNaN(userGuess)) return;
             if (userGuess === secretNumber) { 
-                hint.innerHTML = '🎉 בול כל הכבוד!'; 
-                secretNumber = Math.floor(Math.random() * 100) + 1; 
-            } else if (userGuess > secretNumber) { 
-                hint.innerHTML = '📉 גבוה מדי!'; 
-            } else { 
-                hint.innerHTML = '📈 נמוך מדי!'; 
-            }
+                hint.innerHTML = '🎉 בול כל הכבוד!'; secretNumber = Math.floor(Math.random() * 100) + 1; 
+            } else { hint.innerHTML = userGuess > secretNumber ? '📉 גבוה מדי!' : '📈 נמוך מדי!'; }
         }
 
         /* משחק זיכרון */
         const icons = ['🍎', '🍎', '⚽', '⚽', '🧠', '🧠', '🎒', '🎒', '🎨', '🎨', '📚', '📚', '📝', '📝', '⭐', '⭐'];
-        let flippedCards = [];
-        let matchedCount = 0;
-
+        let flippedCards = []; let matchedCount = 0;
         function resetMemoryGame() {
-            const board = document.getElementById('mem-board');
-            if(!board) return;
+            const board = document.getElementById('mem-board'); if(!board) return;
             board.innerHTML = ''; flippedCards = []; matchedCount = 0;
             const shuffled = icons.sort(() => 0.5 - Math.random());
             shuffled.forEach(icon => {
-                const card = document.createElement('div');
-                card.classList.add('memory-card');
-                card.dataset.icon = icon;
-                card.innerText = icon;
-                card.addEventListener('click', flipCard);
+                const card = document.createElement('div'); card.classList.add('memory-card');
+                card.dataset.icon = icon; card.innerText = icon; card.addEventListener('click', flipCard);
                 board.appendChild(card);
             });
         }
-
         function flipCard() {
             if (flippedCards.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) return;
-            this.classList.add('flipped');
-            flippedCards.push(this);
+            this.classList.add('flipped'); flippedCards.push(this);
             if (flippedCards.length === 2) {
                 if (flippedCards[0].dataset.icon === flippedCards[1].dataset.icon) {
                     flippedCards[0].classList.add('matched'); flippedCards[1].classList.add('matched');
-                    matchedCount += 2; flippedCards = [];
-                    if (matchedCount === icons.length) { alert('🏆 ניצחת במשחק הזיכרון!'); }
-                } else {
-                    setTimeout(() => { flippedCards[0].classList.remove('flipped'); flippedCards[1].classList.remove('flipped'); flippedCards = []; }, 1000);
-                }
+                    matchedCount += 2; flippedCards = []; if (matchedCount === icons.length) alert('🏆 ניצחת במשחק הזיכרון!');
+                } else { setTimeout(() => { flippedCards[0].classList.remove('flipped'); flippedCards[1].classList.remove('flipped'); flippedCards = []; }, 1000); }
             }
         }
 
-        /* סנייק */
+        /* משחק סנייק */
         const canvas = document.getElementById("snake-canvas");
         let ctx, box = 12, snake, food, d, score, snakeGameInterval;
         if(canvas) ctx = canvas.getContext("2d");
-
         function startSnakeGame() {
-            if(!canvas || !ctx) return;
-            clearInterval(snakeGameInterval);
-            snake = [{ x: 9 * box, y: 10 * box }];
-            food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 20) * box };
-            score = 0;
-            document.getElementById("snake-score").innerText = score;
-            d = "RIGHT"; 
+            if(!canvas || !ctx) return; clearInterval(snakeGameInterval);
+            snake = [{ x: 9 * box, y: 7 * box }];
+            food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 15) * box };
+            score = 0; document.getElementById("snake-score").innerText = score; d = "RIGHT"; 
             snakeGameInterval = setInterval(drawSnake, 140);
         }
-
         function changeSnakeDir(dir) {
-            if (dir === "LEFT" && d !== "RIGHT") d = "LEFT";
-            else if (dir === "UP" && d !== "DOWN") d = "UP";
-            else if (dir === "RIGHT" && d !== "LEFT") d = "RIGHT";
-            else if (dir === "DOWN" && d !== "UP") d = "DOWN";
+            if (dir === "LEFT" && d !== "RIGHT") d = "LEFT"; else if (dir === "UP" && d !== "DOWN") d = "UP";
+            else if (dir === "RIGHT" && d !== "LEFT") d = "RIGHT"; else if (dir === "DOWN" && d !== "UP") d = "DOWN";
         }
-
         document.addEventListener("keydown", function(e) {
-            if (e.keyCode == 37 && d != "RIGHT") d = "LEFT";
-            else if (e.keyCode == 38 && d != "DOWN") d = "UP";
-            else if (e.keyCode == 39 && d != "LEFT") d = "RIGHT";
-            else if (e.keyCode == 40 && d != "UP") d = "DOWN";
+            if (e.keyCode == 37 && d != "RIGHT") d = "LEFT"; else if (e.keyCode == 38 && d != "DOWN") d = "UP";
+            else if (e.keyCode == 39 && d != "LEFT") d = "RIGHT"; else if (e.keyCode == 40 && d != "UP") d = "DOWN";
         });
-
         function drawSnake() {
-            if(!ctx) return;
-            ctx.fillStyle = "#000000";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            for (let i = 0; i < snake.length; i++) {
-                ctx.fillStyle = (i == 0) ? "#00adb5" : "#00f5ff";
-                ctx.fillRect(snake[i].x, snake[i].y, box, box);
-            }
-
-            ctx.fillStyle = "red";
-            ctx.fillRect(food.x, food.y, box, box);
-
-            let snakeX = snake[0].x;
-            let snakeY = snake[0].y;
-
-            if (d == "LEFT") snakeX -= box;
-            if (d == "UP") snakeY -= box;
-            if (d == "RIGHT") snakeX += box;
-            if (d == "DOWN") snakeY += box;
-
+            if(!ctx) return; ctx.fillStyle = "#000000"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < snake.length; i++) { ctx.fillStyle = (i == 0) ? "#00adb5" : "#00f5ff"; ctx.fillRect(snake[i].x, snake[i].y, box, box); }
+            ctx.fillStyle = "red"; ctx.fillRect(food.x, food.y, box, box);
+            let snakeX = snake[0].x; let snakeY = snake[0].y;
+            if (d == "LEFT") snakeX -= box; if (d == "UP") snakeY -= box; if (d == "RIGHT") snakeX += box; if (d == "DOWN") snakeY += box;
             if (snakeX == food.x && snakeY == food.y) {
-                score++;
-                document.getElementById("snake-score").innerText = score;
-                food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 20) * box };
-            } else {
-                snake.pop();
-            }
-
+                score++; document.getElementById("snake-score").innerText = score;
+                food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 15) * box };
+            } else { snake.pop(); }
             let newHead = { x: snakeX, y: snakeY };
-
-            if (snakeX < 0 || snakeX >= canvas.width || snakeY < 0 || snakeY >= canvas.height || collision(newHead, snake)) {
-                clearInterval(snakeGameInterval);
-                alert("💥 משחק נגמר! ניקוד: " + score);
-                return;
-            }
+            if (snakeX < 0 || snakeX >= canvas.width || snakeY < 0 || snakeY >= canvas.height || collision(newHead, snake)) { clearInterval(snakeGameInterval); alert("💥 משחק נגמר! ניקוד: " + score); return; }
             snake.unshift(newHead);
         }
+        function collision(head, array) { for (let i = 0; i < array.length; i++) { if (head.x == array[i].x && head.y == array[i].y) return true; } return false; }
 
-        function collision(head, array) {
-            for (let i = 0; i < array.length; i++) {
-                if (head.x == array[i].x && head.y == array[i].y) return true;
+        /* משחק איקס עיגול */
+        let ticBoard = ["", "", "", "", "", "", "", "", ""]; let ticCurrentPlayer = "X"; let ticActive = true;
+        function resetTicGame() {
+            ticBoard = ["", "", "", "", "", "", "", "", ""]; ticCurrentPlayer = "X"; ticActive = true;
+            document.getElementById('tic-status').innerText = "תור השחקן: X";
+            const boardDiv = document.getElementById('tic-board'); if(!boardDiv) return;
+            boardDiv.innerHTML = '';
+            for(let i=0; i<9; i++) {
+                const cell = document.createElement('div'); cell.classList.add('tic-cell');
+                cell.dataset.index = i; cell.addEventListener('click', ticCellClick);
+                boardDiv.appendChild(cell);
             }
-            return false;
+        }
+        function ticCellClick() {
+            const idx = this.dataset.index;
+            if(ticBoard[idx] !== "" || !ticActive) return;
+            ticBoard[idx] = ticCurrentPlayer; this.innerText = ticCurrentPlayer;
+            this.style.color = ticCurrentPlayer === "X" ? "#00adb5" : "#ff4a4a";
+            checkTicWinner();
+        }
+        function checkTicWinner() {
+            const winPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
+            let won = false;
+            for(let pattern of winPatterns) {
+                if(ticBoard[pattern[0]] !== "" && ticBoard[pattern[0]] === ticBoard[pattern[1]] && ticBoard[pattern[0]] === ticBoard[pattern[2]]) { won = true; break; }
+            }
+            if(won) { document.getElementById('tic-status').innerText = `🏆 שחקן ${ticCurrentPlayer} ניצח!`; ticActive = false; return; }
+            if(!ticBoard.includes("")) { document.getElementById('tic-status').innerText = "🤝 תיקו שווה!"; ticActive = false; return; }
+            ticCurrentPlayer = ticCurrentPlayer === "X" ? "O" : "X";
+            document.getElementById('tic-status').innerText = `תור השחקן: ${ticCurrentPlayer}`;
         }
     </script>
 </body>
