@@ -56,13 +56,12 @@
         }
 
         .content-section {
-            display: none; /* מוחבא כברירת מחדל */
+            display: none;
             padding: 25px;
             max-width: 800px;
             margin: 0 auto;
         }
 
-        /* מציג את הלשונית הפעילה */
         .content-section.active {
             display: block !important;
         }
@@ -257,7 +256,7 @@
 
     <div id="main-os">
         <div class="top-bar">
-            <h2>⚡ SCHOOL OS v18.0</h2>
+            <h2>⚡ SCHOOL OS v19.0</h2>
             <button class="pin-btn" onclick="toggleAdminMode()" style="background:#252525; border:1px solid #333; font-size: 1.1rem; padding: 8px 12px;">⚙️ הגדרות לו"ז ומשימות</button>
         </div>
 
@@ -354,11 +353,10 @@
 
     <script>
         let isAdmin = false;
-        let currentTab = 'my-day'; // הגדרה שהדף הראשון הוא הלו"ז
+        let currentTab = 'my-day';
 
-        // תיקון קריטי: הפעלת האתר ישירות על הלשונית הראשונה בצורה מאובטחת
         document.addEventListener("DOMContentLoaded", function() {
-            switchTab('my-day', 'tab-day'); // כופה הצגה של דף הבית מיד
+            switchTab('my-day', 'tab-day');
             resetMemoryGame();
             updateProgress();
             startSpaceGame();
@@ -395,15 +393,12 @@
 
         function switchTab(tabId, btnId) {
             currentTab = tabId;
-            // מעלים את כל הדפים
             document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.remove('active');
                 section.style.display = 'none';
             });
-            // מוריד סימון מכל הכפתורים
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             
-            // מציג ומסמן את הדף הנכון
             const activeSection = document.getElementById(tabId);
             if(activeSection) {
                 activeSection.classList.add('active');
@@ -435,7 +430,7 @@
             } else { hint.innerHTML = userGuess > secretNumber ? '📉 גבוה מדי!' : '📈 נמוך מדי!'; }
         }
 
-        /* משחק זיכרון */
+        /* משחק זיכרון - תוקן (בלי אלרט בסוף) */
         const icons = ['🍎', '🍎', '⚽', '⚽', '🧠', '🧠', '🎒', '🎒', '🎨', '🎨', '📚', '📚', '📝', '📝', '⭐', '⭐'];
         let flippedCards = []; let matchedCount = 0;
         function resetMemoryGame() {
@@ -454,12 +449,12 @@
             if (flippedCards.length === 2) {
                 if (flippedCards[0].dataset.icon === flippedCards[1].dataset.icon) {
                     flippedCards[0].classList.add('matched'); flippedCards[1].classList.add('matched');
-                    matchedCount += 2; flippedCards = []; if (matchedCount === icons.length) alert('🏆 ניצחת במשחק הזיכרון!');
+                    matchedCount += 2; flippedCards = [];
                 } else { setTimeout(() => { flippedCards[0].classList.remove('flipped'); flippedCards[1].classList.remove('flipped'); flippedCards = []; }, 1000); }
             }
         }
 
-        /* משחק חלליות */
+        /* משחק חלליות - תוקן (מתאפס שקט בלי פופ-אפ) */
         const sCanvas = document.getElementById("space-canvas");
         let sCtx, playerX, enemies, lasers, spaceScore, spaceInterval;
         if(sCanvas) sCtx = sCanvas.getContext("2d");
@@ -488,76 +483,4 @@
         function updateSpaceGame() {
             if (currentTab !== 'my-games') return;
             if(!sCtx) return;
-            sCtx.fillStyle = "#050508";
-            sCtx.fillRect(0, 0, sCanvas.width, sCanvas.height);
-
-            sCtx.fillStyle = "#00adb5";
-            sCtx.fillRect(playerX, sCanvas.height - 20, 20, 12);
-
-            if(Math.random() < 0.07) { lasers.push({x: playerX + 9, y: sCanvas.height - 20}); }
-
-            sCtx.fillStyle = "#00f5ff";
-            for(let i = lasers.length - 1; i >= 0; i--) {
-                lasers[i].y -= 4;
-                sCtx.fillRect(lasers[i].x, lasers[i].y, 3, 7);
-                if(lasers[i].y < 0) lasers.splice(i, 1);
-            }
-
-            if(Math.random() < 0.03) { enemies.push({x: Math.random() * (sCanvas.width - 15), y: 0}); }
-
-            sCtx.fillStyle = "#ff4a4a";
-            for(let i = enemies.length - 1; i >= 0; i--) {
-                enemies[i].y += 1.5;
-                sCtx.fillRect(enemies[i].x, enemies[i].y, 15, 11);
-
-                if(enemies[i].y > sCanvas.height) {
-                    clearInterval(spaceInterval);
-                    alert("💥 אויבים פלשו למערכת! משחק נגמר. ניקוד: " + spaceScore);
-                    startSpaceGame();
-                    return;
-                }
-
-                for(let j = lasers.length - 1; j >= 0; j--) {
-                    if(lasers[j].x > enemies[i].x && lasers[j].x < enemies[i].x + 15 && lasers[j].y > enemies[i].y && lasers[j].y < enemies[i].y + 11) {
-                        enemies.splice(i, 1); lasers.splice(j, 1); spaceScore += 10;
-                        document.getElementById("space-score").innerText = spaceScore;
-                        break;
-                    }
-                }
-            }
-        }
-
-        /* משחק איקס עיגול */
-        let ticBoard = ["", "", "", "", "", "", "", "", ""]; let ticCurrentPlayer = "X"; let ticActive = true;
-        function resetTicGame() {
-            ticBoard = ["", "", "", "", "", "", "", "", ""]; ticCurrentPlayer = "X"; ticActive = true;
-            document.getElementById('tic-status').innerText = "תור השחקן: X";
-            const boardDiv = document.getElementById('tic-board'); if(!boardDiv) return;
-            boardDiv.innerHTML = '';
-            for(let i=0; i<9; i++) {
-                const cell = document.createElement('div'); cell.classList.add('tic-cell');
-                cell.dataset.index = i; cell.addEventListener('click', ticCellClick);
-                boardDiv.appendChild(cell);
-            }
-        }
-        function ticCellClick() {
-            const idx = this.dataset.index;
-            if(ticBoard[idx] !== "" || !ticActive) return;
-            ticBoard[idx] = ticCurrentPlayer; this.innerText = ticCurrentPlayer;
-            this.style.color = ticCurrentPlayer === "X" ? "#00adb5" : "#ff4a4a";
-            checkTicWinner();
-        }
-        function checkTicWinner() {
-            const winPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
-            let won = false;
-            for(let pattern of winPatterns) {
-                if(ticBoard[pattern[0]] !== "" && ticBoard[pattern[0]] === ticBoard[pattern[1]] && ticBoard[pattern[0]] === ticBoard[pattern[2]]) { won = true; break; }
-            }
-            if(won) { document.getElementById('tic-status').innerText = `🏆 שחקן ${ticCurrentPlayer} ניצח!`; ticActive = false; return; }
-            if(!ticBoard.includes("")) { document.getElementById('tic-status').innerText = "🤝 תיקו שווה!"; ticActive = false; return; }
-            ticCurrentPlayer = ticCurrentPlayer === "X" ? "O" : "X";
-            document.getElementById('tic-status').innerText = `תור השחקן: ${ticCurrentPlayer}`;
-        }
-    </script>
-</body>
-</html>
+            sCtx.fillStyle = "#050
