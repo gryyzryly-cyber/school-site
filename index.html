@@ -5,573 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCHOOL OS v40.0 - Enterprise Ultra (Absolute Full-Width)</title>
     <style>
-        /* ==========================================================================
-           1. CORE ARCHITECTURE & DARK MATRIX VARIABLES (ENTERPRISE ULTRA)
-           ========================================================================== */
         :root {
             --os-bg-deep: #030712;
             --os-bg-surface: #0b1329;
             --os-bg-card: #111c40;
             --os-border-glow: #1e293b;
             --os-border-active: #3b82f6;
-            
             --neon-blue: #3b82f6;
             --neon-blue-hover: #60a5fa;
             --neon-blue-glow: rgba(59, 130, 246, 0.2);
-            
             --status-success: #10b981;
             --status-warning: #f59e0b;
             --status-danger: #ef4444;
-            
             --text-ultra: #ffffff;
             --text-standard: #e2e8f0;
             --text-muted: #94a3b8;
-            
             --panel-radius-lg: 16px;
             --panel-radius-md: 12px;
             --panel-radius-sm: 8px;
-            
             --ultra-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.9), 0 10px 15px -6px rgba(0, 0, 0, 0.9);
             --transition-swift: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ==========================================================================
-           2. GLOBAL RESET & OS INTERACTION SCROLLBARS
-           ========================================================================== */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            user-select: none;
-        }
-
-        body {
-            background-color: var(--os-bg-deep);
-            color: var(--text-standard);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Enterprise Scrollbar Graphics */
-        ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--os-bg-deep);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--os-border-glow);
-            border-radius: 20px;
-            border: 2px solid var(--os-bg-deep);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--neon-blue);
-        }
-
-        /* ==========================================================================
-           3. MAIN FRAMEWORK NAVIGATION & ULTRA HEADER
-           ========================================================================== */
-        .os-mainframe-header {
-            background-color: var(--os-bg-surface);
-            border-bottom: 2px solid var(--os-border-glow);
-            position: sticky;
-            top: 0;
-            z-index: 999;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .os-header-inner {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 1.25rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .os-brand-block {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .os-brand-block .os-core-logo {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--neon-blue), #1d4ed8);
-            color: var(--text-ultra);
-            border-radius: var(--panel-radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: 900;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-        }
-
-        .os-brand-block h1 {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--text-ultra);
-            letter-spacing: -0.5px;
-        }
-
-        .os-realtime-clock {
-            font-family: 'Courier New', monospace;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #60a5fa;
-            background-color: #030611;
-            padding: 0.6rem 1.5rem;
-            border-radius: var(--panel-radius-sm);
-            border: 1px solid var(--os-border-glow);
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);
-        }
-
-        .os-navigation-bar {
-            background-color: var(--os-bg-surface);
-            border-bottom: 1px solid var(--os-border-glow);
-        }
-
-        .os-nav-container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .os-nav-tabs-list {
-            display: flex;
-            list-style: none;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .os-nav-tab-link {
-            display: block;
-            padding: 1.25rem 1.75rem;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 1.1rem;
-            cursor: pointer;
-            border-bottom: 4px solid transparent;
-            transition: var(--transition-swift);
-        }
-
-        .os-nav-tab-link:hover {
-            color: var(--text-ultra);
-            background-color: rgba(255, 255, 255, 0.01);
-        }
-
-        .os-nav-tab-link.state-active {
-            color: var(--neon-blue);
-            border-bottom-color: var(--neon-blue);
-            background-color: var(--neon-blue-glow);
-        }
-
-        /* ==========================================================================
-           4. WORKSPACE CONTAINER & PERSISTENT VIEWS
-           ========================================================================== */
-        .os-workspace {
-            flex: 1;
-            max-width: 1600px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-        }
-
-        .os-viewscreen {
-            display: none;
-        }
-
-        .os-viewscreen.state-visible {
-            display: block;
-            animation: viewScreenIntro Entry var(--transition-smooth) forwards;
-        }
-
-        @keyframes viewScreenIntro {
-            from { opacity: 0; transform: translateY(25px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .os-screen-title-ribbon {
-            margin-bottom: 3rem;
-            border-right: 6px solid var(--neon-blue);
-            padding-right: 1.5rem;
-        }
-
-        .os-screen-title-ribbon h2 {
-            font-size: 2.4rem;
-            font-weight: 900;
-            color: var(--text-ultra);
-        }
-
-        /* ==========================================================================
-           5. ENTERPRISE CONTROLS & UI COMPONENT PACK (PURE FULL-WIDTH)
-           ========================================================================== */
-        .os-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.9rem 2rem;
-            font-size: 1rem;
-            font-weight: 800;
-            border-radius: var(--panel-radius-sm);
-            border: 1px solid transparent;
-            cursor: pointer;
-            transition: var(--transition-swift);
-        }
-
-        .os-btn-primary { background-color: var(--neon-blue); color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
-        .os-btn-primary:hover { background-color: #2563eb; transform: translateY(-1px); }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; user-select: none; }
+        body { background-color: var(--os-bg-deep); color: var(--text-standard); min-height: 100vh; display: flex; flex-direction: column; line-height: 1.6; overflow-x: hidden; }
         
-        .os-btn-success { background-color: var(--status-success); color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
-        .os-btn-success:hover { background-color: #059669; transform: translateY(-1px); }
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: var(--os-bg-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--os-border-glow); border-radius: 20px; border: 2px solid var(--os-bg-deep); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
+
+        .os-mainframe-header { background-color: var(--os-bg-surface); border-bottom: 2px solid var(--os-border-glow); position: sticky; top: 0; z-index: 999; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
+        .os-header-inner { max-width: 100%; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .os-brand-block { display: flex; align-items: center; gap: 1rem; }
+        .os-core-logo { width: 48px; height: 48px; background: linear-gradient(135deg, var(--neon-blue), #1d4ed8); color: var(--text-ultra); border-radius: var(--panel-radius-md); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+        .os-brand-block h1 { font-size: 1.6rem; font-weight: 900; color: var(--text-ultra); letter-spacing: -0.5px; }
         
-        .os-btn-danger { background-color: var(--status-danger); color: white; }
-        .os-btn-danger:hover { background-color: #dc2626; }
+        .os-realtime-clock { font-family: 'Courier New', monospace; font-size: 1.4rem; font-weight: 700; color: #60a5fa; background-color: #030611; padding: 0.6rem 1.5rem; border-radius: var(--panel-radius-sm); border: 1px solid var(--os-border-glow); box-shadow: inset 0 2px 4px rgba(0,0,0,0.8); }
         
-        .os-btn-outline { background-color: transparent; border-color: var(--os-border-glow); color: var(--text-standard); }
-        .os-btn-outline:hover { background-color: var(--os-border-glow); color: white; }
+        .os-navigation-bar { background-color: var(--os-bg-surface); border-bottom: 1px solid var(--os-border-glow); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .os-nav-container { max-width: 100%; padding: 0 2rem; }
+        .os-nav-tabs-list { display: flex; list-style: none; gap: 0.5rem; flex-wrap: wrap; }
+        .os-nav-tab-link { display: block; padding: 1.25rem 1.75rem; color: var(--text-muted); text-decoration: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; border-bottom: 4px solid transparent; transition: var(--transition-swift); }
+        .os-nav-tab-link:hover { color: var(--text-ultra); background-color: rgba(255, 255, 255, 0.02); }
+        .os-nav-tab-link.state-active { color: var(--neon-blue); border-bottom-color: var(--neon-blue); background-color: var(--neon-blue-glow); text-shadow: 0 0 10px rgba(59, 130, 246, 0.6); }
 
-        .os-card {
-            background-color: var(--os-bg-surface);
-            border: 1px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-lg);
-            padding: 2.5rem;
-            box-shadow: var(--ultra-shadow);
-            width: 100%;
-            margin-bottom: 2.5rem;
-        }
+        .os-workspace { flex: 1; width: 100%; padding: 2rem; }
+        .os-viewscreen { display: none; width: 100%; }
+        .os-viewscreen.state-visible { display: block; animation: viewScreenIntro var(--transition-smooth) forwards; }
+        @keyframes viewScreenIntro { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        .os-input-wrapper {
-            margin-bottom: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
+        .os-screen-title-ribbon { margin-bottom: 2.5rem; border-right: 6px solid var(--neon-blue); padding-right: 1.5rem; }
+        .os-screen-title-ribbon h2 { font-size: 2.4rem; font-weight: 900; color: var(--text-ultra); text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .os-screen-title-ribbon p { color: var(--text-muted); font-size: 1.1rem; margin-top: 0.25rem; }
 
-        .os-input-label {
-            font-size: 1rem;
-            font-weight: 800;
-            color: var(--text-ultra);
-        }
+        .os-analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        .os-analytic-card { background: linear-gradient(145deg, #0e1733, #111c40); border: 1px solid var(--os-border-glow); border-radius: var(--panel-radius-lg); padding: 2rem; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: var(--ultra-shadow); position: relative; overflow: hidden; }
+        .os-analytic-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background-color: var(--neon-blue); }
+        .os-analytic-card.color-success::before { background-color: var(--status-success); }
+        .os-analytic-card.color-danger::before { background-color: var(--status-danger); }
+        .os-analytic-label { font-size: 1rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .os-analytic-value { font-size: 2.8rem; font-weight: 900; color: var(--text-ultra); line-height: 1; }
 
-        .os-input-field {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            font-size: 1.1rem;
-            background-color: var(--os-bg-deep);
-            color: var(--text-standard);
-            border: 2px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-sm);
-            outline: none;
-            transition: var(--transition-swift);
-        }
+        .os-split-architecture { display: grid; grid-template-columns: 380px 1fr; gap: 2.5rem; align-items: start; }
+        @media(max-width: 1100px) { .os-split-architecture { grid-template-columns: 1fr; } }
 
-        .os-input-field:focus {
-            border-color: var(--os-border-active);
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
-        }
+        .os-card { background-color: var(--os-bg-surface); border: 1px solid var(--os-border-glow); border-radius: var(--panel-radius-lg); padding: 2.5rem; box-shadow: var(--ultra-shadow); width: 100%; margin-bottom: 2.5rem; }
+        .os-card-title { font-size: 1.4rem; font-weight: 900; color: var(--text-ultra); margin-bottom: 1.75rem; display: flex; align-items: center; gap: 0.75rem; border-bottom: 1px solid var(--os-border-glow); padding-bottom: 0.75rem; }
+        
+        .os-form-group { margin-bottom: 1.5rem; }
+        .os-form-label { display: block; font-size: 1rem; font-weight: 700; color: var(--text-standard); margin-bottom: 0.5rem; }
+        .os-input-field { width: 100%; padding: 1rem 1.5rem; font-size: 1.1rem; background-color: var(--os-bg-deep); color: var(--text-standard); border: 2px solid var(--os-border-glow); border-radius: var(--panel-radius-sm); outline: none; transition: var(--transition-swift); }
+        .os-input-field:focus { border-color: var(--os-border-active); box-shadow: 0 0 12px rgba(59, 130, 246, 0.3); background-color: #050b1a; }
+        
+        .os-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.9rem 2rem; font-size: 1.1rem; font-weight: 800; border-radius: var(--panel-radius-sm); border: 1px solid transparent; cursor: pointer; transition: var(--transition-swift); width: 100%; text-align: center; }
+        .os-btn-primary { background: linear-gradient(135deg, var(--neon-blue), #1d4ed8); color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+        .os-btn-primary:hover { background: linear-gradient(135deg, var(--neon-blue-hover), #2563eb); transform: translateY(-1px); }
+        .os-btn-success { background: linear-gradient(135deg, var(--status-success), #059669); color: white; }
+        .os-btn-success:hover { background: linear-gradient(135deg, #34d399, #10b981); transform: translateY(-1px); }
+        
+        .os-table-scroller { overflow-x: auto; width: 100%; border: 1px solid var(--os-border-glow); border-radius: var(--panel-radius-lg); background-color: var(--os-bg-surface); box-shadow: var(--ultra-shadow); }
+        .os-data-table { width: 100%; border-collapse: collapse; text-align: right; font-size: 1.1rem; }
+        .os-data-table th, .os-data-table td { padding: 1.5rem; border-bottom: 1px solid var(--os-border-glow); }
+        .os-data-table th { background-color: #121d3a; color: var(--text-ultra); font-weight: 900; letter-spacing: 0.5px; }
+        .os-data-table tr:last-child td { border-bottom: none; }
+        .os-data-table tr:hover td { background-color: rgba(255, 255, 255, 0.01); }
+        
+        .badge-pill { display: inline-block; padding: 0.4rem 1rem; font-size: 0.9rem; font-weight: 800; border-radius: 50px; text-align: center; }
+        .badge-blue { background-color: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+        .badge-amber { background-color: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+        .badge-red { background-color: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
 
-        .os-table-scroller {
-            overflow-x: auto;
-            width: 100%;
-            border: 1px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-lg);
-            background-color: var(--os-bg-surface);
-            box-shadow: var(--ultra-shadow);
-        }
+        .action-icon-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0.5rem; border-radius: var(--panel-radius-sm); transition: var(--transition-swift); font-size: 1.2rem; }
+        .action-icon-btn:hover { color: var(--status-danger); background-color: rgba(239, 68, 68, 0.1); }
 
-        .os-data-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: right;
-        }
-
-        .os-data-table th, .os-data-table td {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--os-border-glow);
-        }
-
-        .os-data-table th { 
-            background-color: #121d3a; 
-            color: var(--text-ultra); 
-            font-weight: 900;
-        }
-
-        .os-data-table tbody tr:hover {
-            background-color: rgba(255,255,255,0.01);
-        }
-
-        .os-toast-pipeline {
-            position: fixed;
-            bottom: 3rem;
-            left: 3rem;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .os-toast-item {
-            background-color: #172342;
-            color: var(--text-ultra);
-            border-left: 6px solid var(--neon-blue);
-            padding: 1.5rem 2.5rem;
-            border-radius: var(--panel-radius-sm);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            font-weight: 800;
-            animation: toastEnter var(--transition-smooth) forwards;
-        }
-
-        @keyframes toastEnter {
-            from { transform: translateX(-60px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        /* ==========================================================================
-           6. SYSTEMS: DATA ANALYTICS & SINGLE COLUMN MANAGEMENT
-           ========================================================================== */
-        .os-analytics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-            margin-bottom: 3.5rem;
-        }
-
-        .os-analytic-card {
-            background-color: var(--os-bg-surface);
-            border: 1px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-lg);
-            padding: 2.5rem;
-            box-shadow: var(--ultra-shadow);
-            border-top: 5px solid var(--neon-blue);
-        }
-
-        .os-analytic-card .os-counter { 
-            font-size: 3.5rem; 
-            font-weight: 900; 
-            color: #60a5fa; 
-            display: block;
-            margin-top: 0.5rem;
-            text-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
-        }
-
-        .os-task-item-card {
-            background-color: var(--os-bg-surface);
-            border: 1px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-sm);
-            padding: 1.75rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--ultra-shadow);
-            width: 100%;
-        }
-
-        .os-task-item-card.state-done { opacity: 0.35; }
-        .os-task-item-card.state-done .os-task-text { text-decoration: line-through; }
-
-        .os-progress-track {
-            width: 100%;
-            height: 14px;
-            background-color: #121a2e;
-            border-radius: 40px;
-            margin-bottom: 3rem;
-            overflow: hidden;
-            border: 1px solid var(--os-border-glow);
-        }
-
-        .os-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #34d399);
-            width: 0%;
-            transition: width var(--transition-smooth);
-        }
-
-        /* ==========================================================================
-           7. ARCADE INTEGRATION MESH - ABSOLUTE SYMMETRIC FULL-WIDTH (NO SIDEBAR)
-           ========================================================================== */
-        .arcade-navbar-selection {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-            width: 100%;
-        }
-
-        .arcade-selection-trigger-btn {
-            background-color: var(--os-bg-surface);
-            border: 2px solid var(--os-border-glow);
-            padding: 1.5rem;
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: var(--text-standard);
-            border-radius: var(--panel-radius-lg);
-            cursor: pointer;
-            transition: var(--transition-swift);
-            box-shadow: var(--ultra-shadow);
-        }
-
-        .arcade-selection-trigger-btn:hover {
-            background-color: rgba(255,255,255,0.02);
-            border-color: var(--neon-blue);
-        }
-
-        .arcade-selection-trigger-btn.state-active {
-            background-color: var(--neon-blue-glow);
-            color: var(--neon-blue);
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-        }
-
-        .arcade-master-viewport {
-            background-color: #020408;
-            border-radius: var(--panel-radius-lg);
-            border: 4px solid var(--os-border-glow);
-            padding: 3rem;
-            min-height: 700px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 4px 50px rgba(0,0,0,0.98);
-            width: 100%;
-        }
-
-        .arcade-game-module-view {
-            display: none;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .arcade-game-module-view.state-active {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .arcade-hud-telemetry {
-            width: 100%;
-            background-color: #090f1d;
-            border: 2px solid var(--os-border-glow);
-            padding: 1.25rem 2rem;
-            border-radius: var(--panel-radius-sm);
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #94a3b8;
-            font-size: 1.1rem;
-            font-weight: 800;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-
-        .arcade-canvas-graphics {
-            background-color: #010204;
-            border: 2px solid #1e293b;
-            border-radius: var(--panel-radius-sm);
-            width: 100%;
-            max-width: 700px;
-            height: 480px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
-        }
-
-        .quiz-engine-wrapper {
-            width: 100%;
-            background-color: #090f1d;
-            border: 2px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-lg);
-            padding: 3.5rem;
-            text-align: center;
-            box-shadow: var(--ultra-shadow);
-        }
-
-        .quiz-equation-string { 
-            font-size: 4.5rem; 
-            font-weight: 900; 
-            color: white; 
-            margin-bottom: 2.5rem;
-            text-shadow: 0 0 20px rgba(255,255,255,0.15);
-        }
-
-        .quiz-matrix-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 1.5rem; 
-        }
-
-        .quiz-choice-trigger { 
-            background-color: #141f38; 
-            color: white; 
-            padding: 1.75rem; 
-            border-radius: var(--panel-radius-sm); 
-            font-size: 1.7rem; 
-            font-weight: 900; 
-            cursor: pointer; 
-            border: 2px solid transparent; 
-            transition: var(--transition-swift);
-        }
-
-        .quiz-choice-trigger:hover { 
-            background-color: var(--neon-blue); 
-            border-color: var(--neon-blue-hover);
-            transform: scale(1.03);
-        }
-
-        .ttt-mesh-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 130px); 
-            grid-template-rows: repeat(3, 130px); 
-            gap: 1.25rem; 
-            margin: 3rem auto; 
-        }
-
-        .ttt-mesh-node { 
-            background-color: #090f1d; 
-            border: 2px solid var(--os-border-glow); 
-            border-radius: var(--panel-radius-sm); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 4rem; 
-            font-weight: 900; 
-            color: white; 
-            cursor: pointer; 
-            transition: var(--transition-swift);
-        }
-
-        .ttt-mesh-node:hover {
-            background-color: rgba(255,255,255,0.02);
-            border-color: var(--neon-blue);
-        }
-
-        .os-mainframe-footer { 
-            background-color: var(--os-bg-surface); 
-            border-top: 2px solid var(--os-border-glow); 
-            padding: 2.5rem; 
-            text-align: center; 
-            font-size: 1rem; 
-            color: var(--text-muted); 
-            margin-top: auto; 
-        }
-
-        /* התאמה רספונסיבית לניווט הארקייד הרוחבי */
-        @media (max-width: 768px) {
-            .arcade-navbar-selection {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+        /* מתחם ארקייד ומסכי משחק */
+        .arcade-hub-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2.5rem; }
+        @media(max-width: 500px) { .arcade-hub-layout { grid-template-columns: 1fr; } }
+        .game-terminal-card { background-color: var(--os-bg-surface); border: 2px solid var(--os-border-glow); border-radius: var(--panel-radius-lg); overflow: hidden; box-shadow: var(--ultra-shadow); display: flex; flex-direction: column; transition: var(--transition-smooth); }
+        .game-terminal-card:hover { border-color: var(--os-border-active); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(59,130,246,0.15); }
+        .game-preview-header { height: 160px; background: linear-gradient(135deg, #1e1b4b, #311042); display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; }
+        .game-preview-header::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, var(--os-bg-surface), transparent); }
+        .game-terminal-body { padding: 2rem; flex: 1; display: flex; flex-direction: column; gap: 1rem; }
+        .game-terminal-title { font-size: 1.6rem; font-weight: 900; color: var(--text-ultra); }
+        .game-terminal-desc { color: var(--text-muted); font-size: 1.05rem; line-height: 1.5; flex: 1; }
+        
+        .game-arena-wrapper { display: none; background-color: #02040a; border: 3px solid var(--os-border-glow); border-radius: var(--panel-radius-lg); overflow: hidden; box-shadow: var(--ultra-shadow); margin-top: 2rem; position: relative; }
+        .game-arena-wrapper.active-arena { display: block; animation: viewScreenIntro var(--transition-smooth) forwards; }
+        .arena-control-bar { background-color: var(--os-bg-surface); padding: 1.25rem 2rem; border-bottom: 2px solid var(--os-border-glow); display: flex; justify-content: space-between; align-items: center; }
+        .arena-canvas-container { display: flex; justify-content: center; align-items: center; padding: 2.5rem; background-color: #05070f; position: relative; }
+        
+        canvas { background-color: #000000; border: 2px solid var(--os-border-glow); box-shadow: 0 0 40px rgba(0,0,0,0.8); display: block; }
     </style>
 </head>
 <body>
@@ -582,11 +127,11 @@
         <div class="os-header-inner">
             <div class="os-brand-block">
                 <div class="os-core-logo">Ω</div>
-                <h1>SCHOOL OS v40.0 <span style="color: var(--neon-blue); font-weight:400;">| Enterprise Ultra</span></h1>
+                <div>
+                    <h1>SCHOOL OS v40.0 <span style="color: var(--neon-blue); font-weight:400;">| Enterprise Ultra</span></h1>
+                </div>
             </div>
-            <div class="os-utilities">
-                <div class="os-realtime-clock" id="os-live-clock-digit">00:00:00</div>
-            </div>
+            <div class="os-realtime-clock" id="os-live-clock-digit">00:00:00</div>
         </div>
     </header>
 
@@ -605,148 +150,187 @@
 
         <section id="os-view-home" class="os-viewscreen state-visible">
             <div class="os-screen-title-ribbon">
-                <h2>מבט כולל על המערכת</h2>
+                <h2>לוח פיקוח מרכזי</h2>
+                <p>סקירה סינופטית של נתוני המערכת והביצועים בזמן אמת.</p>
             </div>
+            
             <div class="os-analytics-grid">
                 <div class="os-analytic-card">
-                    <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-muted);">רשומות פעילות בלו"ז</div>
-                    <span class="os-counter" id="meta-metric-schedule-count">0</span>
+                    <span class="os-analytic-label">שיעורים ומערכים במערכת</span>
+                    <span class="os-analytic-value" id="meta-metric-schedule-count">0</span>
                 </div>
-                <div class="os-analytic-card">
-                    <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-muted);">משימות פתוחות במאגר</div>
-                    <span class="os-counter" id="meta-metric-todo-count">0</span>
+                <div class="os-analytic-card color-success">
+                    <span class="os-analytic-label">משימות פעילות לביצוע</span>
+                    <span class="os-analytic-value" id="meta-metric-todo-count">0</span>
                 </div>
-                <div class="os-analytic-card">
-                    <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-muted);">שיא נוכחי - חלליות</div>
-                    <span class="os-counter" id="meta-metric-space-high">0</span>
+                <div class="os-analytic-card color-danger">
+                    <span class="os-analytic-label">משימות שהושלמו</span>
+                    <span class="os-analytic-value" id="meta-metric-completed-count">0</span>
                 </div>
             </div>
+
             <div class="os-card">
-                <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1rem; color: white;">סטטוס הפעלה: Enterprise Ultra Active</h3>
-                <p style="color: var(--text-muted); font-size: 1.15rem; line-height: 1.8;">ברוך הבא לגרסה האולטימטיבית של מערכת ההפעלה. הארכיטקטורה הנוכחית עובדת במצב פריסה רחבה ונקייה (Pure Wide) לחלוטין ללא שום פאנל צידי או תפריט צדדי חוסם, ומבטיחה תצוגה מקסימלית עבור מערכות הנתונים ומתחם הארקייד.</p>
+                <div class="os-card-title">🚀 ברוך הבא ל-SCHOOL OS Enterprise</div>
+                <p style="font-size: 1.15rem; color: var(--text-standard); max-width: 900px;">
+                    מערכת הפעלה מרכזית המאחדת את כל צרכי הלימודים, המטלות וזמני ההפוגה שלך לממשק הייטק אחוד במלוא רוחב המסך. השתמש בלשוניות הניווט העליונות כדי לעבור בין המודולים השונים.
+                </p>
             </div>
         </section>
 
         <section id="os-view-schedule" class="os-viewscreen">
             <div class="os-screen-title-ribbon">
-                <h2>מערכת שעות שבועית מורחבת</h2>
-            </div>
-            
-            <div class="os-card">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; align-items: flex-end;">
-                    <div class="os-input-wrapper" style="margin-bottom: 0;">
-                        <label class="os-input-label">זמן / שעת פעילות:</label>
-                        <input type="time" id="form-schedule-time" class="os-input-field">
-                    </div>
-                    <div class="os-input-wrapper" style="margin-bottom: 0;">
-                        <label class="os-input-label">תיאור הפעילות / שיעור:</label>
-                        <input type="text" id="form-schedule-title" class="os-input-field" placeholder="הזן נושא פעילות...">
-                    </div>
-                    <button class="os-btn os-btn-success" style="height: 54px;" onclick="systemScheduleManager.add()">הזרק רשומה חדשה</button>
-                </div>
+                <h2>מערכת שעות שבועית</h2>
+                <p>ניהול, שיבוץ וניטור מערכי שיעור לאורך ימי השבוע.</p>
             </div>
 
-            <div class="os-table-scroller">
-                <table class="os-data-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 160px;">שעה כרונולוגית</th>
-                            <th>תיאור שיעור / משימה</th>
-                            <th style="width: 140px; text-align: center;">ניהול רשומה</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-injected-schedule-rows"></tbody>
-                </table>
+            <div class="os-split-architecture">
+                <div class="os-card">
+                    <div class="os-card-title">📅 הוספת שיעור חדש</div>
+                    <form id="schedule-creation-form" onsubmit="event.preventDefault(); systemScheduleManager.add();">
+                        <div class="os-form-group">
+                            <label class="os-form-label">שם השיעור / המקצוע</label>
+                            <input type="text" id="sched-input-title" class="os-input-field" placeholder="לדוגמה: מתמטיקה 5 יח" Required>
+                        </div>
+                        <div class="os-form-group">
+                            <label class="os-form-label">יום בשבוע</label>
+                            <select id="sched-input-day" class="os-input-field" style="appearance: none;">
+                                <option value="ראשון">יום ראשון</option>
+                                <option value="שני">יום שני</option>
+                                <option value="שלישי">יום שלישי</option>
+                                <option value="רביעי">יום רביעי</option>
+                                <option value="חמישי">יום חמישי</option>
+                                <option value="שישי">יום שישי</option>
+                            </select>
+                        </div>
+                        <div class="os-form-group">
+                            <label class="os-form-label">שעת התחלה</label>
+                            <input type="time" id="sched-input-start" class="os-input-field" Required>
+                        </div>
+                        <div class="os-form-group">
+                            <label class="os-form-label">שעת סיום</label>
+                            <input type="time" id="sched-input-end" class="os-input-field" Required>
+                        </div>
+                        <div class="os-form-group">
+                            <label class="os-form-label">מיקום / כיתה</label>
+                            <input type="text" id="sched-input-room" class="os-input-field" placeholder="לדוגמה: מעבדה 3 או בזום">
+                        </div>
+                        <button type="submit" class="os-btn os-btn-primary">הזרק שיעור למערכת</button>
+                    </form>
+                </div>
+
+                <div class="os-table-scroller">
+                    <table class="os-data-table" id="schedule-master-table">
+                        <thead>
+                            <tr>
+                                <th>יום</th>
+                                <th>טווח שעות</th>
+                                <th>מקצוע / שיעור</th>
+                                <th>מיקום / כיתה</th>
+                                <th style="width: 80px;">פעולות</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-table-body">
+                            </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
         <section id="os-view-todo" class="os-viewscreen">
             <div class="os-screen-title-ribbon">
-                <h2>מערכת ניהול משימות יומיות</h2>
+                <h2>ניהול משימות קריטיות</h2>
+                <p>מעקב אחר מטלות, פרויקטים ומבחנים עם תעדוף מבוסס חומרה.</p>
             </div>
 
-            <div class="os-card">
-                <div style="display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: flex-end;">
-                    <div class="os-input-wrapper" style="margin-bottom: 0;">
-                        <label class="os-input-label">תיאור המשימה המבוקשת:</label>
-                        <input type="text" id="form-todo-caption" class="os-input-field" placeholder="הקלד תיאור משימה למאגר...">
-                    </div>
-                    <button class="os-btn os-btn-primary" style="height: 54px; min-width: 200px;" onclick="systemTodoManager.add()">הוסף משימה ראשית</button>
+            <div class="os-split-architecture">
+                <div class="os-card">
+                    <div class="os-card-title">📝 יצירת משימה חדשה</div>
+                    <form id="todo-creation-form" onsubmit="event.preventDefault(); systemTodoManager.add();">
+                        <div class="os-form-group">
+                            <label class="os-form-label">תיאור המשימה המבוקשת</label>
+                            <input type="text" id="todo-input-title" class="os-input-field" placeholder="לדוגמה: הגשת עבודה בהיסטוריה" Required>
+                        </div>
+                        <div class="os-form-group">
+                            <label class="os-form-label">רמת דחיפות ותעדוף</label>
+                            <select id="todo-input-priority" class="os-input-field">
+                                <option value="נמוכה">נמוכה - שגרתי</option>
+                                <option value="בינונית" selected>בינונית - דורש תשומת לב</option>
+                                <option value="גבוהה">גבוהה - קריטי מיידי</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="os-btn os-btn-success">הוסף משימה לרשימה</button>
+                    </form>
+                </div>
+
+                <div class="os-table-scroller">
+                    <table class="os-data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">סטטוס</th>
+                                <th>תיאור משימה</th>
+                                <th>רמת תעדוף</th>
+                                <th style="width: 120px; text-align: left; padding-left: 2rem;">פעולות</th>
+                            </tr>
+                        </thead>
+                        <tbody id="todo-table-body">
+                            </tbody>
+                    </table>
                 </div>
             </div>
-
-            <div class="os-progress-track">
-                <div id="todo-progress-fluid-fill" class="os-progress-fill"></div>
-            </div>
-            <div id="todo-injected-list-wrapper"></div>
         </section>
 
         <section id="os-view-arcade" class="os-viewscreen">
             <div class="os-screen-title-ribbon">
-                <h2>מתחם משחקים ארקייד - פריסה סימטרית רחבה</h2>
-            </div>
-            
-            <div class="arcade-navbar-selection">
-                <button id="arcade-btn-space" class="arcade-selection-trigger-btn state-active" onclick="arcadeModuleRouter('space')">🚀 סימולטור חלליות</button>
-                <button id="arcade-btn-coin" class="arcade-selection-trigger-btn" onclick="arcadeModuleRouter('coin')">🪙 תפוס את המטבע</button>
-                <button id="arcade-btn-math" class="arcade-selection-trigger-btn" onclick="arcadeModuleRouter('math')">🧠 אתגר חשבון מהיר</button>
-                <button id="arcade-btn-ttt" class="arcade-selection-trigger-btn" onclick="arcadeModuleRouter('ttt')">❌ איקס עיגול AI</button>
+                <h2>מתחם ארקייד רחב</h2>
+                <p>מערכות הפוגה וסימולטורים מובנים להתרעננות מדעית.</p>
             </div>
 
-            <div class="arcade-master-viewport">
-                
-                <div id="arcade-submodule-space" class="arcade-game-module-view state-active">
-                    <div class="arcade-hud-telemetry">
-                        <div>מערך חיים: <span id="hud-space-hearts" style="color:#ef4444;">❤️❤️❤️</span></div>
-                        <div>מערכת ניקוד: <span id="hud-space-score" style="color:#60a5fa;">0</span></div>
-                    </div>
-                    <canvas id="os-canvas-space" class="arcade-canvas-graphics" width="700" height="480"></canvas>
-                </div>
-
-                <div id="arcade-submodule-coin" class="arcade-game-module-view">
-                    <div class="arcade-hud-telemetry">
-                        <div>זמן נותר: <span id="hud-coin-timer" style="color:#f59e0b;">30</span> שניות</div>
-                        <div>מטבעות שנצברו: <span id="hud-coin-score" style="color:#10b981;">0</span></div>
-                    </div>
-                    <canvas id="os-canvas-coin" class="arcade-canvas-graphics" width="700" height="480"></canvas>
-                </div>
-
-                <div id="arcade-submodule-math" class="arcade-game-module-view">
-                    <div class="arcade-hud-telemetry">
-                        <div>רצף תשובות נוכחי: <span id="hud-math-streak" style="color:#10b981;">0</span></div>
-                    </div>
-                    <div class="quiz-engine-wrapper">
-                        <div class="quiz-equation-string" id="quiz-string-box-target">0 + 0</div>
-                        <div class="quiz-matrix-grid" id="quiz-injected-buttons-target"></div>
+            <div class="arcade-hub-layout">
+                <div class="game-terminal-card">
+                    <div class="game-preview-header">🚀</div>
+                    <div class="game-terminal-body">
+                        <div class="game-terminal-title">סימולטור חלליות קוונטי</div>
+                        <div class="game-terminal-desc">הגן על גזרת החלל מפני אסטרואידים. השתמש בחצי המקלדת ימינה ושמאלה לתנועה, ובמקש הרווח לירי פלזמה.</div>
+                        <button class="os-btn os-btn-primary" onclick="arcadeKernel.bootGame('space')">טען סימולטור</button>
                     </div>
                 </div>
 
-                <div id="arcade-submodule-ttt" class="arcade-game-module-view">
-                    <div class="arcade-hud-telemetry">
-                        <div id="hud-ttt-status-label" style="color:white;">תורך לשחק (X)</div>
+                <div class="game-terminal-card">
+                    <div class="game-preview-header">🧠</div>
+                    <div class="game-terminal-body">
+                        <div class="game-terminal-title">אתגר חשיבה ורפלקס</div>
+                        <div class="game-terminal-desc">אימון מנטלי מבוסס מהירות. תפוס את קוביות האנרגיה הירוקות שמופיעות באזורים רנדומליים על המסך לפני שהזמן אוזל!</div>
+                        <button class="os-btn os-btn-primary" onclick="arcadeKernel.bootGame('logic')">טען אתגר חשיבה</button>
                     </div>
-                    <div class="ttt-mesh-grid" id="ttt-injected-mesh-target"></div>
-                    <button class="os-btn os-btn-outline" style="width:220px;" onclick="systemTttEngine.reset()">אתחל לוח משחק</button>
                 </div>
+            </div>
 
+            <div class="game-arena-wrapper" id="global-arcade-arena-wrapper">
+                <div class="arena-control-bar">
+                    <h3 id="arena-current-game-title" style="font-weight:900; color:var(--text-ultra);">משחק פעיל</h3>
+                    <div style="display:flex; gap:1.5rem; align-items:center;">
+                        <div id="arena-score-board" style="font-size:1.25rem; font-weight:800; color:#10b981;">ניקוד: 0</div>
+                        <button class="os-btn os-btn-primary" style="padding:0.5rem 1.2rem; font-size:0.95rem; width:auto; background:var(--status-danger);" onclick="arcadeKernel.shutdownActiveGame()">סגור משחק</button>
+                    </div>
+                </div>
+                <div class="arena-canvas-container">
+                    <canvas id="arcade-viewport" width="800" height="500"></canvas>
+                </div>
             </div>
         </section>
 
-    </main>
-
-    <footer class="os-mainframe-footer">
-        <p>© 2026 SCHOOL OS v40.0 - Enterprise Ultra Edition. קוד ליבה מאובטח ופריסה רחבה נקייה.</p>
-    </footer>
-
-    <script>
-        // א. מערכת הודעות צפות גלובלית ועדכון שעון
+    </main><script>
+        // ==========================================
+        // א. מנוע ההודעות הגלובלי (מנוטרל לבקשתך)
+        // ==========================================
         const systemNotificationBroker = {
             show: function(messageText) {
-                
+                // המערכת מנוטרלת - הודעות לא יקפצו יותר במסך
+                return;
             }
         };
 
-        // הזרקת זמן אמת לשעון המערכת העליון
+        // שעון זמן אמת עליון
         setInterval(() => {
             const dateObj = new Date();
             const formatPad = (val) => String(val).padStart(2, '0');
@@ -754,515 +338,442 @@
                 `${formatPad(dateObj.getHours())}:${formatPad(dateObj.getMinutes())}:${formatPad(dateObj.getSeconds())}`;
         }, 1000);
 
-        // ב. ניתוב ובקרת תצוגות (OS ROUTING SYSTEM)
+
+        // ==========================================
+        // ב. נתונים קבועים ומערכת ניתוב דפים
+        // ==========================================
+        const MOCK_DB = {
+            schedule: [
+                { id: 1, day: "ראשון", title: "אלגברה ליניארית", start: "08:30", end: "10:00", room: "אולם 302" },
+                { id: 2, day: "שלישי", title: "מבני נתונים ומודלים", start: "10:15", end: "11:45", room: "מעבדה קוונטית" },
+                { id: 3, day: "חמישי", title: "מבוא לבינה מלאכותית", start: "12:00", end: "13:30", room: "אודיטוריום מרכזי" }
+            ],
+            todo: [
+                { id: 1, title: "הכנת מעבדה 4 במערכות הפעלה", priority: "גבוהה", completed: false },
+                { id: 2, title: "חזרה על סיכומי הרצאות בפיזיקה", priority: "בינונית", completed: false },
+                { id: 3, title: "פרויקט סיום סמסטר - תכנון ארכיטקטורה", priority: "גבוהה", completed: true }
+            ]
+        };
+
         function osViewRoutingBroker(targetViewKey) {
             document.querySelectorAll('.os-viewscreen').forEach(view => view.classList.remove('state-visible'));
             document.querySelectorAll('.os-nav-tab-link').forEach(tab => tab.classList.remove('state-active'));
             
-            document.getElementById(`os-view-${targetViewKey}`).classList.add('state-visible');
-            document.getElementById(`os-tab-${targetViewKey}`).classList.add('state-active');
+            const targetScreen = document.getElementById(`os-view-${targetViewKey}`);
+            const targetTab = document.getElementById(`os-tab-${targetViewKey}`);
             
-            // עצירה מלאה של מנועי המשחק למניעת עומס מעבד
-            spaceShooterEngine.stop(); 
-            coinCollectorEngine.stop(); 
-            systemMathQuizEngine.stop();
-            
-            if(targetViewKey === 'home') refreshSystemAnalytics();
-            if(targetViewKey === 'arcade') arcadeModuleRouter('space');
+            if (targetScreen && targetTab) {
+                targetScreen.classList.add('state-visible');
+                targetTab.classList.add('state-active');
+            }
+            if (targetViewKey !== 'arcade') {
+                arcadeKernel.shutdownActiveGame();
+            }
         }
 
-        function arcadeModuleRouter(targetGameKey) {
-            document.querySelectorAll('.arcade-game-module-view').forEach(mod => mod.classList.remove('state-active'));
-            document.querySelectorAll('.arcade-navbar-selection button').forEach(btn => btn.classList.remove('state-active'));
-            
-            document.getElementById(`arcade-submodule-${targetGameKey}`).classList.add('state-active');
-            document.getElementById(`arcade-btn-${targetGameKey}`).classList.add('state-active');
-
-            spaceShooterEngine.stop(); 
-            coinCollectorEngine.stop(); 
-            systemMathQuizEngine.stop();
-            
-            if(targetGameKey === 'space') spaceShooterEngine.start();
-            if(targetGameKey === 'coin') coinCollectorEngine.start();
-            if(targetGameKey === 'math') systemMathQuizEngine.start();
-            if(targetGameKey === 'ttt') systemTttEngine.start();
+        function systemMetricsEngine() {
+            document.getElementById('meta-metric-schedule-count').innerText = MOCK_DB.schedule.length;
+            const activeTodos = MOCK_DB.todo.filter(t => !t.completed).length;
+            const doneTodos = MOCK_DB.todo.filter(t => t.completed).length;
+            document.getElementById('meta-metric-todo-count').innerText = activeTodos;
+            document.getElementById('meta-metric-completed-count').innerText = doneTodos;
         }
 
-        function refreshSystemAnalytics() {
-            const schedData = JSON.parse(localStorage.getItem('os_v40_sched')) || [];
-            const todoData = JSON.parse(localStorage.getItem('os_v40_todo')) || [];
-            document.getElementById('meta-metric-schedule-count').innerText = schedData.length;
-            document.getElementById('meta-metric-todo-count').innerText = todoData.filter(item => !item.done).length;
-            document.getElementById('meta-metric-space-high').innerText = localStorage.getItem('os_v40_space_hi') || '0';
-        }
-        refreshSystemAnalytics();
 
-        // ג. מודול ניהול לוח שעות שבועי
+        // ==========================================
+        // ג. מודול ניהול מערכת שעות שבועית
+        // ==========================================
         const systemScheduleManager = {
-            records: JSON.parse(localStorage.getItem('os_v40_sched')) || [],
             render: function() {
-                const tbody = document.getElementById('table-injected-schedule-rows');
+                const tbody = document.getElementById('schedule-table-body');
+                if (!tbody) return;
                 tbody.innerHTML = '';
                 
-                this.records.sort((x, y) => x.time.localeCompare(y.time));
-                
-                this.records.forEach((rec, idx) => {
+                const dayOrder = { "ראשון": 1, "שני": 2, "שלישי": 3, "רביעי": 4, "חמישי": 5, "שישי": 6 };
+                const sortedData = [...MOCK_DB.schedule].sort((a, b) => {
+                    if(dayOrder[a.day] !== dayOrder[b.day]) return dayOrder[a.day] - dayOrder[b.day];
+                    return a.start.localeCompare(b.start);
+                });
+
+                sortedData.forEach(item => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td style="font-family: monospace; font-size: 1.15rem; color: #60a5fa; font-weight: 800;">${rec.time}</td>
-                        <td style="font-weight: 700; color: white;">${rec.title}</td>
-                        <td style="text-align: center;">
-                            <button class="os-btn os-btn-danger" style="padding: 0.4rem 1rem; font-size: 0.9rem;" onclick="systemScheduleManager.del(${idx})">מחק רשומה</button>
+                        <td><span class="badge-pill badge-blue">${item.day}</span></td>
+                        <td style="font-family: monospace; font-weight: 700;">${item.start} - ${item.end}</td>
+                        <td style="font-weight: 800; color: var(--text-ultra);">${item.title}</td>
+                        <td><span style="color: var(--text-muted); font-size:0.95rem;">📍 ${item.room || 'לא נקבע'}</span></td>
+                        <td>
+                            <button class="action-icon-btn" onclick="systemScheduleManager.delete(${item.id})">🗑️</button>
                         </td>
                     `;
                     tbody.appendChild(row);
                 });
+                systemMetricsEngine();
             },
             add: function() {
-                const timeField = document.getElementById('form-schedule-time');
-                const titleField = document.getElementById('form-schedule-title');
-                const timeValue = timeField.value;
-                const titleValue = titleField.value.trim();
-                
-                if(!timeValue || !titleValue) {
-                    systemNotificationBroker.show('שגיאה: השדות ריקים!');
-                    return;
-                }
-                
-                this.records.push({ time: timeValue, title: titleValue });
-                localStorage.setItem('os_v40_sched', JSON.stringify(this.records));
+                const title = document.getElementById('sched-input-title').value;
+                const day = document.getElementById('sched-input-day').value;
+                const start = document.getElementById('sched-input-start').value;
+                const end = document.getElementById('sched-input-end').value;
+                const room = document.getElementById('sched-input-room').value;
+
+                if (!title || !start || !end) return;
+
+                const newSlot = { id: Date.now(), day, title, start, end, room };
+                MOCK_DB.schedule.push(newSlot);
                 this.render();
-                titleField.value = '';
-                systemNotificationBroker.show('הרשומה הוזרקה למערכת השעות השבועית');
+                document.getElementById('schedule-creation-form').reset();
             },
-            del: function(idx) {
-                this.records.splice(idx, 1);
-                localStorage.setItem('os_v40_sched', JSON.stringify(this.records));
+            delete: function(targetId) {
+                MOCK_DB.schedule = MOCK_DB.schedule.filter(item => item.id !== targetId);
                 this.render();
-                systemNotificationBroker.show('הרשומה הוסרה בהצלחה');
             }
         };
-        systemScheduleManager.render();
 
-        // ד. מודול ניהול משימות קריטיות
+
+        // ==========================================
+        // ד. מודול ניהול משימות קריטיות (TODO)
+        // ==========================================
         const systemTodoManager = {
-            tasks: JSON.parse(localStorage.getItem('os_v40_todo')) || [],
             render: function() {
-                const targetWrapper = document.getElementById('todo-injected-list-wrapper');
-                targetWrapper.innerHTML = '';
-                
-                this.tasks.forEach((task, idx) => {
-                    const block = document.createElement('div');
-                    block.className = `os-task-item-card ${task.done ? 'state-done' : ''}`;
-                    block.innerHTML = `
-                        <span class="os-task-text" style="color: white; font-weight: 700; font-size: 1.1rem;">${task.txt}</span>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button class="os-btn os-btn-success" style="padding: 0.45rem 1rem; font-size: 0.9rem;" onclick="systemTodoManager.toggle(${idx})">${task.done ? 'פתח משימה' : 'סמן כבוצע'}</button>
-                            <button class="os-btn os-btn-outline" style="padding: 0.45rem 1rem; font-size: 0.9rem;" onclick="systemTodoManager.del(${idx})">מחק</button>
-                        </div>
+                const tbody = document.getElementById('todo-table-body');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+
+                MOCK_DB.todo.forEach(item => {
+                    const row = document.createElement('tr');
+                    let priorityBadge = '';
+                    if (item.priority === 'גבוהה') priorityBadge = '<span class="badge-pill badge-red">קריטי</span>';
+                    else if (item.priority === 'בינונית') priorityBadge = '<span class="badge-pill badge-amber">עומס ממוצע</span>';
+                    else priorityBadge = '<span class="badge-pill badge-blue">שגרתי</span>';
+
+                    row.innerHTML = `
+                        <td>
+                            <input type="checkbox" ${item.completed ? 'checked' : ''} 
+                                   style="width:20px; height:20px; cursor:pointer;" 
+                                   onclick="systemTodoManager.toggle(${item.id})">
+                        </td>
+                        <td style="${item.completed ? 'text-decoration: line-through; color: var(--text-muted);' : 'font-weight: 700; color: var(--text-ultra);'}">
+                            ${item.title}
+                        </td>
+                        <td>${priorityBadge}</td>
+                        <td style="text-align: left; padding-left: 2rem;">
+                            <button class="action-icon-btn" onclick="systemTodoManager.delete(${item.id})">🗑️</button>
+                        </td>
                     `;
-                    targetWrapper.appendChild(block);
+                    tbody.appendChild(row);
                 });
-                
-                const doneCount = this.tasks.filter(t => t.done).length;
-                const totalPercent = this.tasks.length ? Math.round((doneCount / this.tasks.length) * 100) : 0;
-                document.getElementById('todo-progress-fluid-fill').style.width = `${totalPercent}%`;
+                systemMetricsEngine();
             },
             add: function() {
-                const field = document.getElementById('form-todo-caption');
-                const captionValue = field.value.trim();
-                if(!captionValue) {
-                    systemNotificationBroker.show('שגיאה: תיאור משימה ריק!');
-                    return;
+                const title = document.getElementById('todo-input-title').value;
+                const priority = document.getElementById('todo-input-priority').value;
+
+                if (!title) return;
+
+                const newTodo = { id: Date.now(), title, priority, completed: false };
+                MOCK_DB.todo.push(newTodo);
+                this.render();
+                document.getElementById('todo-creation-form').reset();
+            },
+            toggle: function(targetId) {
+                const item = MOCK_DB.todo.find(t => t.id === targetId);
+                if (item) {
+                    item.completed = !item.completed;
+                    this.render();
                 }
-                this.tasks.push({ txt: captionValue, done: false });
-                localStorage.setItem('os_v40_todo', JSON.stringify(this.tasks));
-                this.render();
-                field.value = '';
-                systemNotificationBroker.show('המשימה נרשמה במערכת הניהול');
             },
-            toggle: function(idx) {
-                this.tasks[idx].done = !this.tasks[idx].done;
-                localStorage.setItem('os_v40_todo', JSON.stringify(this.tasks));
+            delete: function(targetId) {
+                MOCK_DB.todo = MOCK_DB.todo.filter(t => t.id !== targetId);
                 this.render();
-            },
-            del: function(idx) {
-                this.tasks.splice(idx, 1);
-                localStorage.setItem('os_v40_todo', JSON.stringify(this.tasks));
-                this.render();
-                systemNotificationBroker.show('המשימה נמחקה מהרשימה');
             }
         };
-        systemTodoManager.render();
 
-        // ה. משחק 1: סימולטור חלליות (SPACE SHOOTER ENGINE PRO)
-        const spaceShooterEngine = (function() {
-            const canvas = document.getElementById('os-canvas-space');
-            let ctx = canvas.getContext('2d');
-            let frameLoopId = null, score = 0, hearts = 3, globalFrameCount = 0;
-            let playerShip = { x: 325, y: 400, w: 45, h: 35 };
-            let laserArsenal = [], enemyFleet = [], cosmosStars = [], activeKeys = {};
 
-            function buildStarfield() {
-                cosmosStars = [];
-                for(let i=0; i<50; i++) {
-                    cosmosStars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*2+0.5, velocity: Math.random()*2.5 + 0.5 });
-                }
-            }
+        // ==========================================
+        // ה. ליבת מנוע הארקייד והמשחקים (Arcade Kernel)
+        // ==========================================
+        const arcadeKernel = {
+            activeGameType: null,
+            canvas: null,
+            ctx: null,
+            loopHandle: null,
+            score: 0,
+            gameState: {},
+            inputRegistry: {},
 
-            function trapKeyDown(e) {
-                activeKeys[e.code] = true;
-                if(e.code === 'Space') {
-                    laserArsenal.push({ x: playerShip.x + (playerShip.w / 2) - 2, y: playerShip.y - 5 });
-                    e.preventDefault();
-                }
-                if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
-            }
-            function trapKeyUp(e) { activeKeys[e.code] = false; }
-
-            function executeCoreLoop() {
-                globalFrameCount++;
+            bootGame: function(gameType) {
+                this.shutdownActiveGame();
                 
-                if((activeKeys['ArrowLeft'] || activeKeys['KeyA']) && playerShip.x > 0) playerShip.x -= 7;
-                if((activeKeys['ArrowRight'] || activeKeys['KeyD']) && playerShip.x < canvas.width - playerShip.w) playerShip.x += 7;
-                if((activeKeys['ArrowUp'] || activeKeys['KeyW']) && playerShip.y > 150) playerShip.y -= 5;
-                if((activeKeys['ArrowDown'] || activeKeys['KeyS']) && playerShip.y < canvas.height - playerShip.h) playerShip.y += 5;
+                this.canvas = document.getElementById('arcade-viewport');
+                this.ctx = this.canvas.getContext('2d');
+                this.activeGameType = gameType;
+                this.score = 0;
+                this.inputRegistry = {};
+                
+                document.getElementById('arena-score-board').innerText = `ניקוד: ${this.score}`;
+                const wrapper = document.getElementById('global-arcade-arena-wrapper');
+                wrapper.classList.add('active-arena');
+                
+                const titleMap = { 'space': 'סימוטור חלליות קוונטי', 'logic': 'אתגר חשיבה ורפלקס קוגניטיבי' };
+                document.getElementById('arena-current-game-title').innerText = titleMap[gameType] || 'מתחם סימולציה';
 
-                cosmosStars.forEach(star => {
-                    star.y += star.velocity;
-                    if(star.y > canvas.height) { star.y = 0; star.x = Math.random()*canvas.width; }
-                });
+                // רישום מאזיני מקלדת למשחק הפעיל
+                window.addEventListener('keydown', this.handleKeyDown);
+                window.addEventListener('keyup', this.handleKeyUp);
 
-                laserArsenal.forEach((laser, lIdx) => {
-                    laser.y -= 10;
-                    if(laser.y < 0) laserArsenal.splice(lIdx, 1);
-                });
+                if (gameType === 'space') this.initSpaceGame();
+                else if (gameType === 'logic') this.initLogicGame();
 
-                if(globalFrameCount % 25 === 0) {
-                    enemyFleet.push({ x: Math.random() * (canvas.width - 40), y: -35, w: 35, h: 28, speed: Math.random() * 2.5 + 2 });
+                // הפעלת לולאת הריצה המרכזית
+                this.loopHandle = requestAnimationFrame((timestamp) => this.masterCycle(timestamp));
+            },
+
+            shutdownActiveGame: function() {
+                if (this.loopHandle) {
+                    cancelAnimationFrame(this.loopHandle);
+                    this.loopHandle = null;
+                }
+                window.removeEventListener('keydown', this.handleKeyDown);
+                window.removeEventListener('keyup', this.handleKeyUp);
+                
+                // הסרת מאזין העכבר המיוחד של משחק החשיבה
+                if (this.canvas) {
+                    this.canvas.removeEventListener('mousedown', this.handleCanvasClick);
                 }
 
-                enemyFleet.forEach((enemy, eIdx) => {
-                    enemy.y += enemy.speed;
-                    
-                    if(enemy.y > canvas.height) {
-                        enemyFleet.splice(eIdx, 1);
-                        hearts--;
-                        refreshHud();
+                const wrapper = document.getElementById('global-arcade-arena-wrapper');
+                if (wrapper) wrapper.classList.remove('active-arena');
+                
+                this.activeGameType = null;
+                this.gameState = {};
+            },
+
+            handleKeyDown: function(e) {
+                arcadeKernel.inputRegistry[e.code] = true;
+                if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
+                    e.preventDefault(); // מניעת גלילת העמוד בזמן משחק
+                }
+            },
+            handleKeyUp: function(e) {
+                arcadeKernel.inputRegistry[e.code] = false;
+            },
+
+            updateScore: function(amount) {
+                this.score += amount;
+                document.getElementById('arena-score-board').innerText = `ניקוד: ${this.score}`;
+            },
+
+            masterCycle: function(timestamp) {
+                if (!this.activeGameType) return;
+                
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                if (this.activeGameType === 'space') {
+                    this.updateSpaceGame();
+                    this.drawSpaceGame();
+                } else if (this.activeGameType === 'logic') {
+                    this.updateLogicGame();
+                    this.drawLogicGame();
+                }
+
+                this.loopHandle = requestAnimationFrame((timestamp) => this.masterCycle(timestamp));
+            },
+
+            // --- 1. מנוע פנימי: סימולטור חלליות ---
+            initSpaceGame: function() {
+                this.gameState = {
+                    player: { x: this.canvas.width / 2 - 20, y: this.canvas.height - 50, w: 40, h: 30, speed: 6 },
+                    lasers: [],
+                    asteroids: [],
+                    lastSpawn: 0,
+                    cooldown: 0
+                };
+            },
+            updateSpaceGame: function() {
+                const state = this.gameState;
+                
+                // תנועת שחקן חללית
+                if (this.inputRegistry['ArrowLeft'] && state.player.x > 0) state.player.x -= state.player.speed;
+                if (this.inputRegistry['ArrowRight'] && state.player.x < this.canvas.width - state.player.w) state.player.x += state.player.speed;
+                
+                // ירי פלזמה/לייזר
+                if (state.cooldown > 0) state.cooldown--;
+                if (this.inputRegistry['Space'] && state.cooldown === 0) {
+                    state.lasers.push({ x: state.player.x + state.player.w / 2 - 2, y: state.player.y, w: 4, h: 12, speed: 8 });
+                    state.cooldown = 15; // השהיית ירי
+                }
+
+                // עדכון מיקומי לייזרים
+                state.lasers.forEach((laser, lIndex) => {
+                    laser.y -= laser.speed;
+                    if (laser.y < 0) state.lasers.splice(lIndex, 1);
+                });
+
+                // יצירת אסטרואידים חדשים
+                const now = Date.now();
+                if (now - state.lastSpawn > 1200) {
+                    const size = Math.random() * 30 + 20;
+                    state.asteroids.push({
+                        x: Math.random() * (this.canvas.width - size),
+                        y: -size,
+                        w: size,
+                        h: size,
+                        speed: Math.random() * 2 + 2
+                    });
+                    state.lastSpawn = now;
+                }
+
+                // עדכון אסטרואידים וזיהוי התנגשויות
+                state.asteroids.forEach((ast, aIndex) => {
+                    ast.y += ast.speed;
+                    if (ast.y > this.canvas.height) {
+                        state.asteroids.splice(aIndex, 1);
                     }
 
-                    if(enemy.x < playerShip.x + playerShip.w && enemy.x + enemy.w > playerShip.x && enemy.y < playerShip.y + playerShip.h && enemy.y + enemy.h > playerShip.y) {
-                        enemyFleet.splice(eIdx, 1);
-                        hearts--;
-                        refreshHud();
-                    }
-
-                    laserArsenal.forEach((laser, lIdx) => {
-                        if(laser.x > enemy.x && laser.x < enemy.x + enemy.w && laser.y > enemy.y && laser.y < enemy.y + enemy.h) {
-                            enemyFleet.splice(eIdx, 1);
-                            laserArsenal.splice(lIdx, 1);
-                            score += 10;
-                            refreshHud();
+                    // פגיעת לייזר באסטרואיד
+                    state.lasers.forEach((laser, lIndex) => {
+                        if (laser.x < ast.x + ast.w && laser.x + laser.w > ast.x &&
+                            laser.y < ast.y + ast.h && laser.y + laser.h > ast.y) {
+                            state.asteroids.splice(aIndex, 1);
+                            state.lasers.splice(lIndex, 1);
+                            arcadeKernel.updateScore(10);
                         }
                     });
+
+                    // התנגשות שחקן באסטרואיד
+                    if (state.player.x < ast.x + ast.w && state.player.x + state.player.w > ast.x &&
+                        state.player.y < ast.y + ast.h && state.player.y + state.player.h > ast.y) {
+                        state.asteroids.splice(aIndex, 1);
+                        arcadeKernel.updateScore(-20); // עונש פגיעה
+                    }
                 });
+            },
+            drawSpaceGame: function() {
+                const state = this.gameState;
+                const ctx = this.ctx;
 
-                if(hearts <= 0) {
-                    systemNotificationBroker.show(`הסימולטור קרס! ניקוד שהופק: ${score}`);
-                    const localHigh = localStorage.getItem('os_v40_space_hi') || 0;
-                    if(score > localHigh) localStorage.setItem('os_v40_space_hi', score);
-                    score = 0; hearts = 3; enemyFleet = []; laserArsenal = [];
-                    refreshHud();
-                }
-
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                cosmosStars.forEach(s => ctx.fillRect(s.x, s.y, s.size, s.size));
-
+                // ציור שחקן (חללית הייטק)
                 ctx.fillStyle = '#3b82f6';
                 ctx.beginPath();
-                ctx.moveTo(playerShip.x + playerShip.w/2, playerShip.y);
-                ctx.lineTo(playerShip.x, playerShip.y + playerShip.h);
-                ctx.lineTo(playerShip.x + playerShip.w, playerShip.y + playerShip.h);
+                ctx.moveTo(state.player.x + state.player.w / 2, state.player.y);
+                ctx.lineTo(state.player.x, state.player.y + state.player.h);
+                ctx.lineTo(state.player.x + state.player.w, state.player.y + state.player.h);
                 ctx.closePath();
                 ctx.fill();
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#3b82f6';
 
-                ctx.fillStyle = '#10b981';
-                laserArsenal.forEach(l => ctx.fillRect(l.x, l.y, 4, 14));
-
-                enemyFleet.forEach(e => {
-                    ctx.fillStyle = '#ef4444';
-                    ctx.fillRect(e.x, e.y, e.w, e.h);
-                    ctx.fillStyle = '#f87171';
-                    ctx.fillRect(e.x + 8, e.y + 6, e.w - 16, e.h - 12);
+                // ציור לייזרים
+                ctx.fillStyle = '#ef4444';
+                ctx.shadowColor = '#ef4444';
+                state.lasers.forEach(laser => {
+                    ctx.fillRect(laser.x, laser.y, laser.w, laser.h);
                 });
 
-                frameLoopId = requestAnimationFrame(executeCoreLoop);
-            }
+                // ציור אסטרואידים
+                ctx.fillStyle = '#4b5563';
+                ctx.shadowBlur = 0; // ללא זוהר לאסטרואידים
+                state.asteroids.forEach(ast => {
+                    ctx.beginPath();
+                    ctx.arc(ast.x + ast.w/2, ast.y + ast.h/2, ast.w/2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = '#374151';
+                    ctx.stroke();
+                });
+            },
 
-            function refreshHud() {
-                document.getElementById('hud-space-score').innerText = score;
-                let glyphs = '';
-                for(let i=0; i<hearts; i++) glyphs += '❤️';
-                document.getElementById('hud-space-hearts').innerText = glyphs || 'TERMINATED';
-            }
-
-            return {
-                start: function() {
-                    window.addEventListener('keydown', trapKeyDown);
-                    window.addEventListener('keyup', trapKeyUp);
-                    score = 0; hearts = 3; enemyFleet = []; laserArsenal = [];
-                    buildStarfield();
-                    refreshHud();
-                    executeCoreLoop();
-                },
-                stop: function() {
-                    if(frameLoopId) cancelAnimationFrame(frameLoopId);
-                    window.removeEventListener('keydown', trapKeyDown);
-                    window.removeEventListener('keyup', trapKeyUp);
-                    frameLoopId = null;
-                }
-            };
-        })();
-
-        // ו. משחק 2: תפוס את המטבע (COIN COLLECTOR ENGINE)
-        const coinCollectorEngine = (function() {
-            const canvas = document.getElementById('os-canvas-coin');
-            let ctx = canvas.getContext('2d');
-            let frameId = null, score = 0, timeRemaining = 30, internalClock = 0;
-            let operativePlayer = { x: 330, y: 225, w: 32, h: 32 }, dynamicCoin = { x: 100, y: 100, radius: 11 };
-            let keyRegistry = {};
-
-            function trackDown(e) {
-                keyRegistry[e.code] = true;
-                if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
-            }
-            function trackUp(e) { keyRegistry[e.code] = false; }
-
-            function dropCoin() {
-                dynamicCoin.x = 50 + Math.random() * (canvas.width - 100);
-                dynamicCoin.y = 50 + Math.random() * (canvas.height - 100);
-            }
-
-            function engineCycle() {
-                internalClock++;
+            // --- 2. מנוע פנימי: אתגר חשיבה ורפלקס ---
+            initLogicGame: function() {
+                this.gameState = {
+                    target: { x: 0, y: 0, size: 40 },
+                    timeLeft: 60,
+                    lastRespawn: Date.now(),
+                    durationLimit: 1500 // זמן מוקצב ללחיצה על קוביה
+                };
+                this.spawnLogicTarget();
+                this.canvas.addEventListener('mousedown', this.handleCanvasClick);
+            },
+            spawnLogicTarget: function() {
+                const state = this.gameState;
+                state.target.x = Math.random() * (this.canvas.width - state.target.size * 2) + state.target.size;
+                state.target.y = Math.random() * (this.canvas.height - state.target.size * 2) + state.target.size;
+                state.lastRespawn = Date.now();
+            },
+            handleCanvasClick: function(e) {
+                if (arcadeKernel.activeGameType !== 'logic') return;
                 
-                if(internalClock % 60 === 0) {
-                    timeRemaining--;
-                    document.getElementById('hud-coin-timer').innerText = timeRemaining;
+                const rect = arcadeKernel.canvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                const state = arcadeKernel.gameState;
+
+                // חישוב מרחק לבדיקת פגיעה בעיגול/קוביה המטרה
+                const dist = Math.hypot(mouseX - state.target.x, mouseY - state.target.y);
+                if (dist <= state.target.size) {
+                    arcadeKernel.updateScore(15);
+                    arcadeKernel.spawnLogicTarget();
+                    state.durationLimit = Math.max(600, state.durationLimit - 40); // העלאת דרגת הקושי
+                } else {
+                    arcadeKernel.updateScore(-5); // החטאה מפחיתה ניקוד
                 }
-
-                if(timeRemaining <= 0) {
-                    systemNotificationBroker.show(`המכסה הושלמה! מטבעות שנאספו בסבב: ${score}`);
-                    score = 0; timeRemaining = 30;
-                    document.getElementById('hud-coin-score').innerText = score;
-                    document.getElementById('hud-coin-timer').innerText = timeRemaining;
-                    dropCoin();
+            },
+            updateLogicGame: function() {
+                const state = this.gameState;
+                const now = Date.now();
+                
+                // אם פג הזמן לקוביה הנוכחית, היא משנה מיקום והניקוד יורד
+                if (now - state.lastRespawn > state.durationLimit) {
+                    arcadeKernel.updateScore(-10);
+                    arcadeKernel.spawnLogicTarget();
                 }
+            },
+            drawLogicGame: function() {
+                const state = this.gameState;
+                const ctx = this.ctx;
 
-                if((keyRegistry['ArrowLeft'] || keyRegistry['KeyA']) && operativePlayer.x > 0) operativePlayer.x -= 7;
-                if((keyRegistry['ArrowRight'] || keyRegistry['KeyD']) && operativePlayer.x < canvas.width - operativePlayer.w) operativePlayer.x += 7;
-                if((keyRegistry['ArrowUp'] || keyRegistry['KeyW']) && operativePlayer.y > 0) operativePlayer.y -= 7;
-                if((keyRegistry['ArrowDown'] || keyRegistry['KeyS']) && operativePlayer.y < canvas.height - operativePlayer.h) operativePlayer.y += 7;
-
-                const pX = operativePlayer.x + operativePlayer.w / 2;
-                const pY = operativePlayer.y + operativePlayer.h / 2;
-                const distance = Math.hypot(pX - dynamicCoin.x, pY - dynamicCoin.y);
-
-                if(distance < (operativePlayer.w / 2) + dynamicCoin.radius) {
-                    score++;
-                    document.getElementById('hud-coin-score').innerText = score;
-                    systemNotificationBroker.show('מטבע אלקטרוני נאסף במאגר');
-                    dropCoin();
-                }
-
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                ctx.strokeStyle = '#0a1424';
+                // אפקט רקע לרשת חשיבה
+                ctx.strokeStyle = 'rgba(255,255,255,0.02)';
                 ctx.lineWidth = 1;
-                for(let x=0; x<canvas.width; x+=40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke(); }
-                for(let y=0; y<canvas.height; y+=40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke(); }
+                for(let i=0; i<this.canvas.width; i+=40) {
+                    ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, this.canvas.height); ctx.stroke();
+                }
+                for(let j=0; j<this.canvas.height; j+=40) {
+                    ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(this.canvas.width, j); ctx.stroke();
+                }
 
+                // ציור כפתור המטרה האנרגטי
+                ctx.shadowBlur = 25;
+                ctx.shadowColor = '#10b981';
                 ctx.fillStyle = '#10b981';
-                ctx.fillRect(operativePlayer.x, operativePlayer.y, operativePlayer.w, operativePlayer.h);
-                ctx.strokeStyle = '#34d399';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(operativePlayer.x, operativePlayer.y, operativePlayer.w, operativePlayer.h);
-
-                ctx.fillStyle = '#eab308';
                 ctx.beginPath();
-                ctx.arc(dynamicCoin.x, dynamicCoin.y, dynamicCoin.radius, 0, Math.PI * 2);
+                ctx.arc(state.target.x, state.target.y, state.target.size, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 1.5;
+
+                // ליבה פנימית בהירה למטרה
+                ctx.fillStyle = '#a7f3d0';
+                ctx.beginPath();
+                ctx.arc(state.target.x, state.target.y, state.target.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // מד זמן ויזואלי סביב המטרה
+                const elapsed = Date.now() - state.lastRespawn;
+                const pct = Math.max(0, 1 - (elapsed / state.durationLimit));
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.arc(state.target.x, state.target.y, state.target.size + 8, -Math.PI/2, (-Math.PI/2) + (Math.PI * 2 * pct));
                 ctx.stroke();
-
-                frameId = requestAnimationFrame(engineCycle);
-            }
-
-            return {
-                start: function() {
-                    window.addEventListener('keydown', trackDown);
-                    window.addEventListener('keyup', trackUp);
-                    score = 0; timeRemaining = 30; internalClock = 0;
-                    document.getElementById('hud-coin-score').innerText = score;
-                    document.getElementById('hud-coin-timer').innerText = timeRemaining;
-                    dropCoin();
-                    engineCycle();
-                },
-                stop: function() {
-                    if(frameId) cancelAnimationFrame(frameId);
-                    window.removeEventListener('keydown', trackDown);
-                    window.removeEventListener('keyup', trackUp);
-                    frameId = null;
-                }
-            };
-        })();
-
-        // ז. משחק 3: אתגר חשבון מהיר (SPEED MATH QUIZ ENGINE)
-        const systemMathQuizEngine = {
-            currentStreak: 0, targetCalculatedValue: 0,
-            start: function() {
-                this.currentStreak = 0;
-                document.getElementById('hud-math-streak').innerText = 0;
-                this.deployNewProblem();
-            },
-            stop: function() {},
-            deployNewProblem: function() {
-                const mathType = Math.floor(Math.random() * 3);
-                let a, b, sign;
-
-                if(mathType === 0) {
-                    a = Math.floor(Math.random() * 50) + 15;
-                    b = Math.floor(Math.random() * 50) + 15;
-                    this.targetCalculatedValue = a + b; sign = '+';
-                } else if(mathType === 1) {
-                    a = Math.floor(Math.random() * 80) + 20;
-                    b = Math.floor(Math.random() * 19) + 5;
-                    this.targetCalculatedValue = a - b; sign = '-';
-                } else {
-                    a = Math.floor(Math.random() * 12) + 2;
-                    b = Math.floor(Math.random() * 10) + 2;
-                    this.targetCalculatedValue = a * b; sign = '×';
-                }
-
-                document.getElementById('quiz-string-box-target').innerText = `${a} ${sign} ${b} = ?`;
-                
-                let matrixPool = [this.targetCalculatedValue];
-                while(matrixPool.length < 4) {
-                    const devia = (Math.floor(Math.random() * 8) + 1) * (Math.random() > 0.5 ? 1 : -1);
-                    const fake = this.targetCalculatedValue + devia;
-                    if(!matrixPool.includes(fake) && fake >= 0) matrixPool.push(fake);
-                }
-                matrixPool.sort(() => Math.random() - 0.5);
-
-                const injectorTarget = document.getElementById('quiz-injected-buttons-target');
-                injectorTarget.innerHTML = '';
-                
-                matrixPool.forEach(opt => {
-                    const buttonNode = document.createElement('button');
-                    buttonNode.className = 'quiz-choice-trigger';
-                    buttonNode.innerText = opt;
-                    buttonNode.onclick = () => { this.verifyUserResponse(opt); };
-                    injectorTarget.appendChild(buttonNode);
-                });
-            },
-            verifyUserResponse: function(selectedValue) {
-                if(selectedValue === this.targetCalculatedValue) {
-                    this.currentStreak++;
-                    document.getElementById('hud-math-streak').innerText = this.currentStreak;
-                    systemNotificationBroker.show('אימות מושלם: תשובה נכונה!');
-                    this.deployNewProblem();
-                } else {
-                    systemNotificationBroker.show(`שגיאת אימות! ערך נכון היה: ${this.targetCalculatedValue}`);
-                    this.currentStreak = 0;
-                    document.getElementById('hud-math-streak').innerText = 0;
-                    this.deployNewProblem();
-                }
             }
         };
 
-        // ח. משחק 4: איקס עיגול נגד מחשב (TIC TAC TOE SYSTEM MESH)
-        const systemTttEngine = {
-            meshMemory: ["","","","","","","","",""], stateLock: true,
-            start: function() { this.reset(); },
-            stop: function() {},
-            reset: function() {
-                this.meshMemory = ["","","","","","","","",""];
-                this.stateLock = true;
-                document.getElementById('hud-ttt-status-label').innerText = "תורך לשחק (X)";
-                this.refreshGrid();
-            },
-            refreshGrid: function() {
-                const hostMesh = document.getElementById('ttt-injected-mesh-target');
-                hostMesh.innerHTML = '';
-                
-                this.meshMemory.forEach((value, idx) => {
-                    const node = document.createElement('div');
-                    node.className = 'ttt-mesh-node';
-                    node.innerText = value;
-                    
-                    if(value === 'X') node.style.color = '#f87171';
-                    if(value === 'O') node.style.color = '#60a5fa';
-                    
-                    node.onclick = () => {
-                        if(!this.stateLock || this.meshMemory[idx] !== "") return;
-                        
-                        this.meshMemory[idx] = "X";
-                        this.refreshGrid();
-                        
-                        if(!this.evaluateMatrixWinner()) {
-                            this.stateLock = false;
-                            document.getElementById('hud-ttt-status-label').innerText = "חישוב מהלך AI...";
-                            setTimeout(() => { this.executeAiMove(); }, 400);
-                        }
-                    };
-                    hostMesh.appendChild(node);
-                });
-            },
-            executeAiMove: function() {
-                let blanks = [];
-                this.meshMemory.forEach((v, i) => { if(v === "") blanks.push(i); });
-                
-                if(blanks.length > 0) {
-                    const pick = blanks[Math.floor(Math.random() * blanks.length)];
-                    this.meshMemory[pick] = "O";
-                }
-                
-                this.refreshGrid();
-                this.stateLock = true;
-                this.evaluateMatrixWinner();
-                if(this.stateLock) {
-                    document.getElementById('hud-ttt-status-label').innerText = "תורך לשחק (X)";
-                }
-            },
-            evaluateMatrixWinner: function() {
-                const vectors = [
-                    [0,1,2], [3,4,5], [6,7,8],
-                    [0,3,6], [1,4,7], [2,5,8],
-                    [0,4,8], [2,4,6]
-                ];
 
-                for(let vec of vectors) {
-                    const [a, b, c] = vec;
-                    if(this.meshMemory[a] !== "" && this.meshMemory[a] === this.meshMemory[b] && this.meshMemory[a] === this.meshMemory[c]) {
-                        const winSign = this.meshMemory[a];
-                        document.getElementById('hud-ttt-status-label').innerText = `סבב ננעל! ניצחון ל: ${winSign}`;
-                        systemNotificationBroker.show(`המנצח ברשת: ${winSign}`);
-                        this.stateLock = false;
-                        return true;
-                    }
-                }
-                
-                if(!this.meshMemory.includes("")) {
-                    document.getElementById('hud-ttt-status-label').innerText = "שוויון נקודות אבסולוטי!";
-                    systemNotificationBroker.show('איקס עיגול הסתיים בתיקו');
-                    this.stateLock = false;
-                    return true;
-                }
-                return false;
-            }
+        // איתחול מערכות עם טעינת הדף
+        window.onload = function() {
+            systemScheduleManager.render();
+            systemTodoManager.render();
+            systemMetricsEngine();
         };
     </script>
 </body>
