@@ -3,732 +3,1077 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCHOOL OS v40.0 - Enterprise Ultra (Pure Wide Edition)</title>
+    <title>מערכת ניהול מוסדית אינטראקטיבית וקומפלקס הארקייד הגדול</title>
     <style>
         /* ==========================================================================
-           1. CORE ARCHITECTURE & DARK MATRIX VARIABLES (ENTERPRISE ULTRA)
+           1. הגדרות יסוד ומשתני עיצוב דינמיים (CSS VARIABLES & THEME ENGINE)
            ========================================================================== */
         :root {
-            --os-bg-deep: #030712;
-            --os-bg-surface: #0b1329;
-            --os-bg-card: #111c40;
-            --os-border-glow: #1e293b;
-            --os-border-active: #3b82f6;
+            --bg-base: #f1f5f9;
+            --bg-surface: #ffffff;
+            --bg-card: #ffffff;
+            --border-main: #e2e8f0;
+            --border-focus: #3b82f6;
             
-            --neon-blue: #3b82f6;
-            --neon-blue-hover: #60a5fa;
-            --neon-blue-glow: rgba(59, 130, 246, 0.2);
+            --brand-primary: #2563eb;
+            --brand-primary-hover: #1d4ed8;
+            --brand-primary-alpha: rgba(37, 99, 235, 0.1);
             
-            --status-success: #10b981;
-            --status-warning: #f59e0b;
-            --status-danger: #ef4444;
+            --brand-secondary: #475569;
+            --brand-secondary-hover: #334155;
             
-            --text-ultra: #ffffff;
-            --text-standard: #e2e8f0;
+            --ui-success: #10b981;
+            --ui-success-hover: #059669;
+            --ui-success-alpha: rgba(16, 185, 129, 0.1);
+            
+            --ui-warning: #f59e0b;
+            --ui-warning-hover: #d97706;
+            
+            --ui-danger: #ef4444;
+            --ui-danger-hover: #dc2626;
+            --ui-danger-alpha: rgba(239, 68, 68, 0.1);
+            
+            --text-title: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --text-on-brand: #ffffff;
+            
+            --radius-flat: 0px;
+            --radius-classic: 4px;
+            --radius-standard: 8px;
+            --radius-interactive: 12px;
+            --radius-rounded: 24px;
+            --radius-circle: 50%;
+            
+            --elevation-low: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            --elevation-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --elevation-high: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 7px 10px -4px rgba(0, 0, 0, 0.1);
+            
+            --motion-instant: 0s;
+            --motion-swift: 0.15s ease;
+            --motion-balanced: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --motion-expressive: 0.5s cubic-bezier(0.87, 0, 0.13, 1);
+        }
+
+        .dark-mode-context {
+            --bg-base: #0f172a;
+            --bg-surface: #1e293b;
+            --bg-card: #1e293b;
+            --border-main: #334155;
+            --border-focus: #60a5fa;
+            
+            --brand-primary: #3b82f6;
+            --brand-primary-hover: #60a5fa;
+            --brand-primary-alpha: rgba(59, 130, 246, 0.2);
+            
+            --brand-secondary: #94a3b8;
+            --brand-secondary-hover: #cbd5e1;
+            
+            --ui-success: #34d399;
+            --ui-success-hover: #059669;
+            --ui-success-alpha: rgba(52, 211, 153, 0.2);
+            
+            --ui-warning: #fbbf24;
+            --ui-warning-hover: #f59e0b;
+            
+            --ui-danger: #f87171;
+            --ui-danger-hover: #ef4444;
+            --ui-danger-alpha: rgba(248, 113, 113, 0.2);
+            
+            --text-title: #f8fafc;
+            --text-body: #cbd5e1;
             --text-muted: #94a3b8;
-            
-            --panel-radius-lg: 16px;
-            --panel-radius-md: 12px;
-            --panel-radius-sm: 8px;
-            
-            --ultra-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.9), 0 10px 15px -6px rgba(0, 0, 0, 0.9);
-            --transition-swift: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --text-on-brand: #0f172a;
         }
 
         /* ==========================================================================
-           2. GLOBAL RESET & OS INTERACTION SCROLLBARS
+           2. איפוס מבני גלובלי ואתחול אלמנטים (GLOBAL RESET & BASE LAYOUT)
            ========================================================================== */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            user-select: none;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         body {
-            background-color: var(--os-bg-deep);
-            color: var(--text-standard);
+            background-color: var(--bg-base);
+            color: var(--text-body);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            line-height: 1.6;
+            line-height: 1.5;
             overflow-x: hidden;
-        }
-
-        /* Enterprise Scrollbar Graphics */
-        ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--os-bg-deep);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--os-border-glow);
-            border-radius: 20px;
-            border: 2px solid var(--os-bg-deep);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--neon-blue);
+            transition: background-color var(--motion-balanced), color var(--motion-balanced);
         }
 
         /* ==========================================================================
-           3. MAIN FRAMEWORK NAVIGATION & ULTRA HEADER
+           3. מבנה ניווט ומערכת עטיפה עליונה (NAVIGATION & PLATFORM HEADER)
            ========================================================================== */
-        .os-mainframe-header {
-            background-color: var(--os-bg-surface);
-            border-bottom: 2px solid var(--os-border-glow);
+        .platform-header {
+            background-color: var(--bg-surface);
+            border-bottom: 1px solid var(--border-main);
             position: sticky;
             top: 0;
-            z-index: 999;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            z-index: 500;
+            box-shadow: var(--elevation-low);
+            transition: background-color var(--motion-balanced), border-color var(--motion-balanced);
         }
 
-        .os-header-inner {
-            max-width: 1600px;
+        .header-container {
+            max-width: 1440px;
             margin: 0 auto;
-            padding: 1.25rem 2rem;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .os-brand-block {
+        .brand-identity {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
-        .os-brand-block .os-core-logo {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--neon-blue), #1d4ed8);
-            color: var(--text-ultra);
-            border-radius: var(--panel-radius-md);
+        .brand-identity .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--brand-primary);
+            color: white;
+            border-radius: var(--radius-standard);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            font-weight: 900;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: var(--elevation-medium);
         }
 
-        .os-brand-block h1 {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--text-ultra);
-            letter-spacing: -0.5px;
+        .brand-identity h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-title);
         }
 
-        .os-realtime-clock {
-            font-family: 'Courier New', monospace;
-            font-size: 1.4rem;
+        .action-utilities {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .time-ticker {
+            font-family: monospace;
+            font-size: 1.1rem;
             font-weight: 700;
-            color: #60a5fa;
-            background-color: #030611;
-            padding: 0.6rem 1.5rem;
-            border-radius: var(--panel-radius-sm);
-            border: 1px solid var(--os-border-glow);
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);
+            color: var(--text-title);
+            background-color: var(--bg-base);
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius-classic);
+            border: 1px solid var(--border-main);
         }
 
-        .os-navigation-bar {
-            background-color: var(--os-bg-surface);
-            border-bottom: 1px solid var(--os-border-glow);
+        .action-btn-utility {
+            background: none;
+            border: 1px solid var(--border-main);
+            color: var(--text-body);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-standard);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: var(--motion-swift);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .os-nav-container {
-            max-width: 1600px;
+        .action-btn-utility:hover {
+            background-color: var(--border-main);
+            color: var(--text-title);
+        }
+
+        .main-navigation {
+            background-color: var(--bg-surface);
+            border-bottom: 1px solid var(--border-main);
+            transition: background-color var(--motion-balanced), border-color var(--motion-balanced);
+        }
+
+        .nav-container {
+            max-width: 1440px;
             margin: 0 auto;
             padding: 0 2rem;
         }
 
-        .os-nav-tabs-list {
+        .nav-list {
             display: flex;
             list-style: none;
             gap: 0.5rem;
         }
 
-        .os-nav-tab-link {
+        .nav-item-link {
             display: block;
-            padding: 1.25rem 1.75rem;
+            padding: 1rem 1.25rem;
             color: var(--text-muted);
             text-decoration: none;
-            font-weight: 800;
-            font-size: 1.1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            border-bottom: 4px solid transparent;
-            transition: var(--os-transition-swift);
+            border-bottom: 3px solid transparent;
+            transition: var(--motion-swift);
         }
 
-        .os-nav-tab-link:hover {
-            color: var(--text-ultra);
-            background-color: rgba(255, 255, 255, 0.01);
+        .nav-item-link:hover {
+            color: var(--text-title);
+            background-color: var(--bg-base);
         }
 
-        .os-nav-tab-link.state-active {
-            color: var(--neon-blue);
-            border-bottom-color: var(--neon-blue);
-            background-color: var(--neon-blue-glow);
+        .nav-item-link.state-active {
+            color: var(--brand-primary);
+            border-bottom-color: var(--brand-primary);
         }
 
         /* ==========================================================================
-           4. WORKSPACE CONTAINER & PERSISTENT VIEWS
+           4. רכיבי שלד מרכזיים ומערך עמודים (CENTRAL ROUTING FRAMEWORK)
            ========================================================================== */
-        .os-workspace {
+        .content-workspace {
             flex: 1;
-            max-width: 1600px;
+            max-width: 1440px;
             width: 100%;
             margin: 0 auto;
-            padding: 3rem 2rem;
+            padding: 2rem;
         }
 
-        .os-viewscreen {
+        .view-viewscreen {
             display: none;
         }
 
-        .os-viewscreen.state-visible {
+        .view-viewscreen.state-visible {
             display: block;
-            animation: viewScreenIntro Entry var(--transition-smooth) forwards;
+            animation: frameworkViewIntro var(--motion-balanced) forwards;
         }
 
-        @keyframes viewScreenIntro {
-            from { opacity: 0; transform: translateY(25px); }
+        @keyframes frameworkViewIntro {
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .os-screen-title-ribbon {
-            margin-bottom: 3rem;
-            border-right: 6px solid var(--neon-blue);
-            padding-right: 1.5rem;
+        .screen-header-block {
+            margin-bottom: 2rem;
         }
 
-        .os-screen-title-ribbon h2 {
-            font-size: 2.4rem;
-            font-weight: 900;
-            color: var(--text-ultra);
+        .screen-header-block h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-title);
+            margin-bottom: 0.25rem;
+        }
+
+        .screen-header-block p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
         }
 
         /* ==========================================================================
-           5. ENTERPRISE CONTROLS & UI COMPONENT PACK
+           5. רכיבי ממשק משותפים (SHARED REUSABLE INTERFACE COMPONENTS)
            ========================================================================== */
-        .os-btn {
+        
+        /* מערכות כפתורים מודולריות */
+        .component-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            padding: 0.9rem 2rem;
-            font-size: 1rem;
-            font-weight: 800;
-            border-radius: var(--panel-radius-sm);
+            padding: 0.625rem 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: var(--radius-standard);
             border: 1px solid transparent;
             cursor: pointer;
-            transition: var(--transition-swift);
+            transition: var(--motion-swift);
+            text-decoration: none;
+            white-space: nowrap;
         }
 
-        .os-btn-primary { background-color: var(--neon-blue); color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
-        .os-btn-primary:hover { background-color: #2563eb; transform: translateY(-1px); }
-        
-        .os-btn-success { background-color: var(--status-success); color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
-        .os-btn-success:hover { background-color: #059669; transform: translateY(-1px); }
-        
-        .os-btn-danger { background-color: var(--status-danger); color: white; }
-        .os-btn-danger:hover { background-color: #dc2626; }
-        
-        .os-btn-outline { background-color: transparent; border-color: var(--os-border-glow); color: var(--text-standard); }
-        .os-btn-outline:hover { background-color: var(--os-border-glow); color: white; }
-
-        .os-card {
-            background-color: var(--os-bg-surface);
-            border: 1px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-lg);
-            padding: 2.5rem;
-            box-shadow: var(--ultra-shadow);
+        .component-button:active {
+            transform: scale(0.98);
         }
 
-        .os-input-wrapper {
-            margin-bottom: 2rem;
+        .component-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-style-primary { background-color: var(--brand-primary); color: white; }
+        .btn-style-primary:hover { background-color: var(--brand-primary-hover); }
+        
+        .btn-style-secondary { background-color: var(--brand-secondary); color: white; }
+        .btn-style-secondary:hover { background-color: var(--brand-secondary-hover); }
+
+        .btn-style-success { background-color: var(--ui-success); color: white; }
+        .btn-style-success:hover { background-color: var(--ui-success-hover); }
+
+        .btn-style-danger { background-color: var(--ui-danger); color: white; }
+        .btn-style-danger:hover { background-color: var(--ui-danger-hover); }
+        
+        .btn-style-outline { background-color: transparent; border-color: var(--border-main); color: var(--text-body); }
+        .btn-style-outline:hover { background-color: var(--bg-base); color: var(--text-title); }
+
+        /* קונטיינרים וכרטיסים */
+        .layout-card-base {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-main);
+            border-radius: var(--radius-interactive);
+            padding: 1.5rem;
+            box-shadow: var(--elevation-low);
+            transition: background-color var(--motion-balanced), border-color var(--motion-balanced);
+        }
+
+        /* רכיבי טפסים ושדות קלט */
+        .form-field-group {
+            margin-bottom: 1.25rem;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0.375rem;
         }
 
-        .os-input-label {
-            font-size: 1rem;
-            font-weight: 800;
-            color: var(--text-ultra);
+        .form-field-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-title);
         }
 
-        .os-input-field {
+        .form-field-input {
             width: 100%;
-            padding: 1rem 1.5rem;
-            font-size: 1.1rem;
-            background-color: var(--os-bg-deep);
-            color: var(--text-standard);
-            border: 2px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-sm);
+            padding: 0.625rem 0.875rem;
+            font-size: 0.95rem;
+            background-color: var(--bg-surface);
+            color: var(--text-body);
+            border: 1px solid var(--border-main);
+            border-radius: var(--radius-standard);
             outline: none;
-            transition: var(--transition-swift);
+            transition: var(--motion-swift);
         }
 
-        .os-input-field:focus {
-            border-color: var(--os-border-active);
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+        .form-field-input:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px var(--brand-primary-alpha);
         }
 
-        .os-table-scroller {
+        /* טבלאות נתונים מתקדמות */
+        .table-scroller {
             overflow-x: auto;
             width: 100%;
-            border: 1px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-lg);
-            background-color: var(--os-bg-surface);
-            box-shadow: var(--ultra-shadow);
+            border: 1px solid var(--border-main);
+            border-radius: var(--radius-standard);
+            background-color: var(--bg-surface);
         }
 
-        .os-data-table {
+        .data-table-core {
             width: 100%;
             border-collapse: collapse;
             text-align: right;
+            font-size: 0.9rem;
         }
 
-        .os-data-table th, .os-data-table td {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--os-border-glow);
+        .data-table-core th {
+            background-color: var(--bg-base);
+            color: var(--text-title);
+            padding: 0.875rem 1rem;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-main);
+            white-space: nowrap;
         }
 
-        .os-data-table th { 
-            background-color: #121d3a; 
-            color: var(--text-ultra); 
-            font-weight: 900;
+        .data-table-core td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid var(--border-main);
+            color: var(--text-body);
         }
 
-        .os-data-table tbody tr:hover {
-            background-color: rgba(255,255,255,0.01);
+        .data-table-core tr:last-child td {
+            border-bottom: none;
         }
 
-        .os-toast-pipeline {
+        .data-table-core tr:hover td {
+            background-color: var(--brand-primary-alpha);
+        }
+
+        /* מערכת תגיות מובנית */
+        .ui-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: var(--radius-rounded);
+            text-transform: uppercase;
+        }
+
+        .badge-type-primary { background-color: var(--brand-primary-alpha); color: var(--brand-primary); }
+        .badge-type-success { background-color: var(--ui-success-alpha); color: var(--ui-success); }
+        .badge-type-danger { background-color: var(--ui-danger-alpha); color: var(--ui-danger); }
+        .badge-type-warning { background-color: rgba(245, 158, 11, 0.1); color: var(--ui-warning); }
+
+        /* התראות מערכת צפות (Toast UI) */
+        .toast-broker-container {
             position: fixed;
-            bottom: 3rem;
-            left: 3rem;
-            z-index: 9999;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 1000;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.5rem;
+            pointer-events: none;
         }
 
-        .os-toast-item {
-            background-color: #172342;
-            color: var(--text-ultra);
-            border-left: 6px solid var(--neon-blue);
-            padding: 1.5rem 2.5rem;
-            border-radius: var(--panel-radius-sm);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            font-weight: 800;
-            animation: toastEnter var(--transition-smooth) forwards;
+        .toast-node-item {
+            background-color: var(--text-title);
+            color: var(--bg-surface);
+            padding: 0.875rem 1.5rem;
+            border-radius: var(--radius-standard);
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: var(--elevation-high);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 280px;
+            max-width: 420px;
+            animation: toastNodeIn var(--motion-balanced) forwards;
+            pointer-events: auto;
         }
 
-        @keyframes toastEnter {
-            from { transform: translateX(-60px); opacity: 0; }
+        @keyframes toastNodeIn {
+            from { transform: translateX(-32px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
 
+        .toast-node-item.intent-fadeout {
+            animation: toastNodeOut var(--motion-balanced) forwards;
+        }
+
+        @keyframes toastNodeOut {
+            to { transform: translateY(16px); opacity: 0; }
+        }
+
         /* ==========================================================================
-           6. SYSTEMS: DATA ANALYTICS, MATRIX SCHEDULER & TASKS
+           6. סגנונות ספציפיים - מסך הבית והאנליטיקה (HOME VIEW)
            ========================================================================== */
-        .os-analytics-grid {
+        .analytics-matrix-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-            margin-bottom: 3.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .os-analytic-card {
-            background-color: var(--os-bg-surface);
-            border: 1px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-lg);
-            padding: 2.5rem;
-            box-shadow: var(--ultra-shadow);
-            border-top: 5px solid var(--neon-blue);
+        .metric-card-box {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-main);
+            border-radius: var(--radius-interactive);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: var(--elevation-low);
         }
 
-        .os-analytic-card .os-counter { 
-            font-size: 3.5rem; 
-            font-weight: 900; 
-            color: #60a5fa; 
-            display: block;
+        .metric-card-box .metric-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-card-box .metric-counter {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-title);
+            line-height: 1.2;
+        }
+
+        .metric-card-box .metric-delta-footer {
             margin-top: 0.5rem;
-            text-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
-        }
-        
-        .os-split-layout {
-            display: grid;
-            grid-template-columns: 400px 1fr;
-            gap: 3.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
         }
 
-        .os-task-item-card {
-            background-color: var(--os-bg-surface);
-            border: 1px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-sm);
-            padding: 1.75rem;
-            margin-bottom: 1.5rem;
+        .home-dashboard-layout-split {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* ==========================================================================
+           7. סגנונות ספציפיים - ניהול לוח הזמנים (SCHEDULE MODULE)
+           ========================================================================== */
+        .schedule-workspace-split {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 2rem;
+        }
+
+        .schedule-form-container {
+            position: sticky;
+            top: 6rem;
+            height: fit-content;
+        }
+
+        .schedule-action-hub-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--ultra-shadow);
-        }
-
-        .os-task-item-card.state-done { opacity: 0.35; }
-        .os-task-item-card.state-done .os-task-text { text-decoration: line-through; }
-
-        .os-progress-track {
-            width: 100%;
-            height: 14px;
-            background-color: #121a2e;
-            border-radius: 40px;
-            margin-bottom: 3rem;
-            overflow: hidden;
-            border: 1px solid var(--os-border-glow);
-        }
-
-        .os-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #34d399);
-            width: 0%;
-            transition: width var(--transition-smooth);
+            margin-bottom: 1.25rem;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
         /* ==========================================================================
-           7. ARCADE INTEGRATION MESH - PURE FULL WIDE (NO SIDE TEXT)
+           8. סגנונות ספציפיים - מערכת ניהול משימות (TODO TASK LIST)
            ========================================================================== */
-        .arcade-grid-framework {
+        .todo-application-split {
             display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 3rem;
+            grid-template-columns: 340px 1fr;
+            gap: 2rem;
         }
 
-        .arcade-menu-card {
+        .todo-task-card-item {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-main);
+            border-radius: var(--radius-standard);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--elevation-low);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: var(--motion-swift);
+        }
+
+        .todo-task-card-item:hover {
+            transform: translateX(-4px);
+            border-color: var(--border-focus);
+        }
+
+        .todo-task-card-item.status-resolved {
+            opacity: 0.6;
+        }
+
+        .todo-task-card-item.status-resolved .todo-item-title-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .todo-item-meta-area {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            background-color: var(--os-bg-surface);
-            border: 1px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-lg);
-            padding: 2rem;
-            height: fit-content;
-            box-shadow: var(--ultra-shadow);
+            gap: 0.5rem;
         }
 
-        .arcade-menu-item-btn {
-            background: none;
-            border: 2px solid transparent;
+        .todo-item-title-text {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-title);
+        }
+
+        .todo-item-subtext-details {
+            font-size: 0.825rem;
+            color: var(--text-muted);
+        }
+
+        .todo-item-controls-wrapper {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .todo-progress-tracking-bar {
             width: 100%;
-            padding: 1.5rem;
+            height: 8px;
+            background-color: var(--border-main);
+            border-radius: var(--radius-rounded);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .todo-progress-tracking-fill {
+            height: 100%;
+            background-color: var(--ui-success);
+            width: 0%;
+            transition: width var(--motion-balanced);
+        }
+
+        /* ==========================================================================
+           9. סגנונות ספציפיים - קומפלקס משחקי הארקייד (ARCADE HUB)
+           ========================================================================== */
+        .arcade-structural-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        .arcade-sidebar-navigation-box {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-main);
+            border-radius: var(--radius-interactive);
+            padding: 1rem;
+            height: fit-content;
+        }
+
+        .arcade-selector-button {
+            background: none;
+            border: 1px solid transparent;
+            width: 100%;
+            padding: 0.875rem 1rem;
             text-align: right;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: var(--text-standard);
-            border-radius: var(--panel-radius-sm);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-body);
+            border-radius: var(--radius-standard);
             cursor: pointer;
-            transition: var(--transition-swift);
+            transition: var(--motion-swift);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
-        .arcade-menu-item-btn:hover {
-            background-color: rgba(255,255,255,0.02);
+        .arcade-selector-button:hover {
+            background-color: var(--bg-base);
+            color: var(--text-title);
         }
 
-        .arcade-menu-item-btn.state-active {
-            background-color: var(--neon-blue-glow);
-            color: var(--neon-blue);
-            border-color: rgba(59, 130, 246, 0.5);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        .arcade-selector-button.state-selected {
+            background-color: var(--brand-primary-alpha);
+            color: var(--brand-primary);
+            border-color: rgba(37, 99, 235, 0.2);
         }
 
-        /* במה מלאה וסימטרית לחלוטין ללא חסימות טקסט צדדיות */
-        .arcade-master-viewport {
-            background-color: #020408;
-            border-radius: var(--panel-radius-lg);
-            border: 4px solid var(--os-border-glow);
-            padding: 2.5rem;
-            min-height: 700px;
+        .arcade-stage-viewport-host {
+            background-color: #0b0f19;
+            border-radius: var(--radius-interactive);
+            border: 4px solid #1e293b;
+            padding: 1.5rem;
+            min-height: 640px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 4px 50px rgba(0,0,0,0.98);
+            position: relative;
+            box-shadow: inset 0 4px 20px rgba(0,0,0,0.8);
         }
 
-        .arcade-game-module-view {
+        .arcade-game-subview {
             display: none;
             width: 100%;
-            max-width: 750px;
+            height: 100%;
         }
 
-        .arcade-game-module-view.state-active {
+        .arcade-game-subview.state-active {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
 
-        .arcade-hud-telemetry {
+        .arcade-telemetry-hud {
             width: 100%;
-            background-color: #090f1d;
-            border: 2px solid var(--os-border-glow);
-            padding: 1.25rem 2rem;
-            border-radius: var(--panel-radius-sm);
-            margin-bottom: 2rem;
+            max-width: 760px;
+            background-color: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-standard);
+            margin-bottom: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: #94a3b8;
-            font-size: 1.1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .arcade-telemetry-hud span.telemetry-highlight {
+            color: #3b82f6;
             font-weight: 800;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        .arcade-canvas-graphics {
-            background-color: #010204;
-            border: 2px solid #1e293b;
-            border-radius: var(--panel-radius-sm);
-            width: 100%;
-            max-width: 650px;
-            height: 480px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+        .canvas-graphics-rendering-context {
+            background-color: #020617;
+            border-radius: var(--radius-standard);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
         }
 
-        .quiz-engine-wrapper {
+        /* משחק מתמטיקה - עיצוב רכיבים פנימיים */
+        .math-quiz-wrapper-box {
             width: 100%;
-            background-color: #090f1d;
-            border: 2px solid var(--os-border-glow);
-            border-radius: var(--panel-radius-lg);
-            padding: 3.5rem;
+            max-width: 540px;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: var(--radius-interactive);
+            padding: 2.5rem;
             text-align: center;
-            box-shadow: var(--ultra-shadow);
+            box-shadow: var(--elevation-high);
         }
 
-        .quiz-equation-string { 
-            font-size: 4.5rem; 
-            font-weight: 900; 
-            color: white; 
+        .math-quiz-equation-text {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+            font-family: monospace;
+        }
+
+        .math-quiz-progress-track {
+            width: 100%;
+            height: 6px;
+            background-color: #334155;
+            border-radius: var(--radius-rounded);
             margin-bottom: 2.5rem;
-            text-shadow: 0 0 20px rgba(255,255,255,0.15);
+            overflow: hidden;
         }
 
-        .quiz-matrix-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 1.5rem; 
+        .math-quiz-progress-fill-node {
+            height: 100%;
+            background-color: #10b981;
+            width: 100%;
+            transition: width 0.1s linear;
         }
 
-        .quiz-choice-trigger { 
-            background-color: #141f38; 
-            color: white; 
-            padding: 1.75rem; 
-            border-radius: var(--panel-radius-sm); 
-            font-size: 1.7rem; 
-            font-weight: 900; 
-            cursor: pointer; 
-            border: 2px solid transparent; 
-            transition: var(--transition-swift);
+        .math-quiz-options-matrix {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
         }
 
-        .quiz-choice-trigger:hover { 
-            background-color: var(--neon-blue); 
-            border-color: var(--neon-blue-hover);
-            transform: scale(1.03);
+        .math-quiz-option-trigger {
+            background-color: #334155;
+            border: 1px solid #475569;
+            color: #ffffff;
+            padding: 1rem;
+            border-radius: var(--radius-standard);
+            font-size: 1.25rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--motion-swift);
         }
 
-        .ttt-mesh-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 130px); 
-            grid-template-rows: repeat(3, 130px); 
-            gap: 1.25rem; 
-            margin: 3rem auto; 
+        .math-quiz-option-trigger:hover {
+            background-color: #2563eb;
+            border-color: #3b82f6;
         }
 
-        .ttt-mesh-node { 
-            background-color: #090f1d; 
-            border: 2px solid var(--os-border-glow); 
-            border-radius: var(--panel-radius-sm); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 4rem; 
-            font-weight: 900; 
-            color: white; 
-            cursor: pointer; 
-            transition: var(--transition-swift);
+        /* משחק איקס עיגול - רשת משבצות */
+        .ttt-grid-container-mesh {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 0.75rem;
+            margin: 2rem auto;
         }
 
-        .ttt-mesh-node:hover {
-            background-color: rgba(255,255,255,0.02);
-            border-color: var(--neon-blue);
+        .ttt-individual-node-mesh {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: var(--radius-standard);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            cursor: pointer;
+            transition: var(--motion-swift);
+            user-select: none;
         }
 
-        .os-mainframe-footer { 
-            background-color: var(--os-bg-surface); 
-            border-top: 2px solid var(--os-border-glow); 
-            padding: 2.5rem; 
-            text-align: center; 
-            font-size: 1rem; 
-            color: var(--text-muted); 
-            margin-top: auto; 
+        .ttt-individual-node-mesh:hover {
+            background-color: #334155;
+        }
+
+        .ttt-individual-node-mesh.token-x { color: #f87171; }
+        .ttt-individual-node-mesh.token-o { color: #60a5fa; }
+
+        /* ==========================================================================
+           10. עטיפת בסיס - פוטר האפליקציה (FOOTER METADATA)
+           ========================================================================== */
+        .platform-footer {
+            background-color: var(--bg-surface);
+            border-top: 1px solid var(--border-main);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: auto;
+            transition: background-color var(--motion-balanced), border-color var(--motion-balanced);
         }
     </style>
 </head>
 <body>
 
-    <div class="os-toast-pipeline" id="os-global-toast-pipeline"></div>
+    <div class="toast-broker-container" id="global-application-toast-pipeline"></div>
 
-    <header class="os-mainframe-header">
-        <div class="os-header-inner">
-            <div class="os-brand-block">
-                <div class="os-core-logo">Ω</div>
-                <h1>SCHOOL OS v40.0 <span style="color: var(--neon-blue); font-weight:400;">| Enterprise Ultra</span></h1>
+    <header class="platform-header">
+        <div class="header-container">
+            <div class="brand-identity">
+                <div class="logo-icon">A</div>
+                <h1>מערכת ניהול מוסדית מורחבת ומתחם ארקייד v4.0</h1>
             </div>
-            <div class="os-utilities">
-                <div class="os-realtime-clock" id="os-live-clock-digit">00:00:00</div>
+            <div class="action-utilities">
+                <div class="time-ticker" id="application-live-clock-node">00:00:00</div>
+                <button class="action-btn-utility" onclick="applicationThemeEngine.toggleMode()">שני מצב תצוגה 🌓</button>
             </div>
         </div>
     </header>
 
-    <nav class="os-navigation-bar">
-        <div class="os-nav-container">
-            <ul class="os-nav-tabs-list">
-                <li><a id="os-tab-home" class="os-nav-tab-link state-active" onclick="osViewRoutingBroker('home')">לוח פיקוח ראשי</a></li>
-                <li><a id="os-tab-schedule" class="os-nav-tab-link" onclick="osViewRoutingBroker('schedule')">מערכת שעות שבועית</a></li>
-                <li><a id="os-tab-todo" class="os-nav-tab-link" onclick="osViewRoutingBroker('todo')">ניהול משימות קריטיות</a></li>
-                <li><a id="os-tab-arcade" class="os-nav-tab-link" onclick="osViewRoutingBroker('arcade')">מתחם ארקייד רחב</a></li>
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <ul class="nav-list">
+                <li><a id="nav-anchor-home" class="nav-item-link state-active" onclick="platformRoutingController('home')">לוח פקודות ראשי</a></li>
+                <li><a id="nav-anchor-schedule" class="nav-item-link" onclick="platformRoutingController('schedule')">יומן מערכת שעות</a></li>
+                <li><a id="nav-anchor-todo" class="nav-item-link" onclick="platformRoutingController('todo')">ניהול משימות יומי</a></li>
+                <li><a id="nav-anchor-arcade" class="nav-item-link" onclick="platformRoutingController('arcade')">מתחם משחקי ארקייד</a></li>
             </ul>
         </div>
     </nav>
 
-    <main class="os-workspace">
+    <main class="content-workspace">
 
-        <section id="os-view-home" class="os-viewscreen state-visible">
-            <div class="os-screen-title-ribbon">
+        <section id="viewscreen-home" class="view-viewscreen state-visible">
+            <div class="screen-header-block">
                 <h2>מבט כולל על המערכת</h2>
+                <p>ניתוח נתונים בזמן אמת, סטטיסטיקות שימושיות וסיכום מדדי פעילות כלליים בפורטל.</p>
             </div>
-            <div class="os-analytics-grid">
-                <div class="os-analytic-card">
-                    <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-muted);">רשומות פעילות בלו"ז</div>
-                    <span class="os-counter" id="meta-metric-schedule-count">0</span>
-                </div>
-                <div class="os-analytic-card">
-                    <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-muted);">משימות פתוחות במאגר</div>
-                    <span class="os-counter" id="meta-metric-todo-count">0</span>
-                </div>
-                <div class="os-analytic-card">
-                    <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-muted);">שיא נוכחי - חלליות</div>
-                    <span class="os-counter" id="meta-metric-space-high">0</span>
-                </div>
-            </div>
-            <div class="os-card">
-                <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1rem; color: white;">סטטוס הפעלה: Enterprise Ultra Active</h3>
-                <p style="color: var(--text-muted); font-size: 1.15rem; line-height: 1.8;">ברוך הבא לגרסה האולטימטיבית של מערכת ההפעלה. הארכיטקטורה הנוכחית עובדת במצב פריסה רחבה ונקייה (Pure Wide) ללא פאנלים חוסמים, ומבטיחה תצוגה מקסימלית עבור מערכות הנתונים ומתחם הארקייד.</p>
-            </div>
-        </section>
 
-        <section id="os-view-schedule" class="os-viewscreen">
-            <div class="os-screen-title-ribbon">
-                <h2>מערכת שעות שבועית מורחבת</h2>
-            </div>
-            <div class="os-split-layout">
-                <div class="os-card" style="height: fit-content;">
-                    <div class="os-input-wrapper">
-                        <label class="os-input-label">זמן / שעת פעילות:</label>
-                        <input type="time" id="form-schedule-time" class="os-input-field">
-                    </div>
-                    <div class="os-input-wrapper">
-                        <label class="os-input-label">תיאור הפעילות / שיעור:</label>
-                        <input type="text" id="form-schedule-title" class="os-input-field" placeholder="הזן נושא פעילות...">
-                    </div>
-                    <button class="os-btn os-btn-success" style="width: 100%;" onclick="systemScheduleManager.add()">הזרק רשומה חדשה</button>
+            <div class="analytics-matrix-grid">
+                <div class="metric-card-box">
+                    <span class="metric-label">רשומות במערכת השעות</span>
+                    <span class="metric-counter" id="analytics-metric-schedule-count">0</span>
+                    <span class="metric-delta-footer">שיעורים ואירועים שמורים</span>
                 </div>
-                <div class="os-table-scroller">
-                    <table class="os-data-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 160px;">שעה כרונולוגית</th>
-                                <th>תיאור שיעור / משימה</th>
-                                <th style="width: 140px; text-align: center;">ניהול רשומה</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-injected-schedule-rows"></tbody>
-                    </table>
+                <div class="metric-card-box">
+                    <span class="metric-label">משימות לביצוע</span>
+                    <span class="metric-counter" id="analytics-metric-todo-count">0</span>
+                    <span class="metric-delta-footer" id="analytics-metric-todo-resolved-text">0 הושלמו בהצלחה</span>
+                </div>
+                <div class="metric-card-box">
+                    <span class="metric-label">שיא ארקייד חלליות</span>
+                    <span class="metric-counter" id="analytics-metric-space-high">0</span>
+                    <span class="metric-delta-footer">התוצאה הגבוהה ביותר בזירה</span>
+                </div>
+                <div class="metric-card-box">
+                    <span class="metric-label">דיוק במבחן מתמטיקה</span>
+                    <span class="metric-counter" id="analytics-metric-math-high">0</span>
+                    <span class="metric-delta-footer">רצף תשובות נכונות מקסימלי</span>
+                </div>
+            </div>
+
+            <div class="home-dashboard-layout-split">
+                <div class="layout-card-base">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.15rem; font-weight: 800; color: var(--text-title);">ברוכים הבאים לפורטל המורחב</h3>
+                    <p style="margin-bottom: 1rem;">גרסה 4.0 מציגה ארכיטקטורת קוד מאוחדת ומורחבת. כל הנתונים, מערכות הלו"ז, ניהול המשימות וההישגים בארקייד נשמרים ומסונכרנים בצורה אוטומטית ישירות מתוך זיכרון הדפדפן המקומי שלכם.</p>
+                    <p>עברו בין הלשוניות השונות בתפריט העליון כדי לחקור את המערכות השונות.</p>
+                </div>
+                <div class="layout-card-base">
+                    <h3 style="margin-bottom: 0.75rem; font-size: 1.15rem; font-weight: 800; color: var(--text-title);">קישורים מהירים</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <button class="component-button btn-style-outline" style="justify-content: flex-start;" onclick="platformRoutingController('schedule')">📅 פתח יומן מערכת שעות</button>
+                        <button class="component-button btn-style-outline" style="justify-content: flex-start;" onclick="platformRoutingController('todo')">📋 פתח ניהול משימות</button>
+                        <button class="component-button btn-style-outline" style="justify-content: flex-start;" onclick="platformRoutingController('arcade')">🎮 פתח מתחם ארקייד</button>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="os-view-todo" class="os-viewscreen">
-            <div class="os-screen-title-ribbon">
-                <h2>מערכת ניהול משימות יומיות</h2>
+        <section id="viewscreen-schedule" class="view-viewscreen">
+            <div class="screen-header-block">
+                <h2>יומן מערכת שעות שבועי</h2>
+                <p>נהלו, עקבו וסננו את לוח השיעורים וההפסקות היומי שלכם באמצעות מערכת ניהול נתונים מלאה.</p>
             </div>
-            <div class="os-split-layout">
-                <div class="os-card" style="height: fit-content;">
-                    <div class="os-input-wrapper">
-                        <label class="os-input-label">תיאור המשימה המבוקשת:</label>
-                        <input type="text" id="form-todo-caption" class="os-input-field" placeholder="הקלד תיאור משימה למאגר...">
+
+            <div class="schedule-workspace-split">
+                <div class="layout-card-base schedule-form-container">
+                    <h3 id="schedule-dynamic-form-heading" style="margin-bottom: 1.25rem; font-size: 1.1rem; font-weight: 800; color: var(--text-title); border-bottom: 2px solid var(--border-main); padding-bottom: 0.5rem;">➕ יצירת רשומה חדשה</h3>
+                    <input type="hidden" id="form-schedule-hidden-identity" value="-1">
+
+                    <div class="form-field-group">
+                        <label class="form-field-label" for="input-schedule-time">שעת התחלה:</label>
+                        <input type="time" id="input-schedule-time" class="form-control-input form-field-input">
                     </div>
-                    <button class="os-btn os-btn-primary" style="width: 100%;" onclick="systemTodoManager.add()">הוסף משימה ראשית</button>
+
+                    <div class="form-field-group">
+                        <label class="form-field-label" for="input-schedule-category">סוג הפעילות:</label>
+                        <select id="input-schedule-category" class="form-control-input form-field-input">
+                            <option value="lesson">📚 שיעור לימודי פרונטלי</option>
+                            <option value="break">☕ הפסקת התרעננות</option>
+                            <option value="event">🏆 אירוע מוסדי / טקס</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field-group">
+                        <label class="form-field-label" for="input-schedule-title">שם המקצוע או הפעילות:</label>
+                        <input type="text" id="input-schedule-title" class="form-field-input" placeholder="לדוגמה: מתמטיקה בדידה">
+                    </div>
+
+                    <div class="form-field-group">
+                        <label class="form-field-label" for="input-schedule-location">מיקום / חדר כיתה:</label>
+                        <input type="text" id="input-schedule-location" class="form-field-input" placeholder="לדוגמה: בניין ג', חדר 204">
+                    </div>
+
+                    <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                        <button class="component-button btn-style-success" id="btn-schedule-form-submit" style="flex: 1;" onclick="scheduleBusinessLogicModule.processFormCommit()">שמור רשומה</button>
+                        <button class="component-button btn-style-outline" id="btn-schedule-form-cancel" style="display: none;" onclick="scheduleBusinessLogicModule.revertFormState()">ביטול</button>
+                    </div>
                 </div>
+
                 <div>
-                    <div class="os-progress-track">
-                        <div id="todo-progress-fluid-fill" class="os-progress-fill"></div>
+                    <div class="schedule-action-hub-row">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <label class="form-field-label" for="select-schedule-filter" style="white-space: nowrap;">סינון רשומות:</label>
+                            <select id="select-schedule-filter" class="form-field-input" style="padding: 0.4rem 2rem 0.4rem 0.75rem; width: 180px;" onchange="scheduleBusinessLogicModule.renderDataTable()">
+                                <option value="all">הצג את כל הלו"ז</option>
+                                <option value="lesson">📚 שיעורים בלבד</option>
+                                <option value="break">☕ הפסקות בלבד</option>
+                                <option value="event">🏆 אירועים בלבד</option>
+                            </select>
+                        </div>
+                        <button class="component-button btn-style-danger" onclick="scheduleBusinessLogicModule.wipeCompleteRegistry()">⚠️ מחיקת כל הלו"ז</button>
                     </div>
-                    <div id="todo-injected-list-wrapper"></div>
+
+                    <div class="table-scroller">
+                        <table class="data-table-core">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;">זמן שעה</th>
+                                    <th style="width: 20%;">סיווג</th>
+                                    <th style="width: 35%;">פעילות / מקצוע</th>
+                                    <th style="width: 15%;">מיקום</th>
+                                    <th style="width: 15%; text-align: center;">ניהול</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-target-schedule-rows">
+                                </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="os-view-arcade" class="os-viewscreen">
-            <div class="os-screen-title-ribbon">
-                <h2>מתחם משחקים ארקייד - פריסה סימטרית</h2>
+        <section id="viewscreen-todo" class="view-viewscreen">
+            <div class="screen-header-block">
+                <h2>ניהול משימות יומי ומעקב התקדמות</h2>
+                <p>הוסיפו משימות, מיינו לפי דרגת קושי ועקבו אחר קצב ההתקדמות הכללי שלכם בזמן אמת.</p>
             </div>
-            <div class="arcade-grid-framework">
-                <div class="arcade-menu-card">
-                    <button id="arcade-btn-space" class="arcade-menu-item-btn state-active" onclick="arcadeModuleRouter('space')">🚀 סימולטור חלליות</button>
-                    <button id="arcade-btn-coin" class="arcade-menu-item-btn" onclick="arcadeModuleRouter('coin')">🪙 תפוס את המטבע</button>
-                    <button id="arcade-btn-math" class="arcade-menu-item-btn" onclick="arcadeModuleRouter('math')">🧠 אתגר חשבון מהיר</button>
-                    <button id="arcade-btn-ttt" class="arcade-menu-item-btn" onclick="arcadeModuleRouter('ttt')">❌ איקס עיגול AI</button>
+
+            <div class="todo-application-split">
+                <div class="layout-card-base" style="height: fit-content; position: sticky; top: 6rem;">
+                    <h3 style="margin-bottom: 1.25rem; font-size: 1.1rem; font-weight: 800; color: var(--text-title); border-bottom: 2px solid var(--border-main); padding-bottom: 0.5rem;">➕ יצירת משימה חדשה</h3>
+                    
+                    <div class="form-field-group">
+                        <label class="form-field-label" for="input-todo-caption">תוכן המשימה:</label>
+                        <input type="text" id="input-todo-caption" class="form-field-input" placeholder="לדוגמה: לסיים תרגול 4 במדעי המחשב">
+                    </div>
+
+                    <div class="form-field-group">
+                        <label class="form-field-label" for="input-todo-urgency">רמת דחיפות:</label>
+                        <select id="input-todo-urgency" class="form-field-input">
+                            <option value="low">🟢 עדיפות נמוכה</option>
+                            <option value="medium">🟡 עדיפות בינונית</option>
+                            <option value="high">🔴 עדיפות עליונה</option>
+                        </select>
+                    </div>
+
+                    <button class="component-button btn-style-primary" style="width: 100%; margin-top: 1rem;" onclick="todoBusinessLogicModule.createNewTask()">הוסף משימה לרשימה</button>
                 </div>
 
-                <div class="arcade-master-viewport">
+                <div>
+                    <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-title);">מד התקדמות כללי:</h3>
+                    <div class="todo-progress-tracking-bar">
+                        <div id="todo-progress-bar-fill-node" class="todo-progress-tracking-fill"></div>
+                    </div>
+
+                    <div id="todo-container-tasks-target-list">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="viewscreen-arcade" class="view-viewscreen">
+            <div class="screen-header-block">
+                <h2>מתחם ארקייד וקומפלקס משחקים נוסטלגיים</h2>
+                <p>ארבעה משחקים מתקדמים המבוססים על לוגיקת קנבס, מנועי פיזיקה ובינה מלאכותית חכמה.</p>
+            </div>
+
+            <div class="arcade-structural-grid">
+                <div class="arcade-sidebar-navigation-box">
+                    <button id="arcade-trigger-space" class="arcade-selector-button state-selected" onclick="arcadeViewRouter('space')">🚀 חלליות זירת קרב (שלבים)</button>
+                    <button id="arcade-trigger-coin" class="arcade-selector-button" onclick="arcadeViewRouter('coin')">🪙 תפוס את המטבע (פיזיקה)</button>
+                    <button id="arcade-trigger-math" class="arcade-selector-button" onclick="arcadeViewRouter('math')">🧠 אתגר חשבון מהיר (טיימר)</button>
+                    <button id="arcade-trigger-ttt" class="arcade-selector-button" onclick="arcadeViewRouter('ttt')">❌ איקס עיגול (Smart AI)</button>
+                </div>
+
+                <div class="arcade-stage-viewport-host">
                     
-                    <div id="arcade-submodule-space" class="arcade-game-module-view state-active">
-                        <div class="arcade-hud-telemetry">
-                            <div>מערך חיים: <span id="hud-space-hearts" style="color:#ef4444;">❤️❤️❤️</span></div>
-                            <div>מערכת ניקוד: <span id="hud-space-score" style="color:#60a5fa;">0</span></div>
+                    <div id="arcade-subview-space" class="arcade-game-subview state-active">
+                        <div class="arcade-telemetry-hud">
+                            <div>זירה: <span class="telemetry-highlight">Space Combat Simulator</span></div>
+                            <div>שלב פעיל: <span id="telemetry-space-level" class="telemetry-highlight">1</span></div>
+                            <div>מד חיים: <span id="telemetry-space-hearts" style="color: #ef4444; font-weight: 800;">❤️❤️❤️</span></div>
+                            <div>ניקוד זרם: <span id="telemetry-space-score" class="telemetry-highlight">0</span></div>
                         </div>
-                        <canvas id="os-canvas-space" class="arcade-canvas-graphics" width="650" height="480"></canvas>
+                        <canvas id="canvas-runtime-space-shooter" class="canvas-graphics-rendering-context" width="760" height="460"></canvas>
                     </div>
 
-                    <div id="arcade-submodule-coin" class="arcade-game-module-view">
-                        <div class="arcade-hud-telemetry">
-                            <div>זמן נותר: <span id="hud-coin-timer" style="color:#f59e0b;">30</span> שניות</div>
-                            <div>מטבעות שנצברו: <span id="hud-coin-score" style="color:#10b981;">0</span></div>
+                    <div id="arcade-subview-coin" class="arcade-game-subview">
+                        <div class="arcade-telemetry-hud">
+                            <div>זירה: <span class="telemetry-highlight">Coin Collector Physics</span></div>
+                            <div>זמן נותר: <span id="telemetry-coin-timer" class="telemetry-highlight">30</span> שניות</div>
+                            <div>מטבעות שנאספו: <span id="telemetry-coin-score" class="telemetry-highlight">0</span></div>
                         </div>
-                        <canvas id="os-canvas-coin" class="arcade-canvas-graphics" width="650" height="480"></canvas>
+                        <canvas id="canvas-runtime-coin-collector" class="canvas-graphics-rendering-context" width="760" height="460"></canvas>
                     </div>
 
-                    <div id="arcade-submodule-math" class="arcade-game-module-view">
-                        <div class="arcade-hud-telemetry">
-                            <div>רצף תשובות נוכחי: <span id="hud-math-streak" style="color:#10b981;">0</span></div>
+                    <div id="arcade-subview-math" class="arcade-game-subview">
+                        <div class="arcade-telemetry-hud">
+                            <div>סיווג: <span class="telemetry-highlight">Mental Arithmetic Quiz</span></div>
+                            <div>רצף נוכחי: <span id="telemetry-math-score" class="telemetry-highlight">0</span></div>
+                            <div>רצף שיא זירה: <span id="telemetry-math-high" class="telemetry-highlight">0</span></div>
                         </div>
-                        <div class="quiz-engine-wrapper">
-                            <div class="quiz-equation-string" id="quiz-string-box-target">0 + 0</div>
-                            <div class="quiz-matrix-grid" id="quiz-injected-buttons-target"></div>
+
+                        <div id="math-quiz-panel-difficulty-selector" style="text-align: center; color: white;">
+                            <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem;">בחר רמת קושי לאתגר החשבון:</h3>
+                            <div style="display: flex; gap: 1rem; justify-content: center;">
+                                <button class="component-button btn-style-success" onclick="mathQuizRuntimeModule.initializeQuizSession('easy')">קל (חיבור וחיסור)</button>
+                                <button class="component-button btn-style-primary" onclick="mathQuizRuntimeModule.initializeQuizSession('medium')">בינוני (כולל כפל)</button>
+                                <button class="component-button btn-style-danger" onclick="mathQuizRuntimeModule.initializeQuizSession('hard')">קשה (מספרים מורכבים)</button>
+                            </div>
+                        </div>
+
+                        <div id="math-quiz-panel-active-runtime" class="math-quiz-wrapper-box" style="display: none;">
+                            <div class="math-quiz-equation-text" id="math-quiz-display-box-target">0 + 0</div>
+                            <div class="math-quiz-progress-track">
+                                <div id="math-quiz-timer-fill-element-node" class="math-quiz-progress-fill-node"></div>
+                            </div>
+                            <div class="math-quiz-options-matrix" id="math-quiz-options-matrix-injection-target">
+                                </div>
                         </div>
                     </div>
 
-                    <div id="arcade-submodule-ttt" class="arcade-game-module-view">
-                        <div class="arcade-hud-telemetry">
-                            <div id="hud-ttt-status-label" style="color:white;">תורך לשחק (X)</div>
+                    <div id="arcade-subview-ttt" class="arcade-game-subview">
+                        <div class="arcade-telemetry-hud">
+                            <div>זירה: <span class="telemetry-highlight">Tic Tac Toe Intellect</span></div>
+                            <div>סטטוס נוכחי: <span id="telemetry-ttt-status-label" style="color: #60a5fa; font-weight: 800;">תורך לשחק (X)</span></div>
                         </div>
-                        <div class="ttt-mesh-grid" id="ttt-injected-mesh-target"></div>
-                        <button class="os-btn os-btn-outline" style="width:220px;" onclick="systemTttEngine.reset()">אתחל לוח משחק</button>
+                        <div style="text-align: center;">
+                            <div class="ttt-grid-container-mesh" id="ttt-mesh-board-injection-target">
+                                </div>
+                            <button class="component-button btn-style-primary" onclick="tttSmartAiLogicModule.wipeAndResetSession()">אתחל לוח משחק</button>
+                        </div>
                     </div>
 
                 </div>
@@ -737,555 +1082,1037 @@
 
     </main>
 
-    <footer class="os-mainframe-footer">
-        <p>© 2026 SCHOOL OS v40.0 - Enterprise Ultra Edition. קוד ליבה מאובטח ופריסה רחבה נקייה.</p>
+    <footer class="platform-footer">
+        <p>© 2026 פורטל חינוך אקדמי מורחב - סביבה ניהולית משולבת. פיתוח מונחה עצמים מתקדם בקובץ הפעלה יחיד.</p>
     </footer>
 
     <script>
-        // א. מערכת הודעות צפות גלובלית ועדכון שעון
-        const systemNotificationBroker = {
-            show: function(messageText) {
-               
+        // ==========================================================================
+        // א. ניהול עיצוב, ערכות נושא ומערכת התראות (CORE FRAMEWORK TOAST & THEME)
+        // ==========================================================================
+        const applicationThemeEngine = {
+            toggleMode: function() {
+                document.body.classList.toggle('dark-mode-context');
+                const stateValue = document.body.classList.contains('dark-mode-context') ? 'dark' : 'light';
+                localStorage.setItem('platform_v4_theme_key', stateValue);
+                applicationToastBroker.dispatchNotification(stateValue === 'dark' ? '🌒 מצב לילה הופעל' : '☀️ מצב יום הופעל');
+            },
+            applySavedPreferences: function() {
+                const item = localStorage.getItem('platform_v4_theme_key');
+                if (item === 'dark') document.body.classList.add('dark-mode-context');
+            }
+        };
+        applicationThemeEngine.applySavedPreferences();
+
+        const applicationToastBroker = {
+            dispatchNotification: function(messageText) {
+                const pipeline = document.getElementById('global-application-toast-pipeline');
+                const node = document.createElement('div');
+                node.className = 'toast-node-item';
+                node.innerText = messageText;
+                
+                pipeline.appendChild(node);
+                
+                setTimeout(() => {
+                    node.classList.add('intent-fadeout');
+                    setTimeout(() => { node.remove(); }, 300);
+                }, 3000);
             }
         };
 
-        // הזרקת זמן אמת לשעון המערכת העליון
+        // שעון מערכת חי
         setInterval(() => {
-            const dateObj = new Date();
-            const formatPad = (val) => String(val).padStart(2, '0');
-            document.getElementById('os-live-clock-digit').innerText = 
-                `${formatPad(dateObj.getHours())}:${formatPad(dateObj.getMinutes())}:${formatPad(dateObj.getSeconds())}`;
+            const currentObj = new Date();
+            const formatPad = (value) => String(value).padStart(2, '0');
+            document.getElementById('application-live-clock-node').innerText = 
+                `${formatPad(currentObj.getHours())}:${formatPad(currentObj.getMinutes())}:${formatPad(currentObj.getSeconds())}`;
         }, 1000);
 
-        // ב. ניתוב ובקרת תצוגות (OS ROUTING SYSTEM)
-        function osViewRoutingBroker(targetViewKey) {
-            document.querySelectorAll('.os-viewscreen').forEach(view => view.classList.remove('state-visible'));
-            document.querySelectorAll('.os-nav-tab-link').forEach(tab => tab.classList.remove('state-active'));
+        // ==========================================================================
+        // ב. רכיב ניתוב פנימי (ROUTING SYSTEM LAYER)
+        // ==========================================================================
+        function platformRoutingController(targetViewKey) {
+            document.querySelectorAll('.view-viewscreen').forEach(view => view.classList.remove('state-visible'));
+            document.querySelectorAll('.nav-item-link').forEach(anchor => anchor.classList.remove('state-active'));
             
-            document.getElementById(`os-view-${targetViewKey}`).classList.add('state-visible');
-            document.getElementById(`os-tab-${targetViewKey}`).classList.add('state-active');
-            
-            // עצירה מלאה של מנועי המשחק למניעת עומס מעבד
-            spaceShooterEngine.stop(); 
-            coinCollectorEngine.stop(); 
-            systemMathQuizEngine.stop();
-            
-            if(targetViewKey === 'home') refreshSystemAnalytics();
-            if(targetViewKey === 'arcade') arcadeModuleRouter('space');
+            document.getElementById(`viewscreen-${targetViewKey}`).classList.add('state-visible');
+            document.getElementById(`nav-anchor-${targetViewKey}`).classList.add('state-active');
+
+            // ניקוי או הפעלה של מנועי משחקים בזמן ניתוב
+            spaceShooterEngineInstance.terminateLoop();
+            coinCollectorEngineInstance.terminateLoop();
+            mathQuizRuntimeModule.clearCountdownTimer();
+
+            if (targetViewKey === 'home') {
+                systemAnalyticsAggregatorModule.recomputeMetricsDashboard();
+            }
+            if (targetViewKey === 'arcade') {
+                arcadeViewRouter('space');
+            }
         }
 
-        function arcadeModuleRouter(targetGameKey) {
-            document.querySelectorAll('.arcade-game-module-view').forEach(mod => mod.classList.remove('state-active'));
-            document.querySelectorAll('.arcade-menu-card button').forEach(btn => btn.classList.remove('state-active'));
-            
-            document.getElementById(`arcade-submodule-${targetGameKey}`).classList.add('state-active');
-            document.getElementById(`arcade-btn-${targetGameKey}`).classList.add('state-active');
+        function arcadeViewRouter(targetGameKey) {
+            document.querySelectorAll('.arcade-game-subview').forEach(view => view.classList.remove('state-active'));
+            document.querySelectorAll('.arcade-sidebar-navigation-box button').forEach(btn => btn.classList.remove('state-selected'));
 
-            spaceShooterEngine.stop(); 
-            coinCollectorEngine.stop(); 
-            systemMathQuizEngine.stop();
-            
-            if(targetGameKey === 'space') spaceShooterEngine.start();
-            if(targetGameKey === 'coin') coinCollectorEngine.start();
-            if(targetGameKey === 'math') systemMathQuizEngine.start();
-            if(targetGameKey === 'ttt') systemTttEngine.start();
+            document.getElementById(`arcade-subview-${targetGameKey}`).classList.add('state-active');
+            document.getElementById(`arcade-trigger-${targetGameKey}`).classList.add('state-selected');
+
+            spaceShooterEngineInstance.terminateLoop();
+            coinCollectorEngineInstance.terminateLoop();
+            mathQuizRuntimeModule.clearCountdownTimer();
+
+            if (targetGameKey === 'space') spaceShooterEngineInstance.bootstrapLoop();
+            if (targetGameKey === 'coin') coinCollectorEngineInstance.bootstrapLoop();
+            if (targetGameKey === 'math') mathQuizRuntimeModule.triggerFreshStart();
+            if (targetGameKey === 'ttt') tttSmartAiLogicModule.initializeMeshBoard();
         }
 
-        function refreshSystemAnalytics() {
-            const schedData = JSON.parse(localStorage.getItem('os_v40_sched')) || [];
-            const todoData = JSON.parse(localStorage.getItem('os_v40_todo')) || [];
-            document.getElementById('meta-metric-schedule-count').innerText = schedData.length;
-            document.getElementById('meta-metric-todo-count').innerText = todoData.filter(item => !item.done).length;
-            document.getElementById('meta-metric-space-high').innerText = localStorage.getItem('os_v40_space_hi') || '0';
-        }
-        refreshSystemAnalytics();
+        // ==========================================================================
+        // ג. רכיב סטטיסטיקות ואנליטיקה (ANALYTICS SYSTEM MODULE)
+        // ==========================================================================
+        const systemAnalyticsAggregatorModule = {
+            recomputeMetricsDashboard: function() {
+                const schedData = JSON.parse(localStorage.getItem('platform_v4_sched_store')) || [];
+                const todoData = JSON.parse(localStorage.getItem('platform_v4_todo_store')) || [];
+                
+                const spaceHigh = localStorage.getItem('platform_v4_space_high') || '0';
+                const mathHigh = localStorage.getItem('platform_v4_math_high') || '0';
 
-        // ג. מודול ניהול לוח שעות שבועי
-        const systemScheduleManager = {
-            records: JSON.parse(localStorage.getItem('os_v40_sched')) || [],
-            render: function() {
-                const tbody = document.getElementById('table-injected-schedule-rows');
-                tbody.innerHTML = '';
-                
-                // מיון כרונולוגי אוטומטי על פי זמן שהוזן
-                this.records.sort((x, y) => x.time.localeCompare(y.time));
-                
-                this.records.forEach((rec, idx) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td style="font-family: monospace; font-size: 1.15rem; color: #60a5fa; font-weight: 800;">${rec.time}</td>
-                        <td style="font-weight: 700; color: white;">${rec.title}</td>
-                        <td style="text-align: center;">
-                            <button class="os-btn os-btn-danger" style="padding: 0.4rem 1rem; font-size: 0.9rem;" onclick="systemScheduleManager.del(${idx})">מחק רשומה</button>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            },
-            add: function() {
-                const timeField = document.getElementById('form-schedule-time');
-                const titleField = document.getElementById('form-schedule-title');
-                const timeValue = timeField.value;
-                const titleValue = titleField.value.trim();
-                
-                if(!timeValue || !titleValue) {
-                    systemNotificationBroker.show('שגיאה: השדות ריקים!');
-                    return;
-                }
-                
-                this.records.push({ time: timeValue, title: titleValue });
-                localStorage.setItem('os_v40_sched', JSON.stringify(this.records));
-                this.render();
-                titleField.value = '';
-                systemNotificationBroker.show('הרשומה הוזרקה למערכת השעות השבועית');
-            },
-            del: function(idx) {
-                this.records.splice(idx, 1);
-                localStorage.setItem('os_v40_sched', JSON.stringify(this.records));
-                this.render();
-                systemNotificationBroker.show('הרשומה הוסרה בהצלחה');
+                const totalTasks = todoData.length;
+                const resolvedTasks = todoData.filter(t => t.resolved).length;
+
+                document.getElementById('analytics-metric-schedule-count').innerText = schedData.length;
+                document.getElementById('analytics-metric-todo-count').innerText = totalTasks;
+                document.getElementById('analytics-metric-todo-resolved-text').innerText = `${resolvedTasks} משימות הושלמו`;
+                document.getElementById('analytics-metric-space-high').innerText = spaceHigh;
+                document.getElementById('analytics-metric-math-high').innerText = mathHigh;
             }
         };
-        systemScheduleManager.render();
+        systemAnalyticsAggregatorModule.recomputeMetricsDashboard();
 
-        // ד. מודול ניהול משימות קריטיות
-        const systemTodoManager = {
-            tasks: JSON.parse(localStorage.getItem('os_v40_todo')) || [],
-            render: function() {
-                const targetWrapper = document.getElementById('todo-injected-list-wrapper');
-                targetWrapper.innerHTML = '';
-                
-                this.tasks.forEach((task, idx) => {
-                    const block = document.createElement('div');
-                    block.className = `os-task-item-card ${task.done ? 'state-done' : ''}`;
-                    block.innerHTML = `
-                        <span class="os-task-text" style="color: white; font-weight: 700; font-size: 1.1rem;">${task.txt}</span>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button class="os-btn os-btn-success" style="padding: 0.45rem 1rem; font-size: 0.9rem;" onclick="systemTodoManager.toggle(${idx})">${task.done ? 'פתח משימה' : 'סמן כבוצע'}</button>
-                            <button class="os-btn os-btn-outline" style="padding: 0.45rem 1rem; font-size: 0.9rem;" onclick="systemTodoManager.del(${idx})">מחק</button>
-                        </div>
-                    `;
-                    targetWrapper.appendChild(block);
-                });
-                
-                const doneCount = this.tasks.filter(t => t.done).length;
-                const totalPercent = this.tasks.length ? Math.round((doneCount / this.tasks.length) * 100) : 0;
-                document.getElementById('todo-progress-fluid-fill').style.width = `${totalPercent}%`;
-            },
-            add: function() {
-                const field = document.getElementById('form-todo-caption');
-                const captionValue = field.value.trim();
-                if(!captionValue) {
-                    systemNotificationBroker.show('שגיאה: תיאור משימה ריק!');
-                    return;
-                }
-                this.tasks.push({ txt: captionValue, done: false });
-                localStorage.setItem('os_v40_todo', JSON.stringify(this.tasks));
-                this.render();
-                field.value = '';
-                systemNotificationBroker.show('המשימה נרשמה במערכת הניהול');
-            },
-            toggle: function(idx) {
-                this.tasks[idx].done = !this.tasks[idx].done;
-                localStorage.setItem('os_v40_todo', JSON.stringify(this.tasks));
-                this.render();
-            },
-            del: function(idx) {
-                this.tasks.splice(idx, 1);
-                localStorage.setItem('os_v40_todo', JSON.stringify(this.tasks));
-                this.render();
-                systemNotificationBroker.show('המשימה נמחקה מהרשימה');
-            }
-        };
-        systemTodoManager.render();
+        // ==========================================================================
+        // ד. רכיב ניהול מערכת השעות - CRUD מלא (SCHEDULE BUSINESS LOGIC)
+        // ==========================================================================
+        const scheduleBusinessLogicModule = (function() {
+            const CACHE_KEY = 'platform_v4_sched_store';
+            let internalRegistry = JSON.parse(localStorage.getItem(CACHE_KEY)) || [];
 
-        // ה. משחק 1: סימולטור חלליות (SPACE SHOOTER ENGINE PRO)
-        const spaceShooterEngine = (function() {
-            const canvas = document.getElementById('os-canvas-space');
-            let ctx = canvas.getContext('2d');
-            let frameLoopId = null, score = 0, hearts = 3, globalFrameCount = 0;
-            let playerShip = { x: 300, y: 400, w: 45, h: 35 };
-            let laserArsenal = [], enemyFleet = [], cosmosStars = [], activeKeys = {};
-
-            function buildStarfield() {
-                cosmosStars = [];
-                for(let i=0; i<50; i++) {
-                    cosmosStars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*2+0.5, velocity: Math.random()*2.5 + 0.5 });
-                }
+            function saveToLocalStorage() {
+                localStorage.setItem(CACHE_KEY, JSON.stringify(internalRegistry));
+                systemAnalyticsAggregatorModule.recomputeMetricsDashboard();
             }
 
-            function trapKeyDown(e) {
-                activeKeys[e.code] = true;
-                if(e.code === 'Space') {
-                    laserArsenal.push({ x: playerShip.x + (playerShip.w / 2) - 2, y: playerShip.y - 5 });
-                    e.preventDefault();
+            return {
+                renderDataTable: function() {
+                    const tbody = document.getElementById('table-target-schedule-rows');
+                    const currentFilter = document.getElementById('select-schedule-filter').value;
+                    tbody.innerHTML = '';
+
+                    // מיון לפי שעה מסודרת
+                    internalRegistry.sort((a, b) => a.timeValue.localeCompare(b.timeValue));
+
+                    let recordsToDisplay = internalRegistry.filter(record => {
+                        if (currentFilter === 'all') return true;
+                        return record.categoryValue === currentFilter;
+                    });
+
+                    if (recordsToDisplay.length === 0) {
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 3rem;">
+                                    אין רשומות רלוונטיות להצגה תחת הסינון הנוכחי.
+                                </td>
+                            </tr>
+                        `;
+                        return;
+                    }
+
+                    recordsToDisplay.forEach(item => {
+                        const originalIndex = internalRegistry.indexOf(item);
+                        let categoryBadge = "";
+
+                        if (item.categoryValue === 'lesson') categoryBadge = '<span class="ui-badge badge-type-primary">📚 שיעור</span>';
+                        if (item.categoryValue === 'break') categoryBadge = '<span class="ui-badge badge-type-warning">☕ הפסקה</span>';
+                        if (item.categoryValue === 'event') categoryBadge = '<span class="ui-badge badge-type-success">🏆 אירוע</span>';
+
+                        const rowElement = document.createElement('tr');
+                        rowElement.innerHTML = `
+                            <td style="font-weight: 700; color: var(--brand-primary);">${item.timeValue}</td>
+                            <td>${categoryBadge}</td>
+                            <td style="font-weight: 600; color: var(--text-title);">${item.titleValue}</td>
+                            <td>${item.locationValue ? item.locationValue : '-'}</td>
+                            <td style="text-align: center; display: flex; gap: 0.5rem; justify-content: center;">
+                                <button class="component-button btn-style-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="scheduleBusinessLogicModule.setupFormForEdit(${originalIndex})">ערוך</button>
+                                <button class="component-button btn-style-danger" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="scheduleBusinessLogicModule.removeSingleRecord(${originalIndex})">מחק</button>
+                            </td>
+                        `;
+                        tbody.appendChild(rowElement);
+                    });
+                },
+                processFormCommit: function() {
+                    const timeValue = document.getElementById('input-schedule-time').value;
+                    const categoryValue = document.getElementById('input-schedule-category').value;
+                    const titleValue = document.getElementById('input-schedule-title').value.trim();
+                    const locationValue = document.getElementById('input-schedule-location').value.trim();
+                    const targetHiddenId = parseInt(document.getElementById('form-schedule-hidden-identity').value);
+
+                    if (!timeValue || !titleValue) {
+                        applicationToastBroker.dispatchNotification('❌ שגיאה: חובה להזין שעה וכותרת לפעילות');
+                        return;
+                    }
+
+                    const schemaPayload = { timeValue, categoryValue, titleValue, locationValue };
+
+                    if (targetHiddenId === -1) {
+                        internalRegistry.push(schemaPayload);
+                        applicationToastBroker.dispatchNotification('✅ רשומה חדשה נרשמה ביומן בהצלחה');
+                    } else {
+                        internalRegistry[targetHiddenId] = schemaPayload;
+                        applicationToastBroker.dispatchNotification('📝 הרשומה עודכנה ושמורה כעת');
+                        this.revertFormState();
+                    }
+
+                    saveToLocalStorage();
+                    this.renderDataTable();
+
+                    document.getElementById('input-schedule-time').value = '';
+                    document.getElementById('input-schedule-title').value = '';
+                    document.getElementById('input-schedule-location').value = '';
+                },
+                setupFormForEdit: function(index) {
+                    const objectRef = internalRegistry[index];
+                    document.getElementById('input-schedule-time').value = objectRef.timeValue;
+                    document.getElementById('input-schedule-category').value = objectRef.categoryValue;
+                    document.getElementById('input-schedule-title').value = objectRef.titleValue;
+                    document.getElementById('input-schedule-location').value = objectRef.locationValue;
+
+                    document.getElementById('form-schedule-hidden-identity').value = index;
+                    document.getElementById('schedule-dynamic-form-heading').innerText = "📝 עריכת רשומה ביומן";
+                    document.getElementById('btn-schedule-form-submit').innerText = "עדכן שינויים";
+                    document.getElementById('btn-schedule-form-cancel').style.display = 'inline-flex';
+                },
+                revertFormState: function() {
+                    document.getElementById('form-schedule-hidden-identity').value = "-1";
+                    document.getElementById('schedule-dynamic-form-heading').innerText = "➕ יצירת רשומה חדשה";
+                    document.getElementById('btn-schedule-form-submit').innerText = "שמור רשומה";
+                    document.getElementById('btn-schedule-form-cancel').style.display = 'none';
+
+                    document.getElementById('input-schedule-time').value = '';
+                    document.getElementById('input-schedule-title').value = '';
+                    document.getElementById('input-schedule-location').value = '';
+                },
+                removeSingleRecord: function(index) {
+                    internalRegistry.splice(index, 1);
+                    saveToLocalStorage();
+                    this.renderDataTable();
+                    applicationToastBroker.dispatchNotification('🗑️ הרשומה נמחקה מלוח הזמנים');
+                },
+                wipeCompleteRegistry: function() {
+                    if (confirm('האם אתה בטוח שברצונך למחוק לחלוטינ את כל מערכת השעות המקומית?')) {
+                        internalRegistry = [];
+                        saveToLocalStorage();
+                        this.renderDataTable();
+                        applicationToastBroker.dispatchNotification('⚠️ כל מערכת השעות אופסה ונמחקה');
+                    }
                 }
+            };
+        })();
+        scheduleBusinessLogicModule.renderDataTable();
+
+        // ==========================================================================
+        // ה. רכיב ניהול משימות - לוח טודו דינמי (TODO TASK LIST MODULE)
+        // ==========================================================================
+        const todoBusinessLogicModule = (function() {
+            const DATA_KEY = 'platform_v4_todo_store';
+            let taskRepository = JSON.parse(localStorage.getItem(DATA_KEY)) || [];
+
+            function saveState() {
+                localStorage.setItem(DATA_KEY, JSON.stringify(taskRepository));
+                systemAnalyticsAggregatorModule.recomputeMetricsDashboard();
+                todoBusinessLogicModule.recomputeProgressBar();
+            }
+
+            return {
+                renderTaskList: function() {
+                    const hostNode = document.getElementById('todo-container-tasks-target-list');
+                    hostNode.innerHTML = '';
+
+                    if (taskRepository.length === 0) {
+                        hostNode.innerHTML = `
+                            <div style="text-align: center; padding: 3rem; color: var(--text-muted); background-color: var(--bg-surface); border-radius: var(--radius-standard); border: 1px dashed var(--border-main);">
+                                אין משימות פתוחות ברשימה שלך. נקה את השולחן!
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    taskRepository.forEach((task, idx) => {
+                        let urgencyBadge = "";
+                        if (task.urgency === 'low') urgencyBadge = '<span class="ui-badge badge-type-success">עדיפות נמוכה</span>';
+                        if (task.urgency === 'medium') urgencyBadge = '<span class="ui-badge badge-type-warning">עדיפות בינונית</span>';
+                        if (task.urgency === 'high') urgencyBadge = '<span class="ui-badge badge-type-danger">עדיפות עליונה</span>';
+
+                        const itemNode = document.createElement('div');
+                        itemNode.className = `todo-task-card-item ${task.resolved ? 'status-resolved' : ''}`;
+                        itemNode.innerHTML = `
+                            <div class="todo-item-meta-area">
+                                <span class="todo-item-title-text">${task.caption}</span>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    ${urgencyBadge}
+                                    <span class="todo-item-subtext-details">נרשם בתאריך: ${task.dateStamp}</span>
+                                </div>
+                            </div>
+                            <div class="todo-item-controls-wrapper">
+                                <button class="component-button btn-style-success" style="padding: 0.35rem 0.6rem; font-size: 0.8rem;" onclick="todoBusinessLogicModule.toggleTaskState(${idx})">
+                                    ${task.resolved ? 'פתח מחדש' : 'סמן כבוצע'}
+                                </button>
+                                <button class="component-button btn-style-outline" style="padding: 0.35rem 0.6rem; font-size: 0.8rem; color: var(--ui-danger);" onclick="todoBusinessLogicModule.purgeSingleTask(${idx})">מחק</button>
+                            </div>
+                        `;
+                        hostNode.appendChild(itemNode);
+                    });
+                },
+                createNewTask: function() {
+                    const caption = document.getElementById('input-todo-caption').value.trim();
+                    const urgency = document.getElementById('input-todo-urgency').value;
+
+                    if (!caption) {
+                        applicationToastBroker.dispatchNotification('❌ לא ניתן להוסיף משימה ריקה');
+                        return;
+                    }
+
+                    const dt = new Date();
+                    const dateStamp = `${dt.getDate()}/${dt.getMonth() + 1}/${dt.getFullYear()}`;
+
+                    taskRepository.push({ caption, urgency, resolved: false, dateStamp });
+                    saveState();
+                    this.renderTaskList();
+
+                    document.getElementById('input-todo-caption').value = '';
+                    applicationToastBroker.dispatchNotification('📋 המשימה נרשמה בלוח העבודה');
+                },
+                toggleTaskState: function(index) {
+                    taskRepository[index].resolved = !taskRepository[index].resolved;
+                    saveState();
+                    this.renderTaskList();
+                    applicationToastBroker.dispatchNotification(taskRepository[index].resolved ? '🎉 כל הכבוד! המשימה סומנה כבוצעה' : '🔄 המשימה הוחזרה לטיפול פתוח');
+                },
+                purgeSingleTask: function(index) {
+                    taskRepository.splice(index, 1);
+                    saveState();
+                    this.renderTaskList();
+                    applicationToastBroker.dispatchNotification('🗑️ המשימה הוסרה מהמערכת');
+                },
+                recomputeProgressBar: function() {
+                    if (taskRepository.length === 0) {
+                        document.getElementById('todo-progress-bar-fill-node').style.width = '0%';
+                        return;
+                    }
+                    const resolvedCount = taskRepository.filter(t => t.resolved).length;
+                    const computedPercentage = (resolvedCount / taskRepository.length) * 100;
+                    document.getElementById('todo-progress-bar-fill-node').style.width = `${computedPercentage}%`;
+                }
+            };
+        })();
+        todoBusinessLogicModule.renderTaskList();
+        todoBusinessLogicModule.recomputeProgressBar();
+
+        // ==========================================================================
+        // ו. מנוע ארקייד 1 - משחק חלליות זירת קרב (SPACE COMBAT ENGINE)
+        // ==========================================================================
+        const spaceShooterEngineInstance = (function() {
+            const canvasRef = document.getElementById('canvas-runtime-space-shooter');
+            let graphicsContext = null;
+            if(canvasRef) graphicsContext = canvasRef.getContext('2d');
+
+            let runtimeLoopId = null;
+            let currentPoints = 0;
+            let highPointsRecord = parseInt(localStorage.getItem('platform_v4_space_high')) || 0;
+            let currentLevel = 1;
+            let currentHearts = 3;
+
+            let systemKeyStates = {};
+            let aircraft = { positionX: 350, positionY: 380, boundWidth: 46, boundHeight: 40, normalSpeed: 6.5 };
+            let laserArsenal = [];
+            let hostileFleet = [];
+            let blastParticles = [];
+            let functionalPowerups = [];
+
+            let globalFrameId = 0;
+            let shipSpawningThrottle = 42;
+            let fireSpreadActive = false;
+            let fireSpreadTimerCount = 0;
+
+            function processKeyDown(e) {
+                systemKeyStates[e.code] = true;
+                if(e.code === 'Space') { triggerWeaponDischarge(); e.preventDefault(); }
                 if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
             }
-            function trapKeyUp(e) { activeKeys[e.code] = false; }
+            function processKeyUp(e) { systemKeyStates[e.code] = false; }
 
-            function executeCoreLoop() {
-                globalFrameCount++;
-                
-                // ניווט והגבלות תנועה
-                if((activeKeys['ArrowLeft'] || activeKeys['KeyA']) && playerShip.x > 0) playerShip.x -= 7;
-                if((activeKeys['ArrowRight'] || activeKeys['KeyD']) && playerShip.x < canvas.width - playerShip.w) playerShip.x += 7;
-                if((activeKeys['ArrowUp'] || activeKeys['KeyW']) && playerShip.y > 150) playerShip.y -= 5;
-                if((activeKeys['ArrowDown'] || activeKeys['KeyS']) && playerShip.y < canvas.height - playerShip.h) playerShip.y += 5;
+            function triggerWeaponDischarge() {
+                if (fireSpreadActive) {
+                    laserArsenal.push({ x: aircraft.positionX + aircraft.boundWidth/2 - 2, y: aircraft.positionY, dX: 0, dY: -10 });
+                    laserArsenal.push({ x: aircraft.positionX + 8, y: aircraft.positionY + 8, dX: -2.5, dY: -9.5 });
+                    laserArsenal.push({ x: aircraft.positionX + aircraft.boundWidth - 12, y: aircraft.positionY + 8, dX: 2.5, dY: -9.5 });
+                } else {
+                    laserArsenal.push({ x: aircraft.positionX + aircraft.boundWidth/2 - 2, y: aircraft.positionY, dX: 0, dY: -10 });
+                }
+            }
 
-                // תנועת כוכבים ברקע
-                cosmosStars.forEach(star => {
-                    star.y += star.velocity;
-                    if(star.y > canvas.height) { star.y = 0; star.x = Math.random()*canvas.width; }
-                });
+            function deployVisualExplosion(srcX, srcY, hexColor) {
+                for(let i=0; i<15; i++) {
+                    blastParticles.push({
+                        x: srcX, y: srcY,
+                        dX: (Math.random() - 0.5) * 7,
+                        dY: (Math.random() - 0.5) * 7,
+                        sizeRadius: 1 + Math.random() * 3,
+                        hexColor: hexColor,
+                        opacity: 1,
+                        durationLife: 30 + Math.random() * 15
+                    });
+                }
+            }
 
-                // לייזרים של השחקן
-                laserArsenal.forEach((laser, lIdx) => {
-                    laser.y -= 10;
-                    if(laser.y < 0) laserArsenal.splice(lIdx, 1);
-                });
+            function syncDifficultyLevel() {
+                let dynamicLevel = Math.floor(currentPoints / 200) + 1;
+                if (dynamicLevel !== currentLevel) {
+                    currentLevel = dynamicLevel;
+                    shipSpawningThrottle = Math.max(12, 42 - (currentLevel * 4));
+                    applicationToastBroker.dispatchNotification(`🚀 עלית לשלב המשחק הבא: רמה ${currentLevel}! המהירות גוברת`);
+                }
+                document.getElementById('telemetry-space-level').innerText = currentLevel;
+            }
 
-                // הזרקת חלליות אויב
-                if(globalFrameCount % 25 === 0) {
-                    enemyFleet.push({ x: Math.random() * (canvas.width - 40), y: -35, w: 35, h: 28, speed: Math.random() * 2.5 + 2 });
+            function evaluateAABBCollision(boxA, boxB) {
+                return boxA.x < boxB.x + boxB.w &&
+                       boxA.x + boxA.w > boxB.x &&
+                       boxA.y < boxB.y + boxB.h &&
+                       boxA.y + boxA.h > boxB.y;
+            }
+
+            function handlePlayerHitEvent() {
+                currentHearts--;
+                renderHeartsTelemetry();
+                deployVisualExplosion(aircraft.positionX + aircraft.boundWidth/2, aircraft.positionY + aircraft.boundHeight/2, '#00bcff');
+
+                if (currentHearts <= 0) {
+                    currentPoints = 0;
+                    currentLevel = 1;
+                    currentHearts = 3;
+                    shipSpawningThrottle = 42;
+                    fireSpreadActive = false;
+                    document.getElementById('telemetry-space-score').innerText = currentPoints;
+                    applicationToastBroker.dispatchNotification('💥 המשחק הסתיים! חללית השחקן הושמדה');
                 }
 
-                // עדכון אויבים והתנגשויות
-                enemyFleet.forEach((enemy, eIdx) => {
-                    enemy.y += enemy.speed;
+                aircraft.positionX = canvasRef.width / 2 - aircraft.boundWidth / 2;
+                aircraft.positionY = canvasRef.height - 65;
+                hostileFleet = [];
+                laserArsenal = [];
+                functionalPowerups = [];
+                renderHeartsTelemetry();
+            }
+
+            function renderHeartsTelemetry() {
+                let heartGlyphs = "";
+                for(let i=0; i<currentHearts; i++) heartGlyphs += "❤️";
+                document.getElementById('telemetry-space-hearts').innerText = heartGlyphs || "⚠️";
+            }
+
+            function coreSimulationStep() {
+                globalFrameId++;
+
+                if (fireSpreadActive) {
+                    fireSpreadTimerCount--;
+                    if (fireSpreadTimerCount <= 0) fireSpreadActive = false;
+                }
+
+                // ניתוח פקודות היגוי של המשתמש
+                if (systemKeyStates['ArrowLeft'] && aircraft.positionX > 0) aircraft.positionX -= aircraft.normalSpeed;
+                if (systemKeyStates['ArrowRight'] && aircraft.positionX < canvasRef.width - aircraft.boundWidth) aircraft.positionX += aircraft.normalSpeed;
+                if (systemKeyStates['ArrowUp'] && aircraft.positionY > 200) aircraft.positionY -= aircraft.normalSpeed;
+                if (systemKeyStates['ArrowDown'] && aircraft.positionY < canvasRef.height - aircraft.boundHeight - 10) aircraft.positionY += aircraft.normalSpeed;
+
+                // עדכון קליעי לייזר
+                laserArsenal.forEach((laser, lIdx) => {
+                    laser.x += laser.dX;
+                    laser.y += laser.dY;
+                    if(laser.y < -30 || laser.x < -30 || laser.x > canvasRef.width + 30) laserArsenal.splice(lIdx, 1);
+                });
+
+                // יצירת חלליות אויב
+                if (globalFrameId % shipSpawningThrottle === 0) {
+                    let extSize = 26 + Math.random() * 20;
+                    let targetVelocity = 1.6 + (Math.random() * 2) + (currentLevel * 0.35);
+                    let targetArmorHp = 1;
+                    let visualHex = '#ef4444';
+
+                    if (Math.random() > 0.8) {
+                        visualHex = '#ca8a04'; // חללית אויב כבדה
+                        targetArmorHp = 2;
+                        targetVelocity *= 0.75;
+                    }
+
+                    hostileFleet.push({
+                        x: Math.random() * (canvasRef.width - extSize),
+                        y: -extSize,
+                        w: extSize,
+                        h: extSize * 0.8,
+                        velocity: targetVelocity,
+                        visualHex: visualHex,
+                        armorHp: targetArmorHp
+                    });
+                }
+
+                // ייצור בונוס שדרוג נשק בשכיחות נמוכה
+                if (globalFrameId % 700 === 0 && !fireSpreadActive) {
+                    functionalPowerups.push({ x: Math.random() * (canvasRef.width - 24), y: -24, w: 24, h: 24, velocity: 1.8 });
+                }
+
+                // עדכון בונוסים וזיהוי איסוף
+                functionalPowerups.forEach((pow, pIdx) => {
+                    pow.y += pow.velocity;
+                    let playerBox = { x: aircraft.positionX, y: aircraft.positionY, w: aircraft.boundWidth, h: aircraft.boundHeight };
+                    let powBox = { x: pow.x, y: pow.y, w: pow.w, h: pow.h };
                     
-                    if(enemy.y > canvas.height) {
-                        enemyFleet.splice(eIdx, 1);
-                        hearts--;
-                        refreshHud();
+                    if (evaluateAABBCollision(playerBox, powBox)) {
+                        functionalPowerups.splice(pIdx, 1);
+                        fireSpreadActive = true;
+                        fireSpreadTimerCount = 400; // אורך הפעולה בפריימים
+                        applicationToastBroker.dispatchNotification('⚡ נשק משולש הופעל! קצב אש משופר');
+                    }
+                    if (pow.y > canvasRef.height) functionalPowerups.splice(pIdx, 1);
+                });
+
+                // הזזת חלליות אויב וזיהוי פגיעה בשחקן
+                hostileFleet.forEach((enemy, eIdx) => {
+                    enemy.y += enemy.velocity;
+
+                    let playerBox = { x: aircraft.positionX, y: aircraft.positionY, w: aircraft.boundWidth, h: aircraft.boundHeight };
+                    let enemyBox = { x: enemy.x, y: enemy.y, w: enemy.w, h: enemy.h };
+
+                    if (enemy.y > canvasRef.height) {
+                        hostileFleet.splice(eIdx, 1);
+                        handlePlayerHitEvent();
+                        return;
                     }
 
-                    // פגיעה פיזית בשחקן
-                    if(enemy.x < playerShip.x + playerShip.w && enemy.x + enemy.w > playerShip.x && enemy.y < playerShip.y + playerShip.h && enemy.y + enemy.h > playerShip.y) {
-                        enemyFleet.splice(eIdx, 1);
-                        hearts--;
-                        refreshHud();
+                    if (evaluateAABBCollision(playerBox, enemyBox)) {
+                        hostileFleet.splice(eIdx, 1);
+                        handlePlayerHitEvent();
+                        return;
                     }
+                });
 
-                    // פגיעת ירי באויב
-                    laserArsenal.forEach((laser, lIdx) => {
-                        if(laser.x > enemy.x && laser.x < enemy.x + enemy.w && laser.y > enemy.y && laser.y < enemy.y + enemy.h) {
-                            enemyFleet.splice(eIdx, 1);
+                // זיהוי התנגשות לייזר באויב
+                laserArsenal.forEach((laser, lIdx) => {
+                    hostileFleet.forEach((enemy, eIdx) => {
+                        let laserBox = { x: laser.x, y: laser.y, w: 4, h: 12 };
+                        let enemyBox = { x: enemy.x, y: enemy.y, w: enemy.w, h: enemy.h };
+
+                        if (evaluateAABBCollision(laserBox, enemyBox)) {
                             laserArsenal.splice(lIdx, 1);
-                            score += 10;
-                            refreshHud();
+                            enemy.armorHp--;
+                            deployVisualExplosion(enemy.x + enemy.w/2, enemy.y + enemy.h/2, enemy.visualHex);
+
+                            if (enemy.armorHp <= 0) {
+                                hostileFleet.splice(eIdx, 1);
+                                currentPoints += 20;
+                                document.getElementById('telemetry-space-score').innerText = currentPoints;
+                                syncDifficultyLevel();
+
+                                if (currentPoints > highPointsRecord) {
+                                    highPointsRecord = currentPoints;
+                                    localStorage.setItem('platform_v4_space_high', highPointsRecord);
+                                    systemAnalyticsAggregatorModule.recomputeMetricsDashboard();
+                                }
+                            }
                         }
                     });
                 });
 
-                // בדיקת סיום פעילות
-                if(hearts <= 0) {
-                    systemNotificationBroker.show(`הסימולטור קרס! ניקוד שהופק: ${score}`);
-                    const localHigh = localStorage.getItem('os_v40_space_hi') || 0;
-                    if(score > localHigh) localStorage.setItem('os_v40_space_hi', score);
-                    score = 0; hearts = 3; enemyFleet = []; laserArsenal = [];
-                    refreshHud();
-                }
-
-                // גרפיקה וציור
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // כוכבים
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                cosmosStars.forEach(s => ctx.fillRect(s.x, s.y, s.size, s.size));
-
-                // חללית שחקן - משולש עתידני מורכב
-                ctx.fillStyle = '#3b82f6';
-                ctx.beginPath();
-                ctx.moveTo(playerShip.x + playerShip.w/2, playerShip.y);
-                ctx.lineTo(playerShip.x, playerShip.y + playerShip.h);
-                ctx.lineTo(playerShip.x + playerShip.w, playerShip.y + playerShip.h);
-                ctx.closePath();
-                ctx.fill();
-
-                // יריות
-                ctx.fillStyle = '#10b981';
-                laserArsenal.forEach(l => ctx.fillRect(l.x, l.y, 4, 14));
-
-                // אויבים
-                enemyFleet.forEach(e => {
-                    ctx.fillStyle = '#ef4444';
-                    ctx.fillRect(e.x, e.y, e.w, e.h);
-                    ctx.fillStyle = '#f87171';
-                    ctx.fillRect(e.x + 8, e.y + 6, e.w - 16, e.h - 12);
+                // ניקוי ועדכון חלקיקי פיצוץ
+                blastParticles.forEach((part, pIdx) => {
+                    part.x += part.dX;
+                    part.y += part.dY;
+                    part.opacity -= 0.03;
+                    part.durationLife--;
+                    if (part.durationLife <= 0 || part.opacity <= 0) blastParticles.splice(pIdx, 1);
                 });
 
-                frameLoopId = requestAnimationFrame(executeCoreLoop);
-            }
+                // ביצוע פעולות הציור מחדש על גבי הקנבס
+                graphicsContext.clearRect(0, 0, canvasRef.width, canvasRef.height);
 
-            function refreshHud() {
-                document.getElementById('hud-space-score').innerText = score;
-                let glyphs = '';
-                for(let i=0; i<hearts; i++) glyphs += '❤️';
-                document.getElementById('hud-space-hearts').innerText = glyphs || 'TERMINATED';
+                // ציור כוכבים רנדומליים כרקע זז
+                graphicsContext.fillStyle = 'rgba(255, 255, 255, 0.15)';
+                for (let i = 0; i < 20; i++) {
+                    let starX = ((i * 149) % canvasRef.width);
+                    let starY = ((i * 67 + globalFrameId * (1 + (i % 2))) % canvasRef.height);
+                    graphicsContext.fillRect(starX, starY, 2, 2);
+                }
+
+                // ציור חללית השחקן (מבנה משולש מתקדם)
+                graphicsContext.fillStyle = '#3b82f6';
+                graphicsContext.beginPath();
+                graphicsContext.moveTo(aircraft.positionX + aircraft.boundWidth / 2, aircraft.positionY);
+                graphicsContext.lineTo(aircraft.positionX, aircraft.positionY + aircraft.boundHeight);
+                graphicsContext.lineTo(aircraft.positionX + aircraft.boundWidth, aircraft.positionY + aircraft.boundHeight);
+                graphicsContext.closePath();
+                graphicsContext.fill();
+
+                // ציור אש המדחף
+                graphicsContext.fillStyle = Math.random() > 0.4 ? '#f97316' : '#ef4444';
+                graphicsContext.fillRect(aircraft.positionX + aircraft.boundWidth/2 - 5, aircraft.positionY + aircraft.boundHeight, 10, 5);
+
+                // ציור הלייזרים הפעילים באוויר
+                graphicsContext.fillStyle = fireSpreadActive ? '#10b981' : '#fbbf24';
+                laserArsenal.forEach(laser => graphicsContext.fillRect(laser.x, laser.y, 4, 12));
+
+                // ציור צי האויב
+                hostileFleet.forEach(enemy => {
+                    graphicsContext.fillStyle = enemy.visualHex;
+                    graphicsContext.fillRect(enemy.x, enemy.y, enemy.w, enemy.h);
+                    // פנסים קדמיים של האויב
+                    graphicsContext.fillStyle = '#ffffff';
+                    graphicsContext.fillRect(enemy.x + 5, enemy.y + 4, 3, 3);
+                    graphicsContext.fillRect(enemy.x + enemy.w - 8, enemy.y + 4, 3, 3);
+                });
+
+                // ציור קופסת בונוס נשק
+                functionalPowerups.forEach(pow => {
+                    graphicsContext.fillStyle = '#10b981';
+                    graphicsContext.fillRect(pow.x, pow.y, pow.w, pow.h);
+                    graphicsContext.fillStyle = '#ffffff';
+                    graphicsContext.font = 'bold 12px monospace';
+                    graphicsContext.fillText('W', pow.x + 7, pow.y + 16);
+                });
+
+                // ציור חלקיקי פיצוצים בתנועה
+                blastParticles.forEach(part => {
+                    graphicsContext.save();
+                    graphicsContext.globalAlpha = part.opacity;
+                    graphicsContext.fillStyle = part.hexColor;
+                    graphicsContext.beginPath();
+                    graphicsContext.arc(part.x, part.y, part.sizeRadius, 0, Math.PI * 2);
+                    graphicsContext.fill();
+                    graphicsContext.restore();
+                });
+
+                runtimeLoopId = requestAnimationFrame(coreSimulationStep);
             }
 
             return {
-                start: function() {
-                    window.addEventListener('keydown', trapKeyDown);
-                    window.addEventListener('keyup', trapKeyUp);
-                    score = 0; hearts = 3; enemyFleet = []; laserArsenal = [];
-                    buildStarfield();
-                    refreshHud();
-                    executeCoreLoop();
+                bootstrapLoop: function() {
+                    window.addEventListener('keydown', processKeyDown);
+                    window.addEventListener('keyup', processKeyUp);
+                    currentHearts = 4;
+                    handlePlayerHitEvent();
+                    if (!runtimeLoopId) coreSimulationStep();
                 },
-                stop: function() {
-                    if(frameLoopId) cancelAnimationFrame(frameLoopId);
-                    window.removeEventListener('keydown', trapKeyDown);
-                    window.removeEventListener('keyup', trapKeyUp);
-                    frameLoopId = null;
+                terminateLoop: function() {
+                    if (runtimeLoopId) { cancelAnimationFrame(runtimeLoopId); runtimeLoopId = null; }
+                    window.removeEventListener('keydown', processKeyDown);
+                    window.removeEventListener('keyup', processKeyUp);
                 }
             };
         })();
 
-        // ו. משחק 2: תפוס את המטבע (COIN COLLECTOR ENGINE)
-        const coinCollectorEngine = (function() {
-            const canvas = document.getElementById('os-canvas-coin');
-            let ctx = canvas.getContext('2d');
-            let frameId = null, score = 0, timeRemaining = 30, internalClock = 0;
-            let operativePlayer = { x: 310, y: 225, w: 32, h: 32 }, dynamicCoin = { x: 100, y: 100, radius: 11 };
-            let keyRegistry = {};
+        // ==========================================================================
+        // ז. מנוע ארקייד 2 - משחק תפוס את המטבע (COIN COLLECTOR PHYSICS ENGINE)
+        // ==========================================================================
+        const coinCollectorEngineInstance = (function() {
+            const canvasRef = document.getElementById('canvas-runtime-coin-collector');
+            let graphicsContext = null;
+            if(canvasRef) graphicsContext = canvasRef.getContext('2d');
 
-            function trackDown(e) {
-                keyRegistry[e.code] = true;
-                if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
+            let runtimeLoopId = null;
+            let currentScore = 0;
+            let targetCountdownSeconds = 30;
+            let framesElapsedCounter = 0;
+
+            let controlKeys = {};
+            let avatar = { x: 100, y: 300, w: 32, h: 32, velX: 0, velY: 0, speed: 5, jumpForce: 12, inAir: true };
+            let activeCoin = { x: 400, y: 200, radius: 10 };
+            
+            const physicalEnvironment = { gravityForce: 0.6, frictionCoefficient: 0.85, groundYLevel: 410 };
+
+            function assignKeyDown(e) {
+                controlKeys[e.code] = true;
+                if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)) e.preventDefault();
             }
-            function trackUp(e) { keyRegistry[e.code] = false; }
+            function assignKeyUp(e) { controlKeys[e.code] = false; }
 
-            function dropCoin() {
-                dynamicCoin.x = 50 + Math.random() * (canvas.width - 100);
-                dynamicCoin.y = 50 + Math.random() * (canvas.height - 100);
-            }
-
-            function engineCycle() {
-                internalClock++;
-                
-                if(internalClock % 60 === 0) {
-                    timeRemaining--;
-                    document.getElementById('hud-coin-timer').innerText = timeRemaining;
-                }
-
-                if(timeRemaining <= 0) {
-                    systemNotificationBroker.show(`המכסה הושלמה! מטבעות שנאספו בסבב: ${score}`);
-                    score = 0; timeRemaining = 30;
-                    document.getElementById('hud-coin-score').innerText = score;
-                    document.getElementById('hud-coin-timer').innerText = timeRemaining;
-                    dropCoin();
-                }
-
-                // בקרת מקשים רציפה
-                if((keyRegistry['ArrowLeft'] || keyRegistry['KeyA']) && operativePlayer.x > 0) operativePlayer.x -= 7;
-                if((keyRegistry['ArrowRight'] || keyRegistry['KeyD']) && operativePlayer.x < canvas.width - operativePlayer.w) operativePlayer.x += 7;
-                if((keyRegistry['ArrowUp'] || keyRegistry['KeyW']) && operativePlayer.y > 0) operativePlayer.y -= 7;
-                if((keyRegistry['ArrowDown'] || keyRegistry['KeyS']) && operativePlayer.y < canvas.height - operativePlayer.h) operativePlayer.y += 7;
-
-                // בדיקת קולז'ן
-                const pX = operativePlayer.x + operativePlayer.w / 2;
-                const pY = operativePlayer.y + operativePlayer.h / 2;
-                const distance = Math.hypot(pX - dynamicCoin.x, pY - dynamicCoin.y);
-
-                if(distance < (operativePlayer.w / 2) + dynamicCoin.radius) {
-                    score++;
-                    document.getElementById('hud-coin-score').innerText = score;
-                    systemNotificationBroker.show('מטבע אלקטרוני נאסף במאגר');
-                    dropCoin();
-                }
-
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                // ציור מטריצת רקע דיגיטלית
-                ctx.strokeStyle = '#0a1424';
-                ctx.lineWidth = 1;
-                for(let x=0; x<canvas.width; x+=40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke(); }
-                for(let y=0; y<canvas.height; y+=40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke(); }
-
-                // ריבוע שחקן
-                ctx.fillStyle = '#10b981';
-                ctx.fillRect(operativePlayer.x, operativePlayer.y, operativePlayer.w, operativePlayer.h);
-                ctx.strokeStyle = '#34d399';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(operativePlayer.x, operativePlayer.y, operativePlayer.w, operativePlayer.h);
-
-                // מטבע זהב
-                ctx.fillStyle = '#eab308';
-                ctx.beginPath();
-                ctx.arc(dynamicCoin.x, dynamicCoin.y, dynamicCoin.radius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-
-                frameId = requestAnimationFrame(engineCycle);
+            function respawnTargetCoin() {
+                activeCoin.x = 40 + Math.random() * (canvasRef.width - 80);
+                activeCoin.y = 120 + Math.random() * (physicalEnvironment.groundYLevel - 160);
             }
 
-            return {
-                start: function() {
-                    window.addEventListener('keydown', trackDown);
-                    window.addEventListener('keyup', trackUp);
-                    score = 0; timeRemaining = 30; internalClock = 0;
-                    document.getElementById('hud-coin-score').innerText = score;
-                    document.getElementById('hud-coin-timer').innerText = timeRemaining;
-                    dropCoin();
-                    engineCycle();
-                },
-                stop: function() {
-                    if(frameId) cancelAnimationFrame(frameId);
-                    window.removeEventListener('keydown', trackDown);
-                    window.removeEventListener('keyup', trackUp);
-                    frameId = null;
-                }
-            };
-        })();
+            function mainExecutionLoop() {
+                framesElapsedCounter++;
 
-        // ז. משחק 3: אתגר חשבון מהיר (SPEED MATH QUIZ ENGINE)
-        const systemMathQuizEngine = {
-            currentStreak: 0, targetCalculatedValue: 0,
-            start: function() {
-                this.currentStreak = 0;
-                document.getElementById('hud-math-streak').innerText = 0;
-                this.deployNewProblem();
-            },
-            stop: function() {},
-            deployNewProblem: function() {
-                const mathType = Math.floor(Math.random() * 3);
-                let a, b, sign;
-
-                if(mathType === 0) {
-                    a = Math.floor(Math.random() * 50) + 15;
-                    b = Math.floor(Math.random() * 50) + 15;
-                    this.targetCalculatedValue = a + b; sign = '+';
-                } else if(mathType === 1) {
-                    a = Math.floor(Math.random() * 80) + 20;
-                    b = Math.floor(Math.random() * 19) + 5;
-                    this.targetCalculatedValue = a - b; sign = '-';
-                } else {
-                    a = Math.floor(Math.random() * 12) + 2;
-                    b = Math.floor(Math.random() * 10) + 2;
-                    this.targetCalculatedValue = a * b; sign = '×';
-                }
-
-                document.getElementById('quiz-string-box-target').innerText = `${a} ${sign} ${b} = ?`;
-                
-                let matrixPool = [this.targetCalculatedValue];
-                while(matrixPool.length < 4) {
-                    const devia = (Math.floor(Math.random() * 8) + 1) * (Math.random() > 0.5 ? 1 : -1);
-                    const fake = this.targetCalculatedValue + devia;
-                    if(!matrixPool.includes(fake) && fake >= 0) matrixPool.push(fake);
-                }
-                matrixPool.sort(() => Math.random() - 0.5);
-
-                const injectorTarget = document.getElementById('quiz-injected-buttons-target');
-                injectorTarget.innerHTML = '';
-                
-                matrixPool.forEach(opt => {
-                    const buttonNode = document.createElement('button');
-                    buttonNode.className = 'quiz-choice-trigger';
-                    buttonNode.innerText = opt;
-                    buttonNode.onclick = () => { this.verifyUserResponse(opt); };
-                    injectorTarget.appendChild(buttonNode);
-                });
-            },
-            verifyUserResponse: function(selectedValue) {
-                if(selectedValue === this.targetCalculatedValue) {
-                    this.currentStreak++;
-                    document.getElementById('hud-math-streak').innerText = this.currentStreak;
-                    systemNotificationBroker.show('אימות מושלם: תשובה נכונה!');
-                    this.deployNewProblem();
-                } else {
-                    systemNotificationBroker.show(`שגיאת אימות! ערך נכון היה: ${this.targetCalculatedValue}`);
-                    this.currentStreak = 0;
-                    document.getElementById('hud-math-streak').innerText = 0;
-                    this.deployNewProblem();
-                }
-            }
-        };
-
-        // ח. משחק 4: איקס עיגול נגד מחשב (TIC TAC TOE SYSTEM MESH)
-        const systemTttEngine = {
-            meshMemory: ["","","","","","","","",""], stateLock: true,
-            start: function() { this.reset(); },
-            stop: function() {},
-            reset: function() {
-                this.meshMemory = ["","","","","","","","",""];
-                this.stateLock = true;
-                document.getElementById('hud-ttt-status-label').innerText = "תורך לשחק (X)";
-                this.refreshGrid();
-            },
-            refreshGrid: function() {
-                const hostMesh = document.getElementById('ttt-injected-mesh-target');
-                hostMesh.innerHTML = '';
-                
-                this.meshMemory.forEach((value, idx) => {
-                    const node = document.createElement('div');
-                    node.className = 'ttt-mesh-node';
-                    node.innerText = value;
+                // ניהול שעון ספירה לאחור של השלב (מבוסס קצב פריימים של 60FPS)
+                if (framesElapsedCounter % 60 === 0) {
+                    targetCountdownSeconds--;
+                    document.getElementById('telemetry-coin-timer').innerText = targetCountdownSeconds;
                     
-                    if(value === 'X') node.style.color = '#f87171';
-                    if(value === 'O') node.style.color = '#60a5fa';
-                    
-                    node.onclick = () => {
-                        if(!this.stateLock || this.meshMemory[idx] !== "") return;
-                        
-                        this.meshMemory[idx] = "X";
-                        this.refreshGrid();
-                        
-                        if(!this.evaluateMatrixWinner()) {
-                            this.stateLock = false;
-                            document.getElementById('hud-ttt-status-label').innerText = "חישוב מהלך AI...";
-                            setTimeout(() => { this.executeAiMove(); }, 400);
-                        }
-                    };
-                    hostMesh.appendChild(node);
-                });
-            },
-            executeAiMove: function() {
-                let blanks = [];
-                this.meshMemory.forEach((v, i) => { if(v === "") blanks.push(i); });
-                
-                if(blanks.length > 0) {
-                    const pick = blanks[Math.floor(Math.random() * blanks.length)];
-                    this.meshMemory[pick] = "O";
-                }
-                
-                this.refreshGrid();
-                this.stateLock = true;
-                this.evaluateMatrixWinner();
-                if(this.stateLock) {
-                    document.getElementById('hud-ttt-status-label').innerText = "תורך לשחק (X)";
-                }
-            },
-            evaluateMatrixWinner: function() {
-                const vectors = [
-                    [0,1,2], [3,4,5], [6,7,8],
-                    [0,3,6], [1,4,7], [2,5,8],
-                    [0,4,8], [2,4,6]
-                ];
-
-                for(let vec of vectors) {
-                    const [a, b, c] = vec;
-                    if(this.meshMemory[a] !== "" && this.meshMemory[a] === this.meshMemory[b] && this.meshMemory[a] === this.meshMemory[c]) {
-                        const winSign = this.meshMemory[a];
-                        document.getElementById('hud-ttt-status-label').innerText = `סבב ננעל! ניצחון ל: ${winSign}`;
-                        systemNotificationBroker.show(`המנצח ברשת: ${winSign}`);
-                        this.stateLock = false;
-                        return true;
+                    if (targetCountdownSeconds <= 0) {
+                        applicationToastBroker.dispatchNotification(`⏱️ תום הזמן! אספת בהצלחה ${currentScore} מטבעות חלודים.`);
+                        currentScore = 0;
+                        targetCountdownSeconds = 30;
+                        document.getElementById('telemetry-coin-score').innerText = currentScore;
                     }
                 }
-                
-                if(!this.meshMemory.includes("")) {
-                    document.getElementById('hud-ttt-status-label').innerText = "שוויון נקודות אבסולוטי!";
-                    systemNotificationBroker.show('איקס עיגול הסתיים בתיקו');
-                    this.stateLock = false;
-                    return true;
+
+                // היגוי ומהירות שחקן (ציר אופקי)
+                if (controlKeys['ArrowLeft'] || controlKeys['KeyA']) avatar.velX = -avatar.speed;
+                if (controlKeys['ArrowRight'] || controlKeys['KeyD']) avatar.velX = avatar.speed;
+
+                // ביצוע קפיצה (ציר אנכי)
+                if ((controlKeys['ArrowUp'] || controlKeys['Space'] || controlKeys['KeyW']) && !avatar.inAir) {
+                    avatar.velY = -avatar.jumpForce;
+                    avatar.inAir = true;
                 }
-                return false;
+
+                // החלת כוח משיכה (Gravity Engine)
+                avatar.velY += physicalEnvironment.gravityForce;
+                
+                // החלת חיכוך ואינרציה
+                avatar.velX *= physicalEnvironment.frictionCoefficient;
+                
+                // עדכון מיקום דמות בפועל
+                avatar.x += avatar.velX;
+                avatar.y += avatar.velY;
+
+                // חסימות גבולות מסך (קירות צדדיים)
+                if (avatar.x < 0) avatar.x = 0;
+                if (avatar.x > canvasRef.width - avatar.w) avatar.x = canvasRef.width - avatar.w;
+
+                // זיהוי פגיעה ברצפה מוצקה
+                if (avatar.y >= physicalEnvironment.groundYLevel - avatar.h) {
+                    avatar.y = physicalEnvironment.groundYLevel - avatar.h;
+                    avatar.velY = 0;
+                    avatar.inAir = false;
+                }
+
+                // בדיקת התנגשות ואיסוף מטבע (Circle-to-Box Collision Test)
+                let cX = Math.max(avatar.x, Math.min(activeCoin.x, avatar.x + avatar.w));
+                let cY = Math.max(avatar.y, Math.min(activeCoin.y, avatar.y + avatar.h));
+                let dstX = activeCoin.x - cX;
+                let dstY = activeCoin.y - cY;
+                
+                if ((dstX * dstX + dstY * dstY) < (activeCoin.radius * activeCoin.radius)) {
+                    currentScore++;
+                    document.getElementById('telemetry-coin-score').innerText = currentScore;
+                    respawnTargetCoin();
+                }
+
+                // פקודות ריקון וציור מחדש
+                graphicsContext.clearRect(0, 0, canvasRef.width, canvasRef.height);
+
+                // ציור רצפת הזירה
+                graphicsContext.fillStyle = '#1e293b';
+                graphicsContext.fillRect(0, physicalEnvironment.groundYLevel, canvasRef.width, canvasRef.height - physicalEnvironment.groundYLevel);
+                graphicsContext.fillStyle = '#475569';
+                graphicsContext.fillRect(0, physicalEnvironment.groundYLevel, canvasRef.width, 4);
+
+                // ציור השחקן (קוביית הארקייד)
+                graphicsContext.fillStyle = '#10b981';
+                graphicsContext.fillRect(avatar.x, avatar.y, avatar.w, avatar.h);
+
+                // ציור המטבע הזהוב הדינמי
+                graphicsContext.fillStyle = '#eab308';
+                graphicsContext.beginPath();
+                graphicsContext.arc(activeCoin.x, activeCoin.y, activeCoin.radius, 0, Math.PI * 2);
+                graphicsContext.fill();
+                // הברקה פנימית של המטבע
+                graphicsContext.fillStyle = '#fef08a';
+                graphicsContext.beginPath();
+                graphicsContext.arc(activeCoin.x - 2, activeCoin.y - 2, 3, 0, Math.PI * 2);
+                graphicsContext.fill();
+
+                runtimeLoopId = requestAnimationFrame(mainExecutionLoop);
             }
-        };
+
+            return {
+                bootstrapLoop: function() {
+                    window.addEventListener('keydown', assignKeyDown);
+                    window.addEventListener('keyup', assignKeyUp);
+                    currentScore = 0;
+                    targetCountdownSeconds = 30;
+                    framesElapsedCounter = 0;
+                    document.getElementById('telemetry-coin-score').innerText = currentScore;
+                    document.getElementById('telemetry-coin-timer').innerText = targetCountdownSeconds;
+                    respawnTargetCoin();
+                    if (!runtimeLoopId) mainExecutionLoop();
+                },
+                terminateLoop: function() {
+                    if (runtimeLoopId) { cancelAnimationFrame(runtimeLoopId); runtimeLoopId = null; }
+                    window.removeEventListener('keydown', assignKeyDown);
+                    window.removeEventListener('keyup', assignKeyUp);
+                }
+            };
+        })();
+
+        // ==========================================================================
+        // ח. מנוע ארקייד 3 - אתגר חשבון מהיר עם מד זמן (MATH QUIZ MODULE)
+        // ==========================================================================
+        const mathQuizRuntimeModule = (function() {
+            let activeModeKey = 'easy';
+            let correctStreakCount = 0;
+            let historicalHighStreak = parseInt(localStorage.getItem('platform_v4_math_high')) || 0;
+            let currentCorrectEvaluatedAnswer = 0;
+            
+            let coreTimerIntervalRef = null;
+            let totalSessionSecondsAllowed = 10;
+            let activeTimeSecondsRemaining = 10;
+
+            function synthesizeMathEquation() {
+                let variableA, variableB, mathematicalOperator;
+
+                if (activeModeKey === 'easy') {
+                    variableA = Math.floor(Math.random() * 25) + 6;
+                    variableB = Math.floor(Math.random() * 20) + 2;
+                    mathematicalOperator = Math.random() > 0.5 ? '+' : '-';
+                    if (mathematicalOperator === '-' && variableA < variableB) { 
+                        let temp = variableA; variableA = variableB; variableB = temp; 
+                    }
+                } else if (activeModeKey === 'medium') {
+                    variableA = Math.floor(Math.random() * 13) + 3;
+                    variableB = Math.floor(Math.random() * 11) + 2;
+                    mathematicalOperator = Math.random() > 0.45 ? '*' : '+';
+                } else {
+                    variableA = Math.floor(Math.random() * 60) + 15;
+                    variableB = Math.floor(Math.random() * 45) + 10;
+                    mathematicalOperator = Math.random() > 0.5 ? '-' : '*';
+                }
+
+                let operatorSymbol = mathematicalOperator === '*' ? '×' : mathematicalOperator;
+                document.getElementById('math-quiz-display-box-target').innerText = `${variableA} ${operatorSymbol} ${variableB} = ?`;
+
+                if (mathematicalOperator === '+') currentCorrectEvaluatedAnswer = variableA + variableB;
+                if (mathematicalOperator === '-') currentCorrectEvaluatedAnswer = variableA - variableB;
+                if (mathematicalOperator === '*') currentCorrectEvaluatedAnswer = variableA * variableB;
+
+                let answerPoolArray = [currentCorrectEvaluatedAnswer];
+                while(answerPoolArray.length < 4) {
+                    let randomDeviation = (Math.floor(Math.random() * 24) - 12);
+                    let proxyFakeAnswer = currentCorrectEvaluatedAnswer + randomDeviation;
+                    if (!answerPoolArray.includes(proxyFakeAnswer) && proxyFakeAnswer !== currentCorrectEvaluatedAnswer && proxyFakeAnswer > 0) {
+                        answerPoolArray.push(proxyFakeAnswer);
+                    }
+                }
+                answerPoolArray.sort(() => Math.random() - 0.5);
+
+                const domWrapper = document.getElementById('math-quiz-options-matrix-injection-target');
+                domWrapper.innerHTML = '';
+                
+                answerPoolArray.forEach(numericValue => {
+                    const btn = document.createElement('button');
+                    btn.className = 'math-quiz-option-trigger';
+                    btn.innerText = numericValue;
+                    btn.onclick = () => verifyUserSelectedAnswer(numericValue);
+                    domWrapper.appendChild(btn);
+                });
+
+                executeTimerCountdownBootstrap();
+            }
+
+            function executeTimerCountdownBootstrap() {
+                clearInterval(coreTimerIntervalRef);
+                activeTimeSecondsRemaining = totalSessionSecondsAllowed;
+                const progressFillNode = document.getElementById('math-quiz-timer-fill-element-node');
+                progressFillNode.style.width = '100%';
+
+                coreTimerIntervalRef = setInterval(() => {
+                    activeTimeSecondsRemaining -= 0.1;
+                    let percentageLeft = (activeTimeSecondsRemaining / totalSessionSecondsAllowed) * 100;
+                    progressFillNode.style.width = `${percentageLeft}%`;
+
+                    if (activeTimeSecondsRemaining <= 0) {
+                        clearInterval(coreTimerIntervalRef);
+                        verifyUserSelectedAnswer(-99999); // הכרח פסילה עקב זמן
+                    }
+                }, 100);
+            }
+
+            function verifyUserSelectedAnswer(chosenValue) {
+                clearInterval(coreTimerIntervalRef);
+                
+                if (chosenValue === currentCorrectEvaluatedAnswer) {
+                    correctStreakCount++;
+                    applicationToastBroker.dispatchNotification('🎯 תשובה נכונה! הרצף נמשך');
+                    if (correctStreakCount > historicalHighStreak) {
+                        historicalHighStreak = correctStreakCount;
+                        localStorage.setItem('platform_v4_math_high', historicalHighStreak);
+                    }
+                } else {
+                    correctStreakCount = 0;
+                    applicationToastBroker.dispatchNotification('❌ תשובה שגויה או תום זמן! הרצף התאפס');
+                }
+
+                document.getElementById('telemetry-math-score').innerText = correctStreakCount;
+                document.getElementById('telemetry-math-high').innerText = historicalHighStreak;
+                synthesizeMathEquation();
+            }
+
+            return {
+                triggerFreshStart: function() {
+                    document.getElementById('math-quiz-panel-difficulty-selector').style.display = 'block';
+                    document.getElementById('math-quiz-panel-active-runtime').style.display = 'none';
+                    document.getElementById('telemetry-math-high').innerText = historicalHighStreak;
+                    document.getElementById('telemetry-math-score').innerText = correctStreakCount;
+                },
+                initializeQuizSession: function(selectedMode) {
+                    activeModeKey = selectedMode;
+                    totalSessionSecondsAllowed = 12;
+                    if(selectedMode === 'medium') totalSessionSecondsAllowed = 9;
+                    if(selectedMode === 'hard') totalSessionSecondsAllowed = 5.5;
+
+                    document.getElementById('math-quiz-panel-difficulty-selector').style.display = 'none';
+                    document.getElementById('math-quiz-panel-active-runtime').style.display = 'block';
+                    synthesizeMathEquation();
+                },
+                clearCountdownTimer: function() {
+                    clearInterval(coreTimerIntervalRef);
+                }
+            };
+        })();
+
+        // ==========================================================================
+        // ט. מנוע ארקייד 4 - משחק איקס עיגול חכם (TIC TAC TOE INTELLIGENT AI)
+        // ==========================================================================
+        const tttSmartAiLogicModule = (function() {
+            let meshCellsVector = ["", "", "", "", "", "", "", "", ""];
+            let humanInputAllowed = true;
+            let roundActive = true;
+
+            const structuralWinningCombinations = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+
+            function examineWinConditions(currentMesh) {
+                for (let combo of structuralWinningCombinations) {
+                    if (currentMesh[combo[0]] && currentMesh[combo[0]] === currentMesh[combo[1]] && currentMesh[combo[0]] === currentMesh[combo[2]]) {
+                        return currentMesh[combo[0]];
+                    }
+                }
+                if (!currentMesh.includes("")) return "draw";
+                return null;
+            }
+
+            function dispatchCalculatedAiTurn() {
+                if (!roundActive) return;
+
+                // 1. בדיקה האם ה-AI יכול להכריע את המשחק במהלך בודד נוכחי
+                for (let i = 0; i < meshCellsVector.length; i++) {
+                    if (meshCellsVector[i] === "") {
+                        let dynamicStateCopy = [...meshCellsVector];
+                        dynamicStateCopy[i] = "O";
+                        if (examineWinConditions(dynamicStateCopy) === "O") {
+                            executeAiTokenPlacement(i);
+                            return;
+                        }
+                    }
+                }
+
+                // 2. מנגנון חסימה אקטיבית: מניעת ניצחון קרוב של האדם בשולחן
+                for (let i = 0; i < meshCellsVector.length; i++) {
+                    if (meshCellsVector[i] === "") {
+                        let dynamicStateCopy = [...meshCellsVector];
+                        dynamicStateCopy[i] = "X";
+                        if (examineWinConditions(dynamicStateCopy) === "X") {
+                            executeAiTokenPlacement(i);
+                            return;
+                        }
+                    }
+                }
+
+                // 3. מהלך אסטרטגי מועדף: תפיסת משבצת האמצע (מרכז הלוח)
+                if (meshCellsVector[4] === "") { executeAiTokenPlacement(4); return; }
+
+                // 4. מהלך ברירת מחדל: בחירה אקראית מתוך המשבצות הפנויות שנותרו
+                let availableIndices = [];
+                meshCellsVector.forEach((value, index) => { if (value === "") availableIndices.push(index); });
+
+                if (availableIndices.length > 0) {
+                    let randomPickedIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+                    executeAiTokenPlacement(randomPickedIndex);
+                }
+            }
+
+            function executeAiTokenPlacement(targetIndex) {
+                meshCellsVector[targetIndex] = "O";
+                humanInputAllowed = true;
+                this.initializeMeshBoard();
+
+                let matchResult = examineWinConditions(meshCellsVector);
+                if (matchResult) {
+                    roundActive = false;
+                    concludeGameResult(matchResult);
+                } else {
+                    document.getElementById('telemetry-ttt-status-label').innerText = "תורך לשחק (X)";
+                    document.getElementById('telemetry-ttt-status-label').style.color = "#60a5fa";
+                }
+            }
+
+            function concludeGameResult(winnerToken) {
+                const labelNode = document.getElementById('telemetry-ttt-status-label');
+                if (winnerToken === 'X') {
+                    labelNode.innerText = "🏆 ניצחון מוחלט! הבסת את הבינה המלאכותית";
+                    labelNode.style.color = "#10b981";
+                } else if (winnerToken === 'O') {
+                    labelNode.innerText = "🤖 ה-AI ניצח את הסבב הפעם!";
+                    labelNode.style.color = "#ef4444";
+                } else {
+                    labelNode.innerText = "🤝 תיקו טקטי! אין הכרעה בזירה";
+                    labelNode.style.color = "#94a3b8";
+                }
+            }
+
+            return {
+                initializeMeshBoard: function() {
+                    const injectionTarget = document.getElementById('ttt-mesh-board-injection-target');
+                    injectionTarget.innerHTML = '';
+
+                    meshCellsVector.forEach((token, index) => {
+                        const cellNode = document.createElement('div');
+                        cellNode.className = `ttt-individual-node-mesh ${token === 'X' ? 'token-x' : token === 'O' ? 'token-o' : ''}`;
+                        cellNode.innerText = token;
+                        cellNode.onclick = () => tttSmartAiLogicModule.processCellClickEvent(index);
+                        injectionTarget.appendChild(cellNode);
+                    });
+                },
+                processCellClickEvent: function(index) {
+                    if (!roundActive || !humanInputAllowed || meshCellsVector[index] !== "") return;
+
+                    meshCellsVector[index] = "X";
+                    humanInputAllowed = false;
+                    this.initializeMeshBoard();
+
+                    let matchResult = examineWinConditions(meshCellsVector);
+                    if (matchResult) {
+                        roundActive = false;
+                        concludeGameResult(matchResult);
+                    } else {
+                        document.getElementById('telemetry-ttt-status-label').innerText = "בינה מלאכותית מחשבת מהלך...";
+                        document.getElementById('telemetry-ttt-status-label').style.color = "#f59e0b";
+                        setTimeout(() => { dispatchCalculatedAiTurn.call(this); }, 450);
+                    }
+                },
+                wipeAndResetSession: function() {
+                    meshCellsVector = ["", "", "", "", "", "", "", "", ""];
+                    humanInputAllowed = true;
+                    roundActive = true;
+                    document.getElementById('telemetry-ttt-status-label').innerText = "תורך לשחק (X)";
+                    document.getElementById('telemetry-ttt-status-label').style.color = "#60a5fa";
+                    this.initializeMeshBoard();
+                }
+            };
+        })();
     </script>
 </body>
 </html>
