@@ -3,36 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCHOOL OS v31.0 - Ultimate Enterprise Realism</title>
+    <title>SCHOOL OS v40.0 - Ultra Enterprise Operating System</title>
     <style>
         /* ==========================================================================
-           1. משתני מערכת וערכת נושא (System Variables & Theme Architecture)
+           1. משתני מערכת וארכיטקטורת עיצוב (System Variables & Tokens)
            ========================================================================== */
         :root {
-            --bg-pure: #000000;
-            --bg-card: #050508;
-            --bg-card-hover: #09090f;
-            --bg-input: #010103;
+            --bg-pure: #020204;
+            --bg-card: #08080f;
+            --bg-card-hover: #10101f;
+            --bg-input: #040408;
             --primary: #00adb5;
             --primary-hover: #008c94;
-            --primary-glow: rgba(0, 173, 181, 0.35);
+            --primary-glow: rgba(0, 173, 181, 0.4);
             --danger: #ff4a4a;
             --danger-hover: #cc3b3b;
-            --danger-glow: rgba(255, 74, 74, 0.2);
+            --danger-glow: rgba(255, 74, 74, 0.25);
             --success: #28a745;
             --success-hover: #218838;
-            --success-glow: rgba(40, 167, 69, 0.2);
+            --success-glow: rgba(40, 167, 69, 0.25);
             --warning: #ffaa00;
-            --text-main: #e4e6eb;
-            --text-muted: #8f94a0;
-            --border-dark: #12121c;
-            --border-glow: #1f1f33;
+            --warning-hover: #cc8800;
+            --text-main: #f1f2f6;
+            --text-muted: #8e94a5;
+            --border-dark: #161626;
+            --border-glow: #22223b;
             --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* ==========================================================================
-           2. אתחול והגדרות בסיס (Reset & Layout Architecture)
+           2. אתחול והגדרות בסיס למבנה (Global Reset & Layout)
            ========================================================================== */
         html, body {
             margin: 0;
@@ -53,49 +54,51 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: stretch;
+            position: relative;
         }
 
         /* ==========================================================================
-           3. רכיבי ממשק משתמש גלובליים (Global UI Components)
+           3. רכיבי ממשק משתמש קבועים (Global UI Core Components)
            ========================================================================== */
         .system-header {
             background-color: var(--bg-card);
-            padding: 18px 30px;
+            padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid var(--border-dark);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.95);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
             z-index: 100;
         }
 
         .system-header h2 {
             margin: 0;
-            font-size: 1.4rem;
-            font-weight: 800;
+            font-size: 1.6rem;
+            font-weight: 900;
             color: var(--primary);
-            text-shadow: 0 0 10px var(--primary-glow);
-            letter-spacing: 0.5px;
+            text-shadow: 0 0 15px var(--primary-glow);
+            letter-spacing: 0.8px;
         }
 
         .navigation-dock {
             display: flex;
-            background-color: #010102;
-            padding: 14px;
-            gap: 14px;
+            background-color: #040406;
+            padding: 16px;
+            gap: 16px;
             border-bottom: 1px solid var(--border-dark);
             justify-content: center;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .tab-controller-btn {
             background: var(--bg-card);
             border: 1px solid var(--border-dark);
             color: var(--text-muted);
-            padding: 14px 32px;
-            font-size: 1rem;
+            padding: 14px 36px;
+            font-size: 1.05rem;
             cursor: pointer;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: 700;
             transition: var(--transition-smooth);
             user-select: none;
@@ -106,48 +109,52 @@
             color: #ffffff;
             border-color: var(--primary);
             background-color: var(--bg-card-hover);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
         }
 
         .tab-controller-btn.active-tab {
             background-color: var(--primary);
             color: #ffffff;
             border-color: var(--primary);
-            box-shadow: 0 0 16px var(--primary-glow);
+            box-shadow: 0 0 20px var(--primary-glow);
         }
 
         .viewport-section {
             display: none;
-            padding: 35px 20px;
-            max-width: 900px;
+            padding: 40px 24px;
+            max-width: 1100px;
             width: 100%;
             box-sizing: border-box;
             margin: 0 auto;
-            animation: sectionEnter 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: sectionEnter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @keyframes sectionEnter {
-            from { opacity: 0; transform: translateY(6px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .content-card {
             background: var(--bg-card);
-            padding: 28px;
-            border-radius: 16px;
+            padding: 32px;
+            border-radius: 20px;
             border: 1px solid var(--border-dark);
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            transition: border-color 0.2s ease;
+            margin-bottom: 35px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+            transition: border-color 0.3s ease;
+        }
+
+        .content-card:hover {
+            border-color: var(--border-glow);
         }
 
         .content-card h3 {
             margin-top: 0;
-            margin-bottom: 22px;
-            font-size: 1.25rem;
-            font-weight: 700;
-            border-right: 4px solid var(--primary);
-            padding-right: 14px;
+            margin-bottom: 24px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            border-right: 5px solid var(--primary);
+            padding-right: 16px;
             color: #ffffff;
         }
 
@@ -155,27 +162,30 @@
             background-color: var(--primary);
             color: #ffffff;
             border: none;
-            padding: 11px 24px;
-            font-size: 0.95rem;
-            border-radius: 8px;
+            padding: 12px 26px;
+            font-size: 1rem;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
         }
 
         .action-button:hover {
             background-color: var(--primary-hover);
-            box-shadow: 0 0 10px var(--primary-glow);
+            box-shadow: 0 0 12px var(--primary-glow);
+            transform: translateY(-1px);
         }
 
         .action-button:disabled {
-            background-color: #22222b !important;
-            color: #555566 !important;
+            background-color: #1a1a26 !important;
+            color: #4a4a5a !important;
             cursor: not-allowed;
             box-shadow: none !important;
+            transform: none !important;
         }
 
         .action-button.danger-variant {
@@ -184,29 +194,39 @@
 
         .action-button.danger-variant:hover {
             background-color: var(--danger-hover);
+            box-shadow: 0 0 12px var(--danger-glow);
+        }
+
+        .action-button.success-variant {
+            background-color: var(--success);
+        }
+
+        .action-button.success-variant:hover {
+            background-color: var(--success-hover);
+            box-shadow: 0 0 12px var(--success-glow);
         }
 
         /* ==========================================================================
-           4. רכיבי ניהול משימות ולו"ז (Task & Schedule UI Styling)
+           4. רכיבי ניהול משימות ולו"ז (Task & Schedule Components)
            ========================================================================== */
         .progress-wrapper {
             display: flex;
             flex-direction: column;
-            margin: 10px 0 25px 0;
+            margin: 10px 0 30px 0;
         }
 
         .progress-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .progress-track {
-            background-color: #09090f;
-            border-radius: 20px;
+            background-color: #05050a;
+            border-radius: 25px;
             overflow: hidden;
-            height: 22px;
+            height: 26px;
             border: 1px solid var(--border-dark);
             position: relative;
         }
@@ -215,28 +235,35 @@
             background: linear-gradient(90deg, var(--primary), #00f5ff);
             height: 100%;
             width: 0%;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 14px rgba(0, 245, 255, 0.5);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 18px rgba(0, 245, 255, 0.6);
         }
 
         .list-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 14px;
-            border-bottom: 1px solid #09090f;
-            border-radius: 8px;
+            padding: 18px 16px;
+            border-bottom: 1px solid #10101c;
+            border-radius: 10px;
+            transition: var(--transition-smooth);
+        }
+
+        .list-row:hover {
+            background-color: var(--bg-card-hover);
         }
 
         .list-row-data {
             display: flex;
             align-items: center;
-            gap: 14px;
-            font-size: 1.05rem;
+            gap: 16px;
+            font-size: 1.1rem;
         }
 
         .list-row-data b {
             color: var(--primary);
+            min-width: 60px;
+            display: inline-block;
         }
 
         .row-delete-btn {
@@ -244,52 +271,54 @@
             border: none;
             color: var(--danger);
             cursor: pointer;
-            font-size: 1.15rem;
+            font-size: 1.3rem;
             display: none;
-            opacity: 0.5;
-            transition: all 0.15s ease;
+            opacity: 0.6;
+            transition: all 0.2s ease;
+            padding: 4px 8px;
         }
 
         .row-delete-btn:hover {
             opacity: 1;
             background-color: var(--danger-glow);
-            border-radius: 6px;
+            border-radius: 8px;
         }
 
         .custom-checkbox {
             accent-color: var(--primary);
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             cursor: pointer;
         }
 
         #management-dock {
-            background: #030306;
-            padding: 26px;
-            border-radius: 16px;
-            margin: 25px auto;
-            max-width: 600px;
-            width: 90%;
+            background: #05050a;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px auto;
+            max-width: 700px;
+            width: 100%;
+            box-sizing: border-box;
             border: 2px dashed var(--primary);
             display: none;
-            animation: sectionEnter 0.2s ease;
+            animation: sectionEnter 0.25s ease;
         }
 
         .management-group {
-            margin-bottom: 22px;
+            margin-bottom: 24px;
         }
 
         .management-group h5 {
-            margin: 0 0 12px 0;
+            margin: 0 0 14px 0;
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 700;
         }
 
         .management-inputs {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
         }
 
@@ -297,44 +326,46 @@
             background: var(--bg-input);
             border: 1px solid var(--border-dark);
             color: #ffffff;
-            padding: 11px 14px;
-            border-radius: 8px;
-            font-size: 0.95rem;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition-smooth);
         }
 
         .control-input:focus {
             outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 8px var(--primary-glow);
         }
 
         /* ==========================================================================
-           5. רכיבי מרכז המשחקים הריאליסטי (Realism Arcade Architecture)
+           5. רכיבי מרכז המשחקים והארקייד (Arcade Experience Components)
            ========================================================================== */
         .arcade-container {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 30px;
+            gap: 35px;
         }
 
-        @media (min-width: 780px) {
+        @media (min-width: 900px) {
             .arcade-container { grid-template-columns: 1fr 1fr; }
         }
 
-        /* משחק זיכרון ריאליסטי בתלת מימד */
+        /* משחק זיכרון 3D */
         .matrix-memory-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            max-width: 320px;
-            margin: 20px auto;
-            perspective: 1000px; /* הפעלת עומק תלת מימדי */
+            gap: 14px;
+            max-width: 360px;
+            margin: 25px auto;
+            perspective: 1000px;
         }
 
         .matrix-container-node {
-            height: 70px;
+            height: 80px;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
         }
 
@@ -347,16 +378,16 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             user-select: none;
         }
 
         .matrix-node-front {
-            background: linear-gradient(135deg, #10101d, var(--bg-card-hover));
+            background: linear-gradient(135deg, #0f0f1c, #05050a);
             border: 1px solid var(--border-dark);
             color: var(--primary);
         }
@@ -370,25 +401,26 @@
         .matrix-container-node.node-solved .matrix-node-back {
             background-color: var(--success);
             color: #ffffff;
+            box-shadow: 0 0 10px var(--success-glow);
         }
 
-        /* איקס עיגול מודרני */
+        /* איקס עיגול AI */
         .tic-mac-matrix {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            max-width: 240px;
-            margin: 20px auto;
+            gap: 14px;
+            max-width: 260px;
+            margin: 25px auto;
         }
 
         .tic-node-block {
-            width: 70px;
-            height: 70px;
-            background-color: #0b0b12;
+            width: 76px;
+            height: 76px;
+            background-color: #080812;
             border: 1px solid var(--border-dark);
-            border-radius: 12px;
-            font-size: 2rem;
-            font-weight: 800;
+            border-radius: 16px;
+            font-size: 2.2rem;
+            font-weight: 900;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -397,136 +429,322 @@
         }
 
         .tic-node-block:hover {
-            background-color: #12121f;
+            background-color: #121226;
             border-color: var(--primary);
         }
 
-        /* חלליות קנבס */
+        /* קנבס חלליות */
         #space-arcade-canvas {
-            background-color: #010102;
+            background-color: #020204;
             display: block;
-            margin: 20px auto;
+            margin: 25px auto;
             border: 2px solid var(--border-dark);
-            border-radius: 12px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.95);
         }
 
         .canvas-shake {
-            animation: canvasVibration 0.38s cubic-bezier(.36,.07,.19,.97) both;
+            animation: canvasVibration 0.4s cubic-bezier(.36,.07,.19,.97) both;
         }
 
         @keyframes canvasVibration {
-            10%, 90% { transform: translate3d(-1.5px, 0, 0); }
-            20%, 80% { transform: translate3d(2.5px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
-            40%, 60% { transform: translate3d(3px, 0, 0); }
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(3px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
         }
 
         .mobile-arcade-controls {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 18px;
+            gap: 25px;
+            margin-top: 20px;
         }
 
         .arcade-joy-btn {
-            background-color: #0b0b12;
+            background-color: #080812;
             color: #ffffff;
             border: 1px solid var(--border-dark);
-            padding: 15px 38px;
-            font-size: 1.1rem;
-            border-radius: 12px;
+            padding: 16px 42px;
+            font-size: 1.2rem;
+            border-radius: 14px;
             cursor: pointer;
             font-weight: 700;
             user-select: none;
+            transition: var(--transition-smooth);
         }
 
         .arcade-joy-btn:active {
             background-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
         }
 
+        /* משחק ניחושים וטיימר */
         .guess-box-layout {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 20px 0;
-            gap: 10px;
+            margin: 25px 0;
+            gap: 12px;
         }
 
         .guess-numeric-input {
-            width: 95px;
-            font-size: 1.35rem;
+            width: 110px;
+            font-size: 1.5rem;
             text-align: center;
             background: var(--bg-input);
             color: #ffffff;
             border: 1px solid var(--border-dark);
-            padding: 9px;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 10px;
         }
 
         .arcade-meta-text {
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: var(--text-muted);
-            margin: 8px 0;
+            margin: 10px 0;
         }
 
         .realism-status-bar {
-            background-color: #010103;
+            background-color: #030306;
             border: 1px solid var(--border-dark);
-            padding: 8px;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 10px;
             display: flex;
             justify-content: space-around;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        /* משחק פיצוח הצופן החדש (Mastermind) */
+        .mastermind-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        .mastermind-history-table th, .mastermind-history-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-dark);
+            text-align: center;
+        }
+
+        .mastermind-history-table th {
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .indicator-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: bold;
             font-size: 0.85rem;
-            margin-bottom: 12px;
+            margin: 0 2px;
+        }
+
+        .badge-bull { background-color: var(--success-glow); color: #2ccf56; border: 1px solid var(--success); }
+        .badge-hit { background-color: var(--warning-glow); color: #ffbb11; border: 1px solid var(--warning); }
+
+        /* חנות השדרוגים לחללית */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        .shop-item-card {
+            background-color: #040408;
+            border: 1px solid var(--border-dark);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition-smooth);
+        }
+
+        .shop-item-card:hover {
+            border-color: var(--primary);
+        }
+
+        .shop-item-info {
+            text-align: right;
+        }
+
+        .shop-item-title {
+            font-weight: bold;
+            font-size: 1.05rem;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .shop-item-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* ==========================================================================
+           6. מרכז התראות פופ-אפ (System Notification Engine Styles)
+           ========================================================================== */
+        #os-notification-container {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9999;
+            width: 320px;
+            pointer-events: none;
+        }
+
+        .os-toast {
+            background-color: rgba(8, 8, 15, 0.95);
+            border-right: 5px solid var(--primary);
+            border-top: 1px solid var(--border-dark);
+            border-bottom: 1px solid var(--border-dark);
+            border-left: 1px solid var(--border-dark);
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            color: #ffffff;
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            pointer-events: auto;
+            animation: toastEnter 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes toastEnter {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .os-toast.toast-danger { border-right-color: var(--danger); }
+        .os-toast.toast-success { border-right-color: var(--success); }
+        .os-toast.toast-warning { border-right-color: var(--warning); }
+
+        .os-toast-header {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* ==========================================================================
+           7. לוח בקרה סטטיסטי (Dashboard Metrics Styles)
+           ========================================================================== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        @media (min-width: 600px) {
+            .dashboard-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .metric-mini-card {
+            background-color: #040408;
+            border: 1px solid var(--border-dark);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .metric-mini-card h6 {
+            margin: 0 0 8px 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .metric-mini-card p {
+            margin: 0;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary);
         }
     </style>
 </head>
 <body>
 
     <div id="main-architecture">
+        
         <header class="system-header">
-            <h2>⚡ SCHOOL OS v31.0 - Realism Edition</h2>
+            <h2>⚡ SCHOOL OS v40.0 - Enterprise Ultra</h2>
             <div>
-                <button class="action-button" onclick="SystemEngine.Core.toggleAdminView()" style="background:#0b0b12; border:1px solid var(--border-dark); font-size:0.95rem;">⚙️ מצב עריכה</button>
+                <button class="action-button" onclick="SystemEngine.Core.toggleAdminView()" style="background:#080812; border:1px solid var(--border-dark);">⚙️ מסד הגדרות ועריכה</button>
             </div>
         </header>
 
         <nav class="navigation-dock">
-            <button id="trigger-day-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-day-view', 'trigger-day-tab')">📅 לו"ז יומי</button>
-            <button id="trigger-tasks-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-tasks-view', 'trigger-tasks-tab')">🚀 משימות</button>
-            <button id="trigger-games-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-games-view', 'trigger-games-tab')">🎮 מרכז ארקייד</button>
+            <button id="trigger-dashboard-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-dashboard-view', 'trigger-dashboard-tab')">📊 לוח בקרה</button>
+            <button id="trigger-day-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-day-view', 'trigger-day-tab')">📅 מערכת לו"ז</button>
+            <button id="trigger-tasks-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-tasks-view', 'trigger-tasks-tab')">🚀 משימות ומדד</button>
+            <button id="trigger-games-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-games-view', 'trigger-games-tab')">🎮 מרכז ארקייד ריאליסטי</button>
         </nav>
 
         <div id="management-dock">
-            <h3 style="color:var(--primary); margin:0; border:none; padding:0;">🛠️ מסד ניהול נתונים</h3>
+            <h3 style="color:var(--primary); margin:0; border:none; padding:0;">🛠️ מסד ניהול נתונים של המערכת</h3>
             
-            <div class="management-group" style="margin-top:18px;">
-                <h5>➕ הוספת פעילות ללוח הזמנים:</h5>
+            <div class="management-group" style="margin-top:20px;">
+                <h5>➕ הוספת פעילות חדשה ללוח הזמנים:</h5>
                 <div class="management-inputs">
-                    <input type="text" id="input-schedule-time" class="control-input" placeholder="08:00" style="width:75px;">
-                    <input type="text" id="input-schedule-desc" class="control-input" placeholder="תיאור השיעור..." style="flex:1; min-width:160px;">
-                    <button class="action-button" onclick="SystemEngine.Core.addScheduleItem()">הוסף פריט</button>
+                    <input type="text" id="input-schedule-time" class="control-input" placeholder="08:00" style="width:80px;">
+                    <input type="text" id="input-schedule-desc" class="control-input" placeholder="תיאור הפעילות או השיעור..." style="flex:1; min-width:180px;">
+                    <button class="action-button success-variant" onclick="SystemEngine.Core.addScheduleItem()">הוסף פריט</button>
                 </div>
             </div>
 
             <div class="management-group">
-                <h5>➕ הוספת משימה חדשה למדד:</h5>
+                <h5>➕ הוספת משימה חדשה למדד ההתקדמות:</h5>
                 <div class="management-inputs">
-                    <input type="text" id="input-task-desc" class="control-input" placeholder="רשום משימה..." style="flex:1; min-width:200px;">
-                    <button class="action-button" onclick="SystemEngine.Core.addTaskItem()">הוסף משימה</button>
+                    <input type="text" id="input-task-desc" class="control-input" placeholder="רשום משימה לביצוע..." style="flex:1; min-width:220px;">
+                    <button class="action-button success-variant" onclick="SystemEngine.Core.addTaskItem()">הוסף משימה</button>
                 </div>
             </div>
             
-            <div class="management-group" style="border-top:1px solid var(--border-dark); padding-top:15px; margin-bottom:0; display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:0.85rem; color:var(--text-muted);">ניהול מערכת:</span>
-                <button class="action-button danger-variant" style="padding:6px 14px; font-size:0.8rem;" onclick="SystemEngine.Core.resetAllSystemData()">איפוס נתונים שמורים ⚠️</button>
+            <div class="management-group" style="border-top:1px solid var(--border-dark); padding-top:20px; margin-bottom:0; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.9rem; color:var(--text-muted);">פעולות תחזוקה:</span>
+                <button class="action-button danger-variant" style="padding:8px 18px; font-size:0.9rem;" onclick="SystemEngine.Core.resetAllSystemData()">איפוס נתונים שמורים קומפלט ⚠️</button>
             </div>
         </div>
 
+        <main id="section-dashboard-view" class="viewport-section">
+            <div class="content-card">
+                <h3>📊 לוח בקרה מרכזי ומדדי ביצוע</h3>
+                <div class="dashboard-grid">
+                    <div class="metric-mini-card">
+                        <h6>משימות שבוצעו</h6>
+                        <p id="metric-tasks-done">0</p>
+                    </div>
+                    <div class="metric-mini-card">
+                        <h6>קריסטלים בחלליות</h6>
+                        <p id="metric-space-crystals" style="color:var(--warning);">0</p>
+                    </div>
+                    <div class="metric-mini-card">
+                        <h6>שיא חלליות</h6>
+                        <p id="metric-space-high">0</p>
+                    </div>
+                    <div class="metric-mini-card">
+                        <h6>ניצחונות AI</h6>
+                        <p id="metric-ai-wins" style="color:var(--success);">0</p>
+                    </div>
+                </div>
+                <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; margin:0;">
+                    ברוך הבא למערכת הניהול המאוחדת שלך. כאן תוכל לראות סנכרון נתונים חי בין הביצועים שלך במרכז הארקייד לבין ההתקדמות במטלות הלימודיות היומיות.
+                </p>
+            </div>
+        </main>
+
         <main id="section-day-view" class="viewport-section">
             <div class="content-card">
-                <h3>⏰ סדר היום ופעילויות</h3>
+                <h3>⏰ סדר היום ופעילויות מתוזמנות</h3>
                 <div id="container-schedule-rows"></div>
             </div>
         </main>
@@ -536,7 +754,7 @@
                 <div class="progress-wrapper">
                     <div class="progress-meta">
                         <h3>⭐ מדד התקדמות משימות רשמי</h3>
-                        <span id="text-star-percentage" style="color: var(--primary);">✨ 0%</span>
+                        <span id="text-star-percentage" style="color: var(--primary); font-weight:bold; font-size:1.1rem;">✨ 0%</span>
                     </div>
                     <div class="progress-track">
                         <div id="element-progress-bar-fill" class="progress-fill"></div>
@@ -556,7 +774,7 @@
                         <span>🎯 התאמות: <b id="text-memory-matches" style="color:var(--success);">0/8</b></span>
                     </div>
                     <div class="matrix-memory-grid" id="container-memory-board"></div>
-                    <button id="btn-memory-restart" class="action-button" style="padding:6px 16px; font-size:0.85rem;" onclick="SystemEngine.MemoryArcade.rebuildMatrix()">אתחל משחק</button>
+                    <button id="btn-memory-restart" class="action-button" style="padding:8px 18px; font-size:0.9rem;" onclick="SystemEngine.MemoryArcade.rebuildMatrix()">אתחל מטריצה</button>
                 </div>
                 
                 <div class="content-card" style="text-align:center;">
@@ -569,36 +787,100 @@
                         <input type="number" id="input-guess-field" class="guess-numeric-input" min="1" max="100">
                         <button id="btn-guess-submit" class="action-button" onclick="SystemEngine.GuessArcade.evaluateUserGuess()">בצע ניחוש</button>
                     </div>
-                    <p id="text-guess-feedback" style="color:var(--primary); font-weight:700; margin:12px 0 0 0;">הזן מספר כדי להתחיל את שעון העצר!</p>
-                </div>
-
-                <div class="content-card" style="text-align:center;">
-                    <h3>🚀 קרב חלליות - קונסולת רטרו</h3>
-                    <p class="arcade-meta-text">ניקוד נוכחי: <span id="text-space-score" style="color:var(--primary); font-weight:bold;">0</span></p>
-                    <canvas id="space-arcade-canvas" width="240" height="180"></canvas>
-                    <button class="action-button" onclick="SystemEngine.SpaceArcade.rebootGame()" style="background-color:var(--success); padding:6px 14px; font-size:0.85rem;">אפס מערכת חלליות</button>
-                    <div class="mobile-arcade-controls">
-                        <button class="arcade-joy-btn" id="joystick-left-trigger">◄ שמאל</button>
-                        <button class="arcade-joy-btn" id="joystick-right-trigger">ימין ►</button>
-                    </div>
+                    <p id="text-guess-feedback" style="color:var(--primary); font-weight:700; margin:14px 0 0 0;">הזן מספר בשדה לקליטת פולס ראשון ותחילת שעון העצר!</p>
                 </div>
 
                 <div class="content-card" style="text-align:center;">
                     <h3>🤖 איקס עיגול נגד המחשב (AI Engine)</h3>
-                    <p id="text-tic-tac-status" style="color:var(--primary); font-weight:bold; margin-bottom:16px;">אתה X, המחשב O. שחק מהלך!</p>
+                    <p id="text-tic-tac-status" style="color:var(--primary); font-weight:bold; margin-bottom:16px;">אתה X, המחשב O. שחק מהלך אסטרטגי!</p>
                     <div class="tic-mac-matrix" id="container-tic-tac-board"></div>
-                    <button class="action-button" style="padding:6px 14px; font-size:0.85rem;" onclick="SystemEngine.TicTacArcade.flushBoard()">אתחל משחק חדש</button>
+                    <button class="action-button" style="padding:8px 18px; font-size:0.9rem;" onclick="SystemEngine.TicTacArcade.flushBoard()">אתחל משחק חדש</button>
+                </div>
+
+                <div class="content-card" style="text-align:center;">
+                    <h3>🔐 פיצוח הצופן הסודי (Mastermind)</h3>
+                    <p class="arcade-meta-text">המחשב הגריל קוד של 4 ספרות ייחודיות (0-9). פצח אותו!</p>
+                    <div class="realism-status-bar">
+                        <span>🛡️ ניסיונות שנותרו: <b id="text-mastermind-attempts" style="color:var(--warning);">8</b></span>
+                        <span>📊 סטטוס: <b id="text-mastermind-status" style="color:var(--primary);">ממתין לקלט</b></span>
+                    </div>
+                    <div class="guess-box-layout">
+                        <input type="text" id="input-mastermind-field" class="control-input" maxlength="4" placeholder="לדוגמה: 1234" style="width:140px; font-size:1.2rem; text-align:center; letter-spacing:4px;">
+                        <button class="action-button success-variant" onclick="SystemEngine.MastermindArcade.submitCodeGuess()">שדר ניחוש</button>
+                    </div>
+                    <div style="max-height: 160px; overflow-y: auto; border: 1px solid var(--border-dark); border-radius: 10px; background:#040408;">
+                        <table class="mastermind-history-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>ניחוש</th>
+                                    <th>תוצאת סריקה אנליטית</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body-mastermind"></tbody>
+                        </table>
+                    </div>
+                    <button class="action-button" style="margin-top:14px; padding:6px 14px; font-size:0.85rem;" onclick="SystemEngine.MastermindArcade.bootNewMatch()">אתחל צופן</button>
+                </div>
+
+                <div class="content-card" style="text-align:center; grid-column: 1 / -1;">
+                    <h3>🚀 קרב חלליות קנבס - מערכת Hyper-Drive</h3>
+                    <div class="realism-status-bar">
+                        <span>🎯 ניקוד: <b id="text-space-score" style="color:var(--primary);">0</b></span>
+                        <span>💎 קריסטלים: <b id="text-space-crystals-live" style="color:var(--warning);">0</b></span>
+                        <span>🛡️ מגן פעיל: <b id="text-space-shield-status" style="color:var(--danger);">כבוי</b></span>
+                        <span>🔫 נשק: <b id="text-space-weapon-status" style="color:var(--success);">לייזר בסיסי</b></span>
+                    </div>
+                    <canvas id="space-arcade-canvas" width="480" height="260"></canvas>
+                    
+                    <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:15px;">
+                        <button class="action-button success-variant" onclick="SystemEngine.SpaceArcade.rebootGame()">אפס ואתחל משחק</button>
+                    </div>
+
+                    <div style="text-align:right; border-top:1px solid var(--border-dark); padding-top:20px;">
+                        <h4 style="margin:0 0 12px 0; color:var(--warning); font-size:1.1rem;">🛒 חנות שדרוגים טקטיים (שדרג באמצעות קריסטלים מהמשחק):</h4>
+                        <div class="shop-grid">
+                            <div class="shop-item-card">
+                                <div class="shop-item-info">
+                                    <div class="shop-item-title">🛡️ מגן אנרגיה פלזמטי (Shield Generator)</div>
+                                    <div class="shop-item-desc">מעניק חסינות מפני פגיעה אחת של חללית אויב.</div>
+                                </div>
+                                <button id="btn-shop-shield" class="action-button" style="font-size:0.85rem; padding:8px 16px;" onclick="SystemEngine.SpaceArcade.purchaseItem('shield')">קנה (30 💎)</button>
+                            </div>
+                            <div class="shop-item-card">
+                                <div class="shop-item-info">
+                                    <div class="shop-item-title">🔫 מערכת ירי כפול (Dual Cannon Link)</div>
+                                    <div class="shop-item-desc">משדרג את המערכת הוקטורית לירי של 2 לייזרים במקביל.</div>
+                                </div>
+                                <button id="btn-shop-weapon" class="action-button" style="font-size:0.85rem; padding:8px 16px;" onclick="SystemEngine.SpaceArcade.purchaseItem('weapon')">קנה (60 💎)</button>
+                            </div>
+                            <div class="shop-item-card">
+                                <div class="shop-item-info">
+                                    <div class="shop-item-title">⚡ דחפי היפר-דרייב (Engine Overclock)</div>
+                                    <div class="shop-item-desc">מגדיל את מהירות התנועה הצידית של החללית שלך ב-40%.</div>
+                                </div>
+                                <button id="btn-shop-speed" class="action-button" style="font-size:0.85rem; padding:8px 16px;" onclick="SystemEngine.SpaceArcade.purchaseItem('speed')">קנה (40 💎)</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mobile-arcade-controls">
+                        <button class="arcade-joy-btn" id="joystick-left-trigger">◄ נווט שמאלה</button>
+                        <button class="arcade-joy-btn" id="joystick-right-trigger">נווט ימינה ►</button>
+                    </div>
                 </div>
 
             </div>
         </main>
     </div>
 
+    <div id="os-notification-container"></div>
+
     <script>
         const SystemEngine = {
             
             // ==========================================================================
-            // א. מודול סאונד דיגיטלי (Audio Synthesizer Engine Module)
+            // א. מודול סאונד דיגיטלי (Audio Synthesizer Architecture)
             // ==========================================================================
             AudioContextController: {
                 audioContextInstance: null,
@@ -622,76 +904,156 @@
                         
                         if (soundProfile === 'laser') {
                             oscillatorNode.type = 'sawtooth';
-                            oscillatorNode.frequency.setValueAtTime(880, this.audioContextInstance.currentTime);
-                            oscillatorNode.frequency.exponentialRampToValueAtTime(70, this.audioContextInstance.currentTime + 0.11);
-                            gainNode.gain.setValueAtTime(0.025, this.audioContextInstance.currentTime);
+                            oscillatorNode.frequency.setValueAtTime(900, this.audioContextInstance.currentTime);
+                            oscillatorNode.frequency.exponentialRampToValueAtTime(80, this.audioContextInstance.currentTime + 0.12);
+                            gainNode.gain.setValueAtTime(0.02, this.audioContextInstance.currentTime);
                             oscillatorNode.start();
-                            oscillatorNode.stop(this.audioContextInstance.currentTime + 0.11);
+                            oscillatorNode.stop(this.audioContextInstance.currentTime + 0.12);
                         } 
                         else if (soundProfile === 'explosion') {
                             oscillatorNode.type = 'triangle';
-                            oscillatorNode.frequency.setValueAtTime(110, this.audioContextInstance.currentTime);
-                            oscillatorNode.frequency.linearRampToValueAtTime(15, this.audioContextInstance.currentTime + 0.22);
-                            gainNode.gain.setValueAtTime(0.14, this.audioContextInstance.currentTime);
+                            oscillatorNode.frequency.setValueAtTime(120, this.audioContextInstance.currentTime);
+                            oscillatorNode.frequency.linearRampToValueAtTime(20, this.audioContextInstance.currentTime + 0.25);
+                            gainNode.gain.setValueAtTime(0.12, this.audioContextInstance.currentTime);
                             oscillatorNode.start();
-                            oscillatorNode.stop(this.audioContextInstance.currentTime + 0.22);
+                            oscillatorNode.stop(this.audioContextInstance.currentTime + 0.25);
                         } 
                         else if (soundProfile === 'win_fanfare') {
                             oscillatorNode.type = 'sine';
                             oscillatorNode.frequency.setValueAtTime(440, this.audioContextInstance.currentTime);
-                            oscillatorNode.frequency.setValueAtTime(554.37, this.audioContextInstance.currentTime + 0.06);
-                            oscillatorNode.frequency.setValueAtTime(659.25, this.audioContextInstance.currentTime + 0.12);
-                            oscillatorNode.frequency.setValueAtTime(880, this.audioContextInstance.currentTime + 0.18);
-                            gainNode.gain.setValueAtTime(0.06, this.audioContextInstance.currentTime);
+                            oscillatorNode.frequency.setValueAtTime(554.37, this.audioContextInstance.currentTime + 0.08);
+                            oscillatorNode.frequency.setValueAtTime(659.25, this.audioContextInstance.currentTime + 0.14);
+                            oscillatorNode.frequency.setValueAtTime(880, this.audioContextInstance.currentTime + 0.20);
+                            gainNode.gain.setValueAtTime(0.05, this.audioContextInstance.currentTime);
                             oscillatorNode.start();
-                            oscillatorNode.stop(this.audioContextInstance.currentTime + 0.35);
+                            oscillatorNode.stop(this.audioContextInstance.currentTime + 0.40);
+                        }
+                        else if (soundProfile === 'notification') {
+                            oscillatorNode.type = 'sine';
+                            oscillatorNode.frequency.setValueAtTime(587.33, this.audioContextInstance.currentTime);
+                            oscillatorNode.frequency.setValueAtTime(880, this.audioContextInstance.currentTime + 0.08);
+                            gainNode.gain.setValueAtTime(0.04, this.audioContextInstance.currentTime);
+                            oscillatorNode.start();
+                            oscillatorNode.stop(this.audioContextInstance.currentTime + 0.18);
                         }
                     } catch (error) {
-                        console.error("Audio Engine system error:", error);
+                        console.error("Audio Engine system block conflict handled:", error);
                     }
                 }
             },
 
             // ==========================================================================
-            // ב. מודול ליבה וניהול נתונים (App Core UI / Storage Management Module)
+            // ב. מודול מרכז התראות פנימי (Notification Center Engine)
+            // ==========================================================================
+            NotificationCenter: {
+                triggerToast(title, text, variant = 'info') {
+                    const container = document.getElementById('os-notification-container');
+                    if (!container) return;
+
+                    const toast = document.createElement('div');
+                    toast.classList.add('os-toast');
+                    if (variant === 'danger') toast.classList.add('toast-danger');
+                    if (variant === 'success') toast.classList.add('toast-success');
+                    if (variant === 'warning') toast.classList.add('toast-warning');
+
+                    toast.innerHTML = `
+                        <div class="os-toast-header">${title}</div>
+                        <div style="font-weight:600;">${text}</div>
+                    `;
+
+                    container.appendChild(toast);
+                    SystemEngine.AudioContextController.dispatchFrequencySound('notification');
+
+                    setTimeout(() => {
+                        toast.style.animation = 'sectionEnter 0.3s ease reverse';
+                        setTimeout(() => {
+                            if (toast.parentNode === container) {
+                                container.removeChild(toast);
+                            }
+                        }, 300);
+                    }, 4000);
+                }
+            },
+
+            // ==========================================================================
+            // ג. מודול ליבה וניהול נתונים (App Core UI / Storage Management Module)
             // ==========================================================================
             Core: {
                 dataState: {
                     isAdminModeActive: false,
-                    activeTabIdentifier: 'section-day-view',
+                    activeTabIdentifier: 'section-dashboard-view',
                     scheduleCollection: [],
-                    tasksCollection: []
+                    tasksCollection: [],
+                    accumulatedCrystals: 0,
+                    highScoreSpace: 0,
+                    aiWinsCount: 0
                 },
 
                 bootstrap() {
                     this.loadStateFromStorage();
                     this.renderScheduleUI();
                     this.renderTasksUI();
+                    this.syncDashboardMetrics();
                     this.bindGlobalInputDevices();
                 },
 
                 loadStateFromStorage() {
                     const fallbackSchedule = [
-                        { id: 101, time: "08:00", text: "🎒 הגעה וארגון כיתה" },
-                        { id: 102, time: "08:15", text: "📚 שיעור ראשון ומערכת שעות" }
+                        { id: 101, time: "08:00", text: "🎒 הגעה, התארגנות ופתיחת מחברות" },
+                        { id: 102, time: "08:30", text: "📚 שיעור מתמטיקה אנליטית" },
+                        { id: 103, time: "09:45", text: "🎨 סדנת עיצוב חוויית משתמש" },
+                        { id: 104, time: "11:00", text: "🍱 הפסקת אוכל ומנוחה בחצר" },
+                        { id: 105, time: "12:00", text: "🧠 תרגול לוגיקה ומשחקי חשיבה במחשב" }
                     ];
                     const fallbackTasks = [
-                        { id: 201, text: "להכין מערכת למחר ולבדוק שיעורים", checked: false }
+                        { id: 201, text: "להכין תבנית בסיס לתיק העבודות בנטליפיי", checked: false },
+                        { id: 202, text: "לעבור על מערך הלייזרים והפיקסלים בקנבס", checked: true },
+                        { id: 203, text: "לפתור את משוואות ה-AI באיקס עיגול", checked: false }
                     ];
 
-                    const rawSchedule = localStorage.getItem('schoolOS_timeline');
+                    const rawSchedule = localStorage.getItem('schoolOS_ultra_timeline');
                     this.dataState.scheduleCollection = rawSchedule ? JSON.parse(rawSchedule) : fallbackSchedule;
 
-                    const rawTasks = localStorage.getItem('schoolOS_tasks');
+                    const rawTasks = localStorage.getItem('schoolOS_ultra_tasks');
                     this.dataState.tasksCollection = rawTasks ? JSON.parse(rawTasks) : fallbackTasks;
+
+                    this.dataState.accumulatedCrystals = parseInt(localStorage.getItem('schoolOS_ultra_crystals') || '0', 10);
+                    this.dataState.highScoreSpace = parseInt(localStorage.getItem('schoolOS_ultra_highscore') || '0', 10);
+                    this.dataState.aiWinsCount = parseInt(localStorage.getItem('schoolOS_ultra_aiwins') || '0', 10);
                 },
 
                 commitStateToStorage(key) {
                     if (key === 'schedule') {
-                        localStorage.setItem('schoolOS_timeline', JSON.stringify(this.dataState.scheduleCollection));
+                        localStorage.setItem('schoolOS_ultra_timeline', JSON.stringify(this.dataState.scheduleCollection));
                     } else if (key === 'tasks') {
-                        localStorage.setItem('schoolOS_tasks', JSON.stringify(this.dataState.tasksCollection));
+                        localStorage.setItem('schoolOS_ultra_tasks', JSON.stringify(this.dataState.tasksCollection));
+                    } else if (key === 'metrics') {
+                        localStorage.setItem('schoolOS_ultra_crystals', this.dataState.accumulatedCrystals);
+                        localStorage.setItem('schoolOS_ultra_highscore', this.dataState.highScoreSpace);
+                        localStorage.setItem('schoolOS_ultra_aiwins', this.dataState.aiWinsCount);
                     }
+                },
+
+                syncDashboardMetrics() {
+                    let doneCount = 0;
+                    for (let i = 0; i < this.dataState.tasksCollection.length; i++) {
+                        if (this.dataState.tasksCollection[i].checked) doneCount++;
+                    }
+
+                    const tDone = document.getElementById('metric-tasks-done');
+                    const sCryst = document.getElementById('metric-space-crystals');
+                    const sHigh = document.getElementById('metric-space-high');
+                    const aWins = document.getElementById('metric-ai-wins');
+
+                    if (tDone) tDone.innerText = doneCount;
+                    if (sCryst) sCryst.innerText = this.dataState.accumulatedCrystals;
+                    if (sHigh) sHigh.innerText = this.dataState.highScoreSpace;
+                    if (aWins) aWins.innerText = this.dataState.aiWinsCount;
+
+                    const liveCryst = document.getElementById('text-space-crystals-live');
+                    if (liveCryst) liveCryst.innerText = this.dataState.accumulatedCrystals;
+
+                    this.updateShopButtonsState();
                 },
 
                 renderScheduleUI() {
@@ -699,9 +1061,12 @@
                     if (!container) return;
 
                     if (this.dataState.scheduleCollection.length === 0) {
-                        container.innerHTML = `<div style="color:var(--text-muted); padding:10px;">אין אירועים קרובים בלוח הזמנים.</div>`;
+                        container.innerHTML = `<div style="color:var(--text-muted); padding:16px;">אין פעילויות רשומות בלוח הזמנים.</div>`;
                         return;
                     }
+
+                    // סידור לפי שעה
+                    this.dataState.scheduleCollection.sort((a, b) => a.time.localeCompare(b.time));
 
                     let generatedHtmlResult = "";
                     for (let i = 0; i < this.dataState.scheduleCollection.length; i++) {
@@ -712,7 +1077,7 @@
                             <div class="list-row">
                                 <div class="list-row-data">
                                     <b>${this.sanitizeString(item.time)}</b>
-                                    <span>-</span>
+                                    <span>—</span>
                                     <span>${this.sanitizeString(item.text)}</span>
                                 </div>
                                 <button class="row-delete-btn" style="display: ${displayState}" onclick="SystemEngine.Core.removeScheduleItem(${item.id})">🗑️</button>
@@ -727,7 +1092,7 @@
                     if (!container) return;
 
                     if (this.dataState.tasksCollection.length === 0) {
-                        container.innerHTML = `<div style="color:var(--text-muted); padding:10px;">אין משימות פעולות ברשימה שלך.</div>`;
+                        container.innerHTML = `<div style="color:var(--text-muted); padding:16px;">אין משימות פעילות במאגר המידע.</div>`;
                         this.evaluateProgressMetrics();
                         return;
                     }
@@ -736,13 +1101,13 @@
                     for (let i = 0; i < this.dataState.tasksCollection.length; i++) {
                         const item = this.dataState.tasksCollection[i];
                         const isChecked = item.checked ? 'checked' : '';
-                        const textDecorationStyle = item.checked ? 'text-decoration: line-through; color: var(--text-muted);' : '';
+                        const textDecorationStyle = item.checked ? 'text-decoration: line-through; color: var(--text-muted); font-style: italic;' : '';
                         const displayState = this.dataState.isAdminModeActive ? 'inline-block' : 'none';
 
                         generatedHtmlResult += `
                             <div class="list-row">
                                 <div class="list-row-data">
-                                    <label style="display:flex; align-items:center; gap:12px; cursor:pointer;">
+                                    <label style="display:flex; align-items:center; gap:14px; cursor:pointer;">
                                         <input type="checkbox" class="custom-checkbox" ${isChecked} onclick="SystemEngine.Core.toggleTaskState(${item.id})">
                                         <span style="${textDecorationStyle}">${this.sanitizeString(item.text)}</span>
                                     </label>
@@ -760,7 +1125,7 @@
                     let checkedCount = 0;
                     
                     for (let i = 0; i < totalItems; i++) {
-                        if (this.dataState.tasksCollection[i].checked === true) checkedCount++;
+                        if (this.dataState.tasksCollection[i].checked) checkedCount++;
                     }
 
                     let calculatedPercentage = totalItems > 0 ? Math.round((checkedCount / totalItems) * 100) : 0;
@@ -771,10 +1136,7 @@
                     const starPercentageTextElement = document.getElementById('text-star-percentage');
                     if (starPercentageTextElement) {
                         if (calculatedPercentage === 100 && totalItems > 0) {
-                            if (starPercentageTextElement.innerText !== '🌟 100% מושלם!') {
-                                starPercentageTextElement.innerText = '🌟 100% מושלם!';
-                                SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare');
-                            }
+                            starPercentageTextElement.innerText = '🌟 100% מושלם!';
                         } else {
                             starPercentageTextElement.innerText = `✨ ${calculatedPercentage}%`;
                         }
@@ -787,6 +1149,12 @@
                     if (dockElement) dockElement.style.display = this.dataState.isAdminModeActive ? 'block' : 'none';
                     this.renderScheduleUI();
                     this.renderTasksUI();
+
+                    SystemEngine.NotificationCenter.triggerToast(
+                        "מערכת", 
+                        this.dataState.isAdminModeActive ? "מצב עריכה וניהול נתונים הופעל" : "מצב עריכה ננעל ויצא משימוש",
+                        "info"
+                    );
                 },
 
                 switchTab(targetViewId, controlButtonId) {
@@ -812,6 +1180,8 @@
                     if (targetViewId === 'section-games-view') {
                         SystemEngine.SpaceArcade.awakenGame();
                     }
+
+                    this.syncDashboardMetrics();
                 },
 
                 addScheduleItem() {
@@ -825,7 +1195,7 @@
                     if (timeVal === "" || descVal === "") return;
 
                     this.dataState.scheduleCollection.push({
-                        id: Date.now() + Math.floor(Math.random() * 100),
+                        id: Date.now() + Math.floor(Math.random() * 1000),
                         time: timeVal,
                         text: descVal
                     });
@@ -834,12 +1204,14 @@
                     descInput.value = '';
                     this.commitStateToStorage('schedule');
                     this.renderScheduleUI();
+                    SystemEngine.NotificationCenter.triggerToast("לוח זמנים", "נוסף אירוע חדש בהצלחה", "success");
                 },
 
                 removeScheduleItem(id) {
                     this.dataState.scheduleCollection = this.dataState.scheduleCollection.filter(item => item.id !== id);
                     this.commitStateToStorage('schedule');
                     this.renderScheduleUI();
+                    SystemEngine.NotificationCenter.triggerToast("לוח זמנים", "האירוע הוסר ממסד הנתונים", "warning");
                 },
 
                 addTaskItem() {
@@ -850,7 +1222,7 @@
                     if (taskTextVal === "") return;
 
                     this.dataState.tasksCollection.push({
-                        id: Date.now() + Math.floor(Math.random() * 100),
+                        id: Date.now() + Math.floor(Math.random() * 1000),
                         text: taskTextVal,
                         checked: false
                     });
@@ -858,32 +1230,83 @@
                     activeInput.value = '';
                     this.commitStateToStorage('tasks');
                     this.renderTasksUI();
+                    this.syncDashboardMetrics();
+                    SystemEngine.NotificationCenter.triggerToast("רשימת משימות", "המשימה נוספה למערכת המדד", "success");
                 },
 
                 removeTaskItem(id) {
                     this.dataState.tasksCollection = this.dataState.tasksCollection.filter(item => item.id !== id);
                     this.commitStateToStorage('tasks');
                     this.renderTasksUI();
+                    this.syncDashboardMetrics();
+                    SystemEngine.NotificationCenter.triggerToast("רשימת משימות", "המשימה נמחקה לחלוטין", "warning");
                 },
 
                 toggleTaskState(id) {
+                    let taskState = false;
                     for (let i = 0; i < this.dataState.tasksCollection.length; i++) {
                         if (this.dataState.tasksCollection[i].id === id) {
                             this.dataState.tasksCollection[i].checked = !this.dataState.tasksCollection[i].checked;
+                            taskState = this.dataState.tasksCollection[i].checked;
                             break;
                         }
                     }
                     this.commitStateToStorage('tasks');
                     this.renderTasksUI();
+                    this.syncDashboardMetrics();
+
+                    if (taskState) {
+                        SystemEngine.NotificationCenter.triggerToast("משימה בוצעה", "כל הכבוד! התקדמת במדד הרשמי", "success");
+                        let completedAll = true;
+                        for (let i = 0; i < this.dataState.tasksCollection.length; i++) {
+                            if (!this.dataState.tasksCollection[i].checked) completedAll = false;
+                        }
+                        if (completedAll && this.dataState.tasksCollection.length > 0) {
+                            SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare');
+                            SystemEngine.NotificationCenter.triggerToast("הישג מושלם", "סיימת את כל המשימות שלך בהצלחה מרובה! 🌟", "success");
+                        }
+                    }
+                },
+
+                incrementCrystals(amount) {
+                    this.dataState.accumulatedCrystals += amount;
+                    this.commitStateToStorage('metrics');
+                    this.syncDashboardMetrics();
+                },
+
+                updateHighScore(score) {
+                    if (score > this.dataState.highScoreSpace) {
+                        this.dataState.highScoreSpace = score;
+                        this.commitStateToStorage('metrics');
+                        this.syncDashboardMetrics();
+                        SystemEngine.NotificationCenter.triggerToast("שיא חדש!", `קבעת שיא מטורף חדש של ${score} נקודות!`, "success");
+                    }
+                },
+
+                incrementAiWins() {
+                    this.dataState.aiWinsCount++;
+                    this.commitStateToStorage('metrics');
+                    this.syncDashboardMetrics();
+                },
+
+                updateShopButtonsState() {
+                    const btnShield = document.getElementById('btn-shop-shield');
+                    const btnWeapon = document.getElementById('btn-shop-weapon');
+                    const btnSpeed = document.getElementById('btn-shop-speed');
+
+                    if (btnShield) btnShield.disabled = this.dataState.accumulatedCrystals < 30 || SystemEngine.SpaceArcade.playerUpgrades.shieldActive;
+                    if (btnWeapon) btnWeapon.disabled = this.dataState.accumulatedCrystals < 60 || SystemEngine.SpaceArcade.playerUpgrades.weaponTier === 'dual';
+                    if (btnSpeed) btnSpeed.disabled = this.dataState.accumulatedCrystals < 40 || SystemEngine.SpaceArcade.playerUpgrades.speedBonus > 0;
                 },
 
                 resetAllSystemData() {
-                    if (confirm("האם אתה בטוח שברצונך למחוק את כל הנתונים השמורים?")) {
-                        localStorage.removeItem('schoolOS_timeline');
-                        localStorage.removeItem('schoolOS_tasks');
+                    if (confirm("האם אתה בטוח שברצונך לבצע מחיקה טוטאלית של כל מסד הנתונים? הפעולה לא ניתנת לביטול.")) {
+                        localStorage.clear();
                         this.loadStateFromStorage();
                         this.renderScheduleUI();
                         this.renderTasksUI();
+                        this.syncDashboardMetrics();
+                        SystemEngine.NotificationCenter.triggerToast("מערכת אותחלה", "כל הנתונים נמחקו והמערכת חזרה להגדרות יצרן", "danger");
                     }
                 },
 
@@ -904,7 +1327,7 @@
             },
 
             // ==========================================================================
-            // ג. מודול משחק ניחושים ריאליסטי - קצוב בזמן ופסילות (Realism Guess Engine)
+            // ד. מודול משחק ניחושים ריאליסטי - קצוב בזמן ופסילות (Realism Guess Engine)
             // ==========================================================================
             GuessArcade: {
                 computationalSecretInteger: 0,
@@ -928,7 +1351,7 @@
                     this.synchronizeMetricsDisplay();
                     
                     const feedback = document.getElementById('text-guess-feedback');
-                    if (feedback) feedback.innerHTML = "הטיימר יתחיל ברגע שתבצע את הניחוש הראשון שלך!";
+                    if (feedback) feedback.innerHTML = "הזן מספר בשדה לקליטת פולס ראשון ותחילת שעון העצר!";
                 },
 
                 startCountdownTimer() {
@@ -970,13 +1393,14 @@
 
                     const extractedNumber = parseInt(inputDomField.value, 10);
                     if (isNaN(extractedNumber) || extractedNumber < 1 || extractedNumber > 100) {
-                        feedbackParagraphDom.innerHTML = "❌ קלט מחוץ לטווח החוקי (1-100).";
+                        feedbackParagraphDom.innerHTML = "❌ שגיאת פולס: קלט מחוץ לטווח החוקי (1-100).";
                         return;
                     }
 
                     if (extractedNumber === this.computationalSecretInteger) {
-                        feedbackParagraphDom.innerHTML = `🎉 פיצחת את הקוד! המספר המסתורי הוא אכן ${this.computationalSecretInteger}.`;
+                        feedbackParagraphDom.innerHTML = `🎉 פגיעה בול! המספר המסתורי הוא אכן ${this.computationalSecretInteger}.`;
                         SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare');
+                        SystemEngine.NotificationCenter.triggerToast("ניחוש מספרים", "ניצחת! פיצחת את תדר המספר", "success");
                         this.executeGameOverSequence(true);
                     } else {
                         this.remainingLivesCount--;
@@ -986,9 +1410,9 @@
                             this.executeGameOverSequence(false);
                         } else {
                             if (extractedNumber > this.computationalSecretInteger) {
-                                feedbackParagraphDom.innerHTML = `📉 נמוך יותר! (ניחשת ${extractedNumber})`;
+                                feedbackParagraphDom.innerHTML = `📉 תדר נמוך יותר! (ניחשת ${extractedNumber})`;
                             } else {
-                                feedbackParagraphDom.innerHTML = `📈 גבוה יותר! (ניחשת ${extractedNumber})`;
+                                feedbackParagraphDom.innerHTML = `📈 תדר גבוה יותר! (ניחשת ${extractedNumber})`;
                             }
                         }
                     }
@@ -1004,16 +1428,17 @@
                     if (btn) btn.disabled = true;
                     
                     if (!isVictory && feedback) {
-                        feedback.innerHTML = `💥 משחק נגמר! נכשלת במשימה. המספר היה ${this.computationalSecretInteger}. <br><button class="action-button" style="margin-top:8px; padding:4px 10px; font-size:0.8rem;" onclick="SystemEngine.GuessArcade.resetGameSystem()">נסה שוב 🔁</button>`;
+                        feedback.innerHTML = `💥 מערכת ננעלה! נכשלת במשימה. המספר היה ${this.computationalSecretInteger}. <br><button class="action-button danger-variant" style="margin-top:10px; padding:6px 14px; font-size:0.9rem;" onclick="SystemEngine.GuessArcade.resetGameSystem()">נסה שוב 🔁</button>`;
                         SystemEngine.AudioContextController.dispatchFrequencySound('explosion');
+                        SystemEngine.NotificationCenter.triggerToast("ניחוש מספרים", "תשישות ניסיונות - המשחק נגמר", "danger");
                     } else if (isVictory && feedback) {
-                        feedback.innerHTML += `<br><button class="action-button" style="margin-top:8px; padding:4px 10px; font-size:0.8rem; background-color:var(--success);" onclick="SystemEngine.GuessArcade.resetGameSystem()">שלב הבא 🔁</button>`;
+                        feedback.innerHTML += `<br><button class="action-button success-variant" style="margin-top:10px; padding:6px 14px; font-size:0.9rem;" onclick="SystemEngine.GuessArcade.resetGameSystem()">שלב הבא 🔁</button>`;
                     }
                 }
             },
 
             // ==========================================================================
-            // ד. מודול משחק זיכרון ריאליסטי - תלת מימד ומד סיבולת (Realism Memory Engine)
+            // ה. מודול משחק זיכרון ריאליסטי - תלת מימד ומד סיבולת (Realism Memory Engine)
             // ==========================================================================
             MemoryArcade: {
                 datasetIcons: ['🍎', '🍎', '⚽', '⚽', '🧠', '🧠', '🎒', '🎒', '🎨', '🎨', '📚', '📚', '📝', '📝', '⭐', '⭐'],
@@ -1043,12 +1468,10 @@
                         containerNode.dataset.icon = iconSymbol;
                         
                         const frontFace = document.createElement('div');
-                        frontFace.classList.add('matrix-node-front');
-                        frontFace.innerText = "?";
+                        frontFace.classList.add('matrix-node-front'); frontFace.innerText = "?";
                         
                         const backFace = document.createElement('div');
-                        backFace.classList.add('matrix-node-back');
-                        backFace.innerText = iconSymbol;
+                        backFace.classList.add('matrix-node-back'); backFace.innerText = iconSymbol;
                         
                         containerNode.appendChild(frontFace);
                         containerNode.appendChild(backFace);
@@ -1090,10 +1513,10 @@
 
                             if (this.successfulMatchCounter === this.datasetIcons.length) {
                                 SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare');
-                                alert("🎉 ניצחון מוחלט! הזיכרון הריאליסטי שלך מושלם.");
+                                SystemEngine.NotificationCenter.triggerToast("משחק הזיכרון", "ניצחון מלא! הזיכרון הריאליסטי שלך מושלם", "success");
                             }
                         } else {
-                            // ענישה ריאליסטית על טעות בבחירה
+                            // ענישה סיבולתית ריאליסטית
                             this.staminaEnergyLevel -= 15;
                             if (this.staminaEnergyLevel < 0) this.staminaEnergyLevel = 0;
                             this.updateInterfaceMetrics();
@@ -1101,7 +1524,7 @@
                             if (this.staminaEnergyLevel <= 0) {
                                 this.isMemoryActive = false;
                                 SystemEngine.AudioContextController.dispatchFrequencySound('explosion');
-                                setTimeout(() => alert("💥 תשישות אנרגיה! המשחק נגמר. לחץ אתחל כדי לנסות שוב."), 300);
+                                SystemEngine.NotificationCenter.triggerToast("משחק הזיכרון", "תשישות סיבולת - המטריצה קרסה", "danger");
                                 return;
                             }
 
@@ -1116,219 +1539,7 @@
             },
 
             // ==========================================================================
-            // ה. מנוע חלליות וקנבס וקטורי מורחב (Vector Starship Arcade 60FPS Engine)
-            // ==========================================================================
-            SpaceArcade: {
-                canvasDomElement: null,
-                renderContext2D: null,
-                playerCoordinateX: 110,
-                enemiesStateArray: [],
-                lasersStateArray: [],
-                particlesStateArray: [],
-                starsCollectionArray: [],
-                accumulatedScore: 0,
-                lastCalculatedTimestamp: 0,
-                animationFrameIdPointer: null,
-                deviceInputBuffer: { leftMoveActive: false, rightMoveActive: false },
-                
-                wireControls() {
-                    this.canvasDomElement = document.getElementById("space-arcade-canvas");
-                    if (this.canvasDomElement) this.renderContext2D = this.canvasDomElement.getContext("2d");
-
-                    this.starsCollectionArray = [];
-                    for (let i = 0; i < 25; i++) {
-                        this.starsCollectionArray.push({
-                            x: Math.random() * 240, y: Math.random() * 180,
-                            speed: Math.random() * 0.4 + 0.1, radius: Math.random() * 0.8 + 0.3
-                        });
-                    }
-
-                    window.addEventListener("keydown", event => {
-                        if (SystemEngine.Core.dataState.activeTabIdentifier === 'section-games-view') {
-                            if (event.key === "ArrowLeft" || event.key === "a" || event.key === "A") {
-                                this.deviceInputBuffer.leftMoveActive = true;
-                                event.preventDefault();
-                            }
-                            if (event.key === "ArrowRight" || event.key === "d" || event.key === "D") {
-                                this.deviceInputBuffer.rightMoveActive = true;
-                                event.preventDefault();
-                            }
-                            if (event.key === " " || event.key === "ArrowUp") {
-                                this.lasersStateArray.push({ x: this.playerCoordinateX + 10, y: this.canvasDomElement.height - 22 });
-                                SystemEngine.AudioContextController.dispatchFrequencySound('laser');
-                                event.preventDefault();
-                            }
-                        }
-                    });
-
-                    window.addEventListener("keyup", event => {
-                        if (event.key === "ArrowLeft" || event.key === "a" || event.key === "A") this.deviceInputBuffer.leftMoveActive = false;
-                        if (event.key === "ArrowRight" || event.key === "d" || event.key === "D") this.deviceInputBuffer.rightMoveActive = false;
-                    });
-
-                    const joyLeft = document.getElementById('joystick-left-trigger');
-                    const joyRight = document.getElementById('joystick-right-trigger');
-                    if (joyLeft && joyRight) {
-                        const assignTriggers = (btn, isLeft) => {
-                            const handler = (e) => {
-                                if (isLeft) this.deviceInputBuffer.leftMoveActive = true;
-                                else this.deviceInputBuffer.rightMoveActive = true;
-                                e.preventDefault();
-                                SystemEngine.AudioContextController.lazyInit();
-                            };
-                            btn.addEventListener('mousedown', handler);
-                            btn.addEventListener('touchstart', handler);
-                        };
-                        assignTriggers(joyLeft, true);
-                        assignTriggers(joyRight, false);
-                    }
-                },
-
-                awakenGame() {
-                    this.killLoop();
-                    if (!this.canvasDomElement) return;
-
-                    this.playerCoordinateX = this.canvasDomElement.width / 2 - 10;
-                    this.enemiesStateArray = [];
-                    this.lasersStateArray = [];
-                    this.particlesStateArray = [];
-                    this.accumulatedScore = 0;
-                    
-                    const scoreBoard = document.getElementById("text-space-score");
-                    if (scoreBoard) scoreBoard.innerText = this.accumulatedScore;
-
-                    this.lastCalculatedTimestamp = performance.now();
-                    this.animationFrameIdPointer = requestAnimationFrame(this.executeGameFrameLoop.bind(this));
-                },
-
-                killLoop() {
-                    if (this.animationFrameIdPointer) cancelAnimationFrame(this.animationFrameIdPointer);
-                    this.animationFrameIdPointer = null;
-                },
-
-                rebootGame() { this.awakenGame(); },
-
-                triggerCameraShakeEffect() {
-                    if (!this.canvasDomElement) return;
-                    this.canvasDomElement.classList.add('canvas-shake');
-                    SystemEngine.AudioContextController.dispatchFrequencySound('explosion');
-                    setTimeout(() => { if (this.canvasDomElement) this.canvasDomElement.classList.remove('canvas-shake'); }, 360);
-                },
-
-                instantiateExplosionParticles(originX, originY) {
-                    for (let index = 0; index < 10; index++) {
-                        const randomAngle = Math.random() * Math.PI * 2;
-                        const speed = Math.random() * 2.5 + 1.2;
-                        this.particlesStateArray.push({
-                            x: originX, y: originY,
-                            vx: Math.cos(randomAngle) * speed, vy: Math.sin(randomAngle) * speed,
-                            alpha: 1.0
-                        });
-                    }
-                },
-                
-                drawPlayerShip(x, y) {
-                    const ctx = this.renderContext2D;
-                    if (Math.random() > 0.3) {
-                        ctx.fillStyle = "#ffaa00";
-                        ctx.beginPath(); ctx.moveTo(x + 7, y + 14); ctx.lineTo(x + 10, y + 21 + Math.random() * 4); ctx.lineTo(x + 13, y + 14); ctx.fill();
-                    }
-                    ctx.fillStyle = "#00adb5";
-                    ctx.beginPath();
-                    ctx.moveTo(x + 10, y); ctx.lineTo(x + 13, y + 5); ctx.lineTo(x + 20, y + 14); ctx.lineTo(x + 14, y + 13);
-                    ctx.lineTo(x + 12, y + 15); ctx.lineTo(x + 8, y + 15); ctx.lineTo(x + 6, y + 13); ctx.lineTo(x, y + 14); ctx.lineTo(x + 7, y + 5);
-                    ctx.closePath(); ctx.fill();
-                },
-
-                drawEnemyShip(x, y) {
-                    const ctx = this.renderContext2D;
-                    if (Math.random() > 0.4) {
-                        ctx.fillStyle = "#ff4a4a";
-                        ctx.beginPath(); ctx.moveTo(x + 6, y); ctx.lineTo(x + 7.5, y - 3 - Math.random() * 2); ctx.lineTo(x + 9, y); ctx.fill();
-                    }
-                    ctx.fillStyle = "#ff4a4a";
-                    ctx.beginPath();
-                    ctx.moveTo(x + 7.5, y + 14); ctx.lineTo(x + 12, y + 7); ctx.lineTo(x + 15, y); ctx.lineTo(x + 10, y + 3);
-                    ctx.lineTo(x + 5, y + 3); ctx.lineTo(x, y); ctx.lineTo(x + 3, y + 7);
-                    ctx.closePath(); ctx.fill();
-                },
-
-                executeGameFrameLoop(currentHighResTimestamp) {
-                    if (SystemEngine.Core.dataState.activeTabIdentifier !== 'section-games-view') return;
-                    if (!this.renderContext2D) return;
-
-                    let relativeDeltaTime = (currentHighResTimestamp - this.lastCalculatedTimestamp) / 16.666;
-                    this.lastCalculatedTimestamp = currentHighResTimestamp;
-                    if (relativeDeltaTime > 4) relativeDeltaTime = 4;
-
-                    this.renderContext2D.fillStyle = "#010103";
-                    this.renderContext2D.fillRect(0, 0, this.canvasDomElement.width, this.canvasDomElement.height);
-
-                    for (let i = 0; i < this.starsCollectionArray.length; i++) {
-                        const star = this.starsCollectionArray[i];
-                        star.y += star.speed * relativeDeltaTime;
-                        if (star.y > this.canvasDomElement.height) { star.y = 0; star.x = Math.random() * this.canvasDomElement.width; }
-                        this.renderContext2D.fillStyle = "#ffffff";
-                        this.renderContext2D.fillRect(star.x, star.y, star.radius, star.radius);
-                    }
-
-                    if (this.deviceInputBuffer.leftMoveActive && this.playerCoordinateX > 0) this.playerCoordinateX -= 4.0 * relativeDeltaTime;
-                    if (this.deviceInputBuffer.rightMoveActive && this.playerCoordinateX < this.canvasDomElement.width - 20) this.playerCoordinateX += 4.0 * relativeDeltaTime;
-
-                    this.drawPlayerShip(this.playerCoordinateX, this.canvasDomElement.height - 24);
-
-                    for (let index = this.lasersStateArray.length - 1; index >= 0; index--) {
-                        this.lasersStateArray[index].y -= 4.6 * relativeDeltaTime;
-                        const currentLaser = this.lasersStateArray[index];
-                        this.renderContext2D.fillStyle = "#00f5ff";
-                        this.renderContext2D.fillRect(currentLaser.x - 1, currentLaser.y, 2, 7);
-                        if (currentLaser.y < 0) this.lasersStateArray.splice(index, 1);
-                    }
-
-                    if (Math.random() < 0.022) this.enemiesStateArray.push({ x: Math.random() * (this.canvasDomElement.width - 15), y: 0 });
-
-                    for (let index = this.enemiesStateArray.length - 1; index >= 0; index--) {
-                        this.enemiesStateArray[index].y += 1.25 * relativeDeltaTime;
-                        const currentEnemy = this.enemiesStateArray[index];
-                        this.drawEnemyShip(currentEnemy.x, currentEnemy.y);
-
-                        if (currentEnemy.y > this.canvasDomElement.height) {
-                            this.triggerCameraShakeEffect(); this.awakenGame(); return;
-                        }
-
-                        for (let laserIndex = this.lasersStateArray.length - 1; laserIndex >= 0; laserIndex--) {
-                            const laserObject = this.lasersStateArray[laserIndex];
-                            if (laserObject.x > currentEnemy.x && laserObject.x < currentEnemy.x + 15 && 
-                                laserObject.y > currentEnemy.y && laserObject.y < currentEnemy.y + 14) {
-                                
-                                this.instantiateExplosionParticles(currentEnemy.x + 7.5, currentEnemy.y + 7);
-                                this.enemiesStateArray.splice(index, 1);
-                                this.lasersStateArray.splice(laserIndex, 1);
-                                this.accumulatedScore += 10;
-                                
-                                const scoreElement = document.getElementById("text-space-score");
-                                if (scoreElement) scoreElement.innerText = this.accumulatedScore;
-                                break;
-                            }
-                        }
-                    }
-
-                    for (let index = this.particlesStateArray.length - 1; index >= 0; index--) {
-                        let particle = this.particlesStateArray[index];
-                        particle.x += particle.vx * relativeDeltaTime; particle.y += particle.vy * relativeDeltaTime;
-                        particle.alpha -= 0.038 * relativeDeltaTime;
-
-                        if (particle.alpha <= 0) { this.particlesStateArray.splice(index, 1); continue; }
-                        this.renderContext2D.fillStyle = `rgba(0, 245, 255, ${particle.alpha})`;
-                        this.renderContext2D.fillRect(particle.x, particle.y, 2, 2);
-                    }
-
-                    this.animationFrameIdPointer = requestAnimationFrame(this.executeGameFrameLoop.bind(this));
-                }
-            },
-
-            // ==========================================================================
-            // ו. מודול משחק איקס עיגול ריאליסטי - מול בינה מלאכותית (AI Engine Architecture)
+            // ו. משחק איקס עיגול ריאליסטי מול בינה מלאכותית (AI Engine Architecture)
             // ==========================================================================
             TicTacArcade: {
                 boardMemoryState: ["", "", "", "", "", "", "", "", ""],
@@ -1339,7 +1550,7 @@
                     this.isMatchActive = true;
 
                     const status = document.getElementById('text-tic-tac-status');
-                    if (status) status.innerText = "אתה X, המחשב O. בצע את המהלך הראשון שלך!";
+                    if (status) status.innerText = "אתה X, המחשב O. שחק מהלך אסטרטגי!";
 
                     const boardGridContainer = document.getElementById('container-tic-tac-board');
                     if (!boardGridContainer) return;
@@ -1358,20 +1569,18 @@
                     const blockIndex = parseInt(cellDomNode.dataset.index, 10);
                     if (this.boardMemoryState[blockIndex] !== "" || !this.isMatchActive) return;
 
-                    // מהלך השחקן (X)
                     this.boardMemoryState[blockIndex] = "X";
                     cellDomNode.innerText = "X";
                     cellDomNode.style.color = "var(--primary)";
 
                     if (this.evaluateGameEndState()) return;
 
-                    // תור המחשב (O) - בינה מלאכותית ריאליסטית
                     const status = document.getElementById('text-tic-tac-status');
-                    if (status) status.innerText = "🤖 המחשב חושב על מהלך...";
+                    if (status) status.innerText = "🤖 מנוע הבינה המלאכותית מחשב תגובה...";
                     
                     setTimeout(() => {
                         this.executeComputerAIMove();
-                    }, 500);
+                    }, 400);
                 },
 
                 executeComputerAIMove() {
@@ -1408,7 +1617,7 @@
                 },
 
                 fetchEmptyCornerOrCenterCell() {
-                    if (this.boardMemoryState[4] === "") return 4; // מרכז הלוח עדיפות עליונה
+                    if (this.boardMemoryState[4] === "") return 4;
                     const corners = [0, 2, 6, 8];
                     const emptyCorners = corners.filter(idx => this.boardMemoryState[idx] === "");
                     if (emptyCorners.length > 0) return emptyCorners[Math.floor(Math.random() * emptyCorners.length)];
@@ -1446,37 +1655,466 @@
                         if (winner === "X") {
                             status.innerText = "🏆 ניצחת את הבינה המלאכותית!";
                             SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare');
+                            SystemEngine.Core.incrementAiWins();
+                            SystemEngine.NotificationCenter.triggerToast("איקס עיגול AI", "ניצחון אסטרטגי על המחשב!", "success");
                         } else {
-                            status.innerText = "🤖 המחשב ניצח! נסה שוב.";
+                            status.innerText = "🤖 מנוע ה-AI ניצח! נסה שוב.";
                             SystemEngine.AudioContextController.dispatchFrequencySound('explosion');
+                            SystemEngine.NotificationCenter.triggerToast("איקס עיגול AI", "הבינה המלאכותית גברה עליך", "danger");
                         }
                         return true;
                     }
 
                     if (!this.boardMemoryState.includes("")) {
                         this.isMatchActive = false;
-                        status.innerText = "🤝 תיקו מורכב מול ה-AI!";
+                        status.innerText = "🤝 שוויון כוחות מוחלט מול ה-AI!";
+                        SystemEngine.NotificationCenter.triggerToast("איקס עיגול AI", "תיקו טקטי", "warning");
                         return true;
                     }
 
-                    if (status.innerText.includes("חושב")) {
-                        status.innerText = "תורך! בחר משבצת פנויה.";
+                    if (status.innerText.includes("מחשב")) {
+                        status.innerText = "תורך! בחר משבצת חופשית.";
                     }
                     return false;
+                }
+            },
+
+            // ==========================================================================
+            // ז. מודול משחק חשיבה חדש: פיצוח הצופן הסודי (Mastermind Codebreaker Engine)
+            // ==========================================================================
+            MastermindArcade: {
+                secretCodeArray: [],
+                remainingAttempts: 8,
+                isMatchActive: true,
+
+                bootNewMatch() {
+                    this.remainingAttempts = 8;
+                    this.isMatchActive = true;
+                    this.generateRandomCode();
+                    
+                    const field = document.getElementById('input-mastermind-field');
+                    if (field) { field.value = ''; field.disabled = false; }
+
+                    const tBody = document.getElementById('table-body-mastermind');
+                    if (tBody) tBody.innerHTML = '';
+
+                    this.syncInterfaceData("ממתין לקלט אנליטי");
+                },
+
+                generateRandomCode() {
+                    const pool = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+                    this.secretCodeArray = [];
+                    for (let i = 0; i < 4; i++) {
+                        const randomIndex = Math.floor(Math.random() * pool.length);
+                        this.secretCodeArray.push(pool[randomIndex]);
+                        pool.splice(randomIndex, 1);
+                    }
+                },
+
+                syncInterfaceData(statusText) {
+                    const attText = document.getElementById('text-mastermind-attempts');
+                    const statusTextDom = document.getElementById('text-mastermind-status');
+                    if (attText) attText.innerText = this.remainingAttempts;
+                    if (statusTextDom) statusTextDom.innerText = statusText;
+                },
+
+                submitCodeGuess() {
+                    if (!this.isMatchActive || this.remainingAttempts <= 0) return;
+
+                    const field = document.getElementById('input-mastermind-field');
+                    if (!field) return;
+
+                    const val = field.value.trim();
+                    if (val.length !== 4 || isNaN(parseInt(val, 10))) {
+                        alert("שגיאה: עליך להזין בדיוק 4 ספרות.");
+                        return;
+                    }
+
+                    const guessDigits = val.split('').map(char => parseInt(char, 10));
+                    
+                    // בדיקת ספרות ייחודיות בקלט
+                    const uniqueCheck = new Set(guessDigits);
+                    if (uniqueCheck.size !== 4) {
+                        alert("שגיאה: הצופן דורש ספרות שונות זו מזו (ללא חזרות).");
+                        return;
+                    }
+
+                    this.remainingAttempts--;
+                    let bullsCount = 0;
+                    let hitsCount = 0;
+
+                    for (let i = 0; i < 4; i++) {
+                        if (guessDigits[i] === this.secretCodeArray[i]) {
+                            bullsCount++;
+                        } else if (this.secretCodeArray.includes(guessDigits[i])) {
+                            hitsCount++;
+                        }
+                    }
+
+                    this.addHistoryRowToTable(val, bullsCount, hitsCount);
+                    field.value = '';
+
+                    if (bullsCount === 4) {
+                        this.isMatchActive = false;
+                        field.disabled = true;
+                        this.syncInterfaceData("🔓 הצופן פוצח בהצלחה!");
+                        SystemEngine.AudioContextController.dispatchFrequencySound('win_fanfare');
+                        SystemEngine.NotificationCenter.triggerToast("פיצוח הצופן", "קוד הגישה פוצח בהצלחה!", "success");
+                    } else if (this.remainingAttempts <= 0) {
+                        this.isMatchActive = false;
+                        field.disabled = true;
+                        this.syncInterfaceData(`🔒 כשל מערכת! הקוד היה ${this.secretCodeArray.join('')}`);
+                        SystemEngine.AudioContextController.dispatchFrequencySound('explosion');
+                        SystemEngine.NotificationCenter.triggerToast("פיצוח הצופן", "ניסיונות אזלו, המערכת ננעלה", "danger");
+                    } else {
+                        this.syncInterfaceData("סריקה הושלמה - נסה שוב");
+                    }
+                },
+
+                addHistoryRowToTable(guess, bulls, hits) {
+                    const tBody = document.getElementById('table-body-mastermind');
+                    if (!tBody) return;
+
+                    const rowNum = 8 - this.remainingAttempts;
+                    const tableRow = document.createElement('tr');
+
+                    let feedbackBadges = '';
+                    if (bulls === 0 && hits === 0) {
+                        feedbackBadges = `<span style="color:var(--text-muted);">ריק לחלוטין (0 פגיעות)</span>`;
+                    } else {
+                        for (let b = 0; b < bulls; b++) feedbackBadges += `<span class="indicator-badge badge-bull">בול 🟢</span>`;
+                        for (let h = 0; h < hits; h++) feedbackBadges += `<span class="indicator-badge badge-hit">פגיעה 🟡</span>`;
+                    }
+
+                    tableRow.innerHTML = `
+                        <td>${rowNum}</td>
+                        <td style="letter-spacing: 3px; font-weight:bold; color:var(--primary);">${guess}</td>
+                        <td>${feedbackBadges}</td>
+                    `;
+                    tBody.appendChild(tableRow);
+                    tBody.scrollTop = tBody.scrollHeight;
+                }
+            },
+
+            // ==========================================================================
+            // ח. מנוע חלליות וקנבס וקטורי מורחב (Vector Starship 60FPS Arcade Engine)
+            // ==========================================================================
+            SpaceArcade: {
+                canvasDomElement: null,
+                renderContext2D: null,
+                playerCoordinateX: 220,
+                enemiesStateArray: [],
+                lasersStateArray: [],
+                particlesStateArray: [],
+                starsCollectionArray: [],
+                accumulatedScore: 0,
+                lastCalculatedTimestamp: 0,
+                animationFrameIdPointer: null,
+                deviceInputBuffer: { leftMoveActive: false, rightMoveActive: false },
+                
+                // מערכת השדרוגים והכלכלה הפנימית של החללית
+                playerUpgrades: {
+                    shieldActive: false,
+                    weaponTier: 'basic', // basic, dual
+                    speedBonus: 0
+                },
+                
+                wireControls() {
+                    this.canvasDomElement = document.getElementById("space-arcade-canvas");
+                    if (this.canvasDomElement) this.renderContext2D = this.canvasDomElement.getContext("2d");
+
+                    this.starsCollectionArray = [];
+                    for (let i = 0; i < 40; i++) {
+                        this.starsCollectionArray.push({
+                            x: Math.random() * 480, y: Math.random() * 260,
+                            speed: Math.random() * 0.5 + 0.1, radius: Math.random() * 0.9 + 0.3
+                        });
+                    }
+
+                    window.addEventListener("keydown", event => {
+                        if (SystemEngine.Core.dataState.activeTabIdentifier === 'section-games-view') {
+                            if (event.key === "ArrowLeft" || event.key === "a" || event.key === "A") {
+                                this.deviceInputBuffer.leftMoveActive = true;
+                                event.preventDefault();
+                            }
+                            if (event.key === "ArrowRight" || event.key === "d" || event.key === "D") {
+                                this.deviceInputBuffer.rightMoveActive = true;
+                                event.preventDefault();
+                            }
+                            if (event.key === " " || event.key === "ArrowUp") {
+                                this.triggerLaserFire();
+                                event.preventDefault();
+                            }
+                        }
+                    });
+
+                    window.addEventListener("keyup", event => {
+                        if (event.key === "ArrowLeft" || event.key === "a" || event.key === "A") this.deviceInputBuffer.leftMoveActive = false;
+                        if (event.key === "ArrowRight" || event.key === "d" || event.key === "D") this.deviceInputBuffer.rightMoveActive = false;
+                    });
+
+                    const joyLeft = document.getElementById('joystick-left-trigger');
+                    const joyRight = document.getElementById('joystick-right-trigger');
+                    if (joyLeft && joyRight) {
+                        const assignTriggers = (btn, isLeft) => {
+                            const handler = (e) => {
+                                if (isLeft) this.deviceInputBuffer.leftMoveActive = true;
+                                else this.deviceInputBuffer.rightMoveActive = true;
+                                e.preventDefault();
+                                SystemEngine.AudioContextController.lazyInit();
+                            };
+                            btn.addEventListener('mousedown', handler);
+                            btn.addEventListener('touchstart', handler);
+                        };
+                        assignTriggers(joyLeft, true);
+                        assignTriggers(joyRight, false);
+                    }
+                },
+
+                triggerLaserFire() {
+                    if (this.playerUpgrades.weaponTier === 'dual') {
+                        this.lasersStateArray.push({ x: this.playerCoordinateX + 4, y: this.canvasDomElement.height - 24 });
+                        this.lasersStateArray.push({ x: this.playerCoordinateX + 16, y: this.canvasDomElement.height - 24 });
+                    } else {
+                        this.lasersStateArray.push({ x: this.playerCoordinateX + 10, y: this.canvasDomElement.height - 24 });
+                    }
+                    SystemEngine.AudioContextController.dispatchFrequencySound('laser');
+                },
+
+                purchaseItem(upgradeType) {
+                    if (upgradeType === 'shield' && !this.playerUpgrades.shieldActive && SystemEngine.Core.dataState.accumulatedCrystals >= 30) {
+                        SystemEngine.Core.incrementCrystals(-30);
+                        this.playerUpgrades.shieldActive = true;
+                        SystemEngine.NotificationCenter.triggerToast("חנות שדרוגים", "מגן אנרגיה הופעל בהצלחה! 🛡️", "success");
+                    } 
+                    else if (upgradeType === 'weapon' && this.playerUpgrades.weaponTier === 'basic' && SystemEngine.Core.dataState.accumulatedCrystals >= 60) {
+                        SystemEngine.Core.incrementCrystals(-60);
+                        this.playerUpgrades.weaponTier = 'dual';
+                        SystemEngine.NotificationCenter.triggerToast("חנות שדרוגים", "מערכת ירי כפול הותקנה! 🔫", "success");
+                    }
+                    else if (upgradeType === 'speed' && this.playerUpgrades.speedBonus === 0 && SystemEngine.Core.dataState.accumulatedCrystals >= 40) {
+                        SystemEngine.Core.incrementCrystals(-40);
+                        this.playerUpgrades.speedBonus = 1.8;
+                        SystemEngine.NotificationCenter.triggerToast("חנות שדרוגים", "מהירות המנוע שודרגה ב-40%! ⚡", "success");
+                    }
+                    this.syncUpgradeStatusDisplay();
+                    SystemEngine.Core.syncDashboardMetrics();
+                },
+
+                syncUpgradeStatusDisplay() {
+                    const elShield = document.getElementById('text-space-shield-status');
+                    const elWeapon = document.getElementById('text-space-weapon-status');
+                    
+                    if (elShield) {
+                        elShield.innerText = this.playerUpgrades.shieldActive ? "פעיל באפר 🛡️" : "כבוי";
+                        elShield.style.color = this.playerUpgrades.shieldActive ? "var(--success)" : "var(--danger)";
+                    }
+                    if (elWeapon) {
+                        elWeapon.innerText = this.playerUpgrades.weaponTier === 'dual' ? "ירי כפול מפוצל 🔥" : "לייזר בסיסי";
+                    }
+                },
+
+                awakenGame() {
+                    this.killLoop();
+                    if (!this.canvasDomElement) return;
+
+                    this.playerCoordinateX = this.canvasDomElement.width / 2 - 10;
+                    this.enemiesStateArray = [];
+                    this.lasersStateArray = [];
+                    this.particlesStateArray = [];
+                    this.accumulatedScore = 0;
+                    
+                    // איפוס שדרוגים זמניים בכל משחק חדש לשמירת הריאליסטיות
+                    this.playerUpgrades.shieldActive = false;
+                    this.playerUpgrades.weaponTier = 'basic';
+                    this.playerUpgrades.speedBonus = 0;
+
+                    this.syncUpgradeStatusDisplay();
+
+                    const scoreBoard = document.getElementById("text-space-score");
+                    if (scoreBoard) scoreBoard.innerText = this.accumulatedScore;
+
+                    this.lastCalculatedTimestamp = performance.now();
+                    this.animationFrameIdPointer = requestAnimationFrame(this.executeGameFrameLoop.bind(this));
+                },
+
+                killLoop() {
+                    if (this.animationFrameIdPointer) cancelAnimationFrame(this.animationFrameIdPointer);
+                    this.animationFrameIdPointer = null;
+                },
+
+                rebootGame() { this.awakenGame(); SystemEngine.Core.syncDashboardMetrics(); },
+
+                triggerCameraShakeEffect() {
+                    if (!this.canvasDomElement) return;
+                    this.canvasDomElement.classList.add('canvas-shake');
+                    SystemEngine.AudioContextController.dispatchFrequencySound('explosion');
+                    setTimeout(() => { if (this.canvasDomElement) this.canvasDomElement.classList.remove('canvas-shake'); }, 380);
+                },
+
+                instantiateExplosionParticles(originX, originY) {
+                    for (let index = 0; index < 15; index++) {
+                        const randomAngle = Math.random() * Math.PI * 2;
+                        const speed = Math.random() * 3.5 + 1.5;
+                        this.particlesStateArray.push({
+                            x: originX, y: originY,
+                            vx: Math.cos(randomAngle) * speed, vy: Math.sin(randomAngle) * speed,
+                            alpha: 1.0
+                        });
+                    }
+                },
+                
+                drawPlayerShip(x, y) {
+                    const ctx = this.renderContext2D;
+                    if (Math.random() > 0.3) {
+                        ctx.fillStyle = "#ffaa00";
+                        ctx.beginPath(); ctx.moveTo(x + 7, y + 16); ctx.lineTo(x + 10, y + 24 + Math.random() * 5); ctx.lineTo(x + 13, y + 16); ctx.fill();
+                    }
+                    
+                    if (this.playerUpgrades.shieldActive) {
+                        ctx.strokeStyle = "rgba(0, 245, 255, 0.6)";
+                        ctx.lineWidth = 2;
+                        ctx.beginPath(); ctx.arc(x + 10, y + 10, 18, 0, Math.PI * 2); ctx.stroke();
+                    }
+
+                    ctx.fillStyle = "#00adb5";
+                    ctx.beginPath();
+                    ctx.moveTo(x + 10, y); ctx.lineTo(x + 14, y + 6); ctx.lineTo(x + 22, y + 16); ctx.lineTo(x + 15, y + 15);
+                    ctx.lineTo(x + 12, y + 18); ctx.lineTo(x + 8, y + 18); ctx.lineTo(x + 5, y + 15); ctx.lineTo(x, y + 16); ctx.lineTo(x + 6, y + 6);
+                    ctx.closePath(); ctx.fill();
+                },
+
+                drawEnemyShip(x, y) {
+                    const ctx = this.renderContext2D;
+                    if (Math.random() > 0.4) {
+                        ctx.fillStyle = "#ff4a4a";
+                        ctx.beginPath(); ctx.moveTo(x + 6, y); ctx.lineTo(x + 8, y - 4 - Math.random() * 3); ctx.lineTo(x + 10, y); ctx.fill();
+                    }
+                    ctx.fillStyle = "#ff4a4a";
+                    ctx.beginPath();
+                    ctx.moveTo(x + 8, y + 16); ctx.lineTo(x + 14, y + 8); ctx.lineTo(x + 18, y); ctx.lineTo(x + 11, y + 4);
+                    ctx.lineTo(x + 5, y + 4); ctx.lineTo(x, y); ctx.lineTo(x + 2, y + 8);
+                    ctx.closePath(); ctx.fill();
+                },
+
+                executeGameFrameLoop(currentHighResTimestamp) {
+                    if (SystemEngine.Core.dataState.activeTabIdentifier !== 'section-games-view') return;
+                    if (!this.renderContext2D) return;
+
+                    let relativeDeltaTime = (currentHighResTimestamp - this.lastCalculatedTimestamp) / 16.666;
+                    this.lastCalculatedTimestamp = currentHighResTimestamp;
+                    if (relativeDeltaTime > 4) relativeDeltaTime = 4;
+
+                    // ניקוי מסך
+                    this.renderContext2D.fillStyle = "#020205";
+                    this.renderContext2D.fillRect(0, 0, this.canvasDomElement.width, this.canvasDomElement.height);
+
+                    // ציור כוכבים ברקע
+                    for (let i = 0; i < this.starsCollectionArray.length; i++) {
+                        const star = this.starsCollectionArray[i];
+                        star.y += star.speed * relativeDeltaTime;
+                        if (star.y > this.canvasDomElement.height) { star.y = 0; star.x = Math.random() * this.canvasDomElement.width; }
+                        this.renderContext2D.fillStyle = "#ffffff";
+                        this.renderContext2D.fillRect(star.x, star.y, star.radius, star.radius);
+                    }
+
+                    // תנועת השחקן כולל בונוס מהירות מותקן
+                    const baseSpeed = 4.5 + this.playerUpgrades.speedBonus;
+                    if (this.deviceInputBuffer.leftMoveActive && this.playerCoordinateX > 0) this.playerCoordinateX -= baseSpeed * relativeDeltaTime;
+                    if (this.deviceInputBuffer.rightMoveActive && this.playerCoordinateX < this.canvasDomElement.width - 22) this.playerCoordinateX += baseSpeed * relativeDeltaTime;
+
+                    this.drawPlayerShip(this.playerCoordinateX, this.canvasDomElement.height - 28);
+
+                    // עדכון לייזרים
+                    for (let index = this.lasersStateArray.length - 1; index >= 0; index--) {
+                        this.lasersStateArray[index].y -= 5.0 * relativeDeltaTime;
+                        const currentLaser = this.lasersStateArray[index];
+                        this.renderContext2D.fillStyle = "#00f5ff";
+                        this.renderContext2D.fillRect(currentLaser.x - 1, currentLaser.y, 2.5, 8);
+                        if (currentLaser.y < 0) this.lasersStateArray.splice(index, 1);
+                    }
+
+                    // גלגול ויצירת אויבים חדשים
+                    if (Math.random() < 0.026) {
+                        this.enemiesStateArray.push({ x: Math.random() * (this.canvasDomElement.width - 18), y: 0 });
+                    }
+
+                    // ניהול התנגשויות ופיזיקה של האויבים
+                    for (let index = this.enemiesStateArray.length - 1; index >= 0; index--) {
+                        this.enemiesStateArray[index].y += 1.4 * relativeDeltaTime;
+                        const currentEnemy = this.enemiesStateArray[index];
+                        this.drawEnemyShip(currentEnemy.x, currentEnemy.y);
+
+                        // הגעה לקצה המסך התחתון פירושה פסילה
+                        if (currentEnemy.y > this.canvasDomElement.height) {
+                            if (this.playerUpgrades.shieldActive) {
+                                this.playerUpgrades.shieldActive = false;
+                                this.enemiesStateArray.splice(index, 1);
+                                this.triggerCameraShakeEffect();
+                                this.syncUpgradeStatusDisplay();
+                                SystemEngine.NotificationCenter.triggerToast("מגן נשחק", "המגן ספג את הפיצוץ והציל אותך!", "warning");
+                                continue;
+                            } else {
+                                this.triggerCameraShakeEffect();
+                                SystemEngine.Core.updateHighScore(this.accumulatedScore);
+                                SystemEngine.NotificationCenter.triggerToast("משחק נגמר", `החללית הושמדה. צברת ${this.accumulatedScore} נקודות.`, "danger");
+                                this.awakenGame();
+                                return;
+                            }
+                        }
+
+                        // התנגשות עם לייזרים של השחקן
+                        for (let laserIndex = this.lasersStateArray.length - 1; laserIndex >= 0; laserIndex--) {
+                            const laserObject = this.lasersStateArray[laserIndex];
+                            if (laserObject.x > currentEnemy.x && laserObject.x < currentEnemy.x + 18 && 
+                                laserObject.y > currentEnemy.y && laserObject.y < currentEnemy.y + 16) {
+                                
+                                this.instantiateExplosionParticles(currentEnemy.x + 9, currentEnemy.y + 8);
+                                this.enemiesStateArray.splice(index, 1);
+                                this.lasersStateArray.splice(laserIndex, 1);
+                                
+                                this.accumulatedScore += 10;
+                                const scoreElement = document.getElementById("text-space-score");
+                                if (scoreElement) scoreElement.innerText = this.accumulatedScore;
+                                
+                                // הזנת קריסטל לכלכלה הפנימית בכל הריסה חמישית
+                                if (Math.random() > 0.75) {
+                                    SystemEngine.Core.incrementCrystals(5);
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    // עדכון חלקיקי פיצוץ
+                    for (let index = this.particlesStateArray.length - 1; index >= 0; index--) {
+                        let particle = this.particlesStateArray[index];
+                        particle.x += particle.vx * relativeDeltaTime; particle.y += particle.vy * relativeDeltaTime;
+                        particle.alpha -= 0.04 * relativeDeltaTime;
+
+                        if (particle.alpha <= 0) { this.particlesStateArray.splice(index, 1); continue; }
+                        this.renderContext2D.fillStyle = `rgba(0, 245, 255, ${particle.alpha})`;
+                        this.renderContext2D.fillRect(particle.x, particle.y, 2, 2);
+                    }
+
+                    this.animationFrameIdPointer = requestAnimationFrame(this.executeGameFrameLoop.bind(this));
                 }
             }
         };
 
-        // ==========================================
-        // 7. נקודת כניסה ראשית (Main Application Entry Point)
-        // ==========================================
+        // ==========================================================================
+        // 9. נקודת כניסה ראשית ואתחול מערכת (Main System Entry Point DOM)
+        // ==========================================================================
         document.addEventListener("DOMContentLoaded", () => {
             SystemEngine.Core.bootstrap();
             SystemEngine.MemoryArcade.rebuildMatrix();
             SystemEngine.GuessArcade.resetGameSystem();
             SystemEngine.TicTacArcade.flushBoard();
+            SystemEngine.MastermindArcade.bootNewMatch();
             SystemEngine.SpaceArcade.wireControls();
-            SystemEngine.Core.switchTab('section-day-view', 'trigger-day-tab');
+            
+            // פתיחת טאב ברירת המחדל
+            SystemEngine.Core.switchTab('section-dashboard-view', 'trigger-dashboard-tab');
         });
     </script>
 </body>
