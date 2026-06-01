@@ -549,7 +549,6 @@
 </head>
 <body>
 
-    <!-- Main System Header -->
     <header class="os-mainframe-header">
         <div class="os-header-inner">
             <div class="os-brand-block">
@@ -562,7 +561,6 @@
         </div>
     </header>
 
-    <!-- Navigation Hub -->
     <nav class="os-navigation-bar">
         <div class="os-nav-container">
             <ul class="os-nav-tabs-list">
@@ -574,10 +572,8 @@
         </div>
     </nav>
 
-    <!-- Main Work Environment Area -->
     <main class="os-workspace">
 
-        <!-- VIEW 1: MATRIX MONITOR CORE -->
         <section id="os-view-home" class="os-viewscreen state-visible">
             <div class="os-screen-title-ribbon">
                 <h2>מבט כולל על המערכת</h2>
@@ -602,7 +598,6 @@
             </div>
         </section>
 
-        <!-- VIEW 2: WEEKLY SCHEDULE MODULE -->
         <section id="os-view-schedule" class="os-viewscreen">
             <div class="os-screen-title-ribbon">
                 <h2>מערכת שעות שבועית מורחבת</h2>
@@ -636,7 +631,6 @@
             </div>
         </section>
 
-        <!-- VIEW 3: TASK CRITICAL MANAGEMENT -->
         <section id="os-view-todo" class="os-viewscreen">
             <div class="os-screen-title-ribbon">
                 <h2>מערכת ניהול משימות יומיות</h2>
@@ -658,7 +652,6 @@
             <div id="todo-injected-list-wrapper"></div>
         </section>
 
-        <!-- VIEW 4: ARCADE SYSTEM MESH -->
         <section id="os-view-arcade" class="os-viewscreen">
             <div class="os-screen-title-ribbon">
                 <h2>מתחם משחקים ארקייד - פריסה סימטרית רחבה</h2>
@@ -673,7 +666,6 @@
 
             <div class="arcade-master-viewport">
                 
-                <!-- GAME 1: SPACE SHOOTER -->
                 <div id="arcade-submodule-space" class="arcade-game-module-view state-active">
                     <div class="arcade-hud-telemetry">
                         <div>מערך חיים: <span id="hud-space-hearts" style="color:#ef4444;">❤️❤️❤️</span></div>
@@ -682,7 +674,6 @@
                     <canvas id="os-canvas-space" class="arcade-canvas-graphics" width="700" height="480"></canvas>
                 </div>
 
-                <!-- GAME 2: COIN CATCHER -->
                 <div id="arcade-submodule-coin" class="arcade-game-module-view">
                     <div class="arcade-hud-telemetry">
                         <div>זמן נותר: <span id="hud-coin-timer" style="color:#f59e0b;">30</span> שניות</div>
@@ -691,7 +682,6 @@
                     <canvas id="os-canvas-coin" class="arcade-canvas-graphics" width="700" height="480"></canvas>
                 </div>
 
-                <!-- GAME 3: SPEED MATH CHALLENGE -->
                 <div id="arcade-submodule-math" class="arcade-game-module-view">
                     <div class="arcade-hud-telemetry">
                         <div>רצף תשובות נוכחי: <span id="hud-math-streak" style="color:#10b981;">0</span></div>
@@ -702,7 +692,6 @@
                     </div>
                 </div>
 
-                <!-- GAME 4: INTERACTIVE TIC TAC TOE -->
                 <div id="arcade-submodule-ttt" class="arcade-game-module-view">
                     <div class="arcade-hud-telemetry">
                         <div id="hud-ttt-status-label" style="color:white;">תורך לשחק (X)</div>
@@ -720,9 +709,6 @@
         <p>© 2026 SCHOOL OS v40.0 - Enterprise Ultra Edition. קוד ליבה מאובטח ופריסה רחבה נקייה.</p>
     </footer>
 
-    <!-- ==========================================================================
-       8. JAVASCRIPT SYSTEM ENGINE MODULES
-       ========================================================================== */ -->
     <script>
         // עדכון שעון
         setInterval(() => {
@@ -768,17 +754,22 @@
         function refreshSystemAnalytics() {
             const schedData = JSON.parse(localStorage.getItem('os_v40_sched')) || [];
             const todoData = JSON.parse(localStorage.getItem('os_v40_todo')) || [];
-            document.getElementById('meta-metric-schedule-count').innerText = schedData.length;
-            document.getElementById('meta-metric-todo-count').innerText = todoData.filter(item => !item.done).length;
-            document.getElementById('meta-metric-space-high').innerText = localStorage.getItem('os_v40_space_hi') || '0';
+            
+            const schedEl = document.getElementById('meta-metric-schedule-count');
+            const todoEl = document.getElementById('meta-metric-todo-count');
+            const spaceEl = document.getElementById('meta-metric-space-high');
+            
+            if(schedEl) schedEl.innerText = schedData.length;
+            if(todoEl) todoEl.innerText = todoData.filter(item => !item.done).length;
+            if(spaceEl) spaceEl.innerText = localStorage.getItem('os_v40_space_hi') || '0';
         }
-        refreshSystemAnalytics();
 
         // מודול ניהול לוח שעות שבועי
         const systemScheduleManager = {
             records: JSON.parse(localStorage.getItem('os_v40_sched')) || [],
             render: function() {
                 const tbody = document.getElementById('table-injected-schedule-rows');
+                if(!tbody) return;
                 tbody.innerHTML = '';
                 this.records.sort((x, y) => x.time.localeCompare(y.time));
                 
@@ -813,13 +804,13 @@
                 this.render();
             }
         };
-        systemScheduleManager.render();
 
         // מודול ניהול משימות קריטיות
         const systemTodoManager = {
             tasks: JSON.parse(localStorage.getItem('os_v40_todo')) || [],
             render: function() {
                 const targetWrapper = document.getElementById('todo-injected-list-wrapper');
+                if(!targetWrapper) return;
                 targetWrapper.innerHTML = '';
                 
                 this.tasks.forEach((task, idx) => {
@@ -837,7 +828,8 @@
                 
                 const doneCount = this.tasks.filter(t => t.done).length;
                 const totalPercent = this.tasks.length ? Math.round((doneCount / this.tasks.length) * 100) : 0;
-                document.getElementById('todo-progress-fluid-fill').style.width = `${totalPercent}%`;
+                const fillEl = document.getElementById('todo-progress-fluid-fill');
+                if(fillEl) fillEl.style.width = `${totalPercent}%`;
             },
             add: function() {
                 const field = document.getElementById('form-todo-caption');
@@ -859,12 +851,11 @@
                 this.render();
             }
         };
-        systemTodoManager.render();
 
         // משחק 1: סימולטור חלליות
         const spaceShooterEngine = (function() {
             const canvas = document.getElementById('os-canvas-space');
-            let ctx = canvas.getContext('2d');
+            let ctx = canvas ? canvas.getContext('2d') : null;
             let frameLoopId = null, score = 0, hearts = 3, globalFrameCount = 0;
             let playerShip = { x: 325, y: 400, w: 45, h: 35 };
             let laserArsenal = [], enemyFleet = [], cosmosStars = [], activeKeys = {};
@@ -965,16 +956,20 @@
                 frameLoopId = requestAnimationFrame(executeCoreLoop);
             }
 
-            // עדכון ה-HUD בלבד (ללא הודעות חיצוניות)
             function refreshHud() {
-                document.getElementById('hud-space-score').innerText = score;
-                let glyphs = '';
-                for(let i=0; i<hearts; i++) glyphs += '❤️';
-                document.getElementById('hud-space-hearts').innerText = glyphs || 'TERMINATED';
+                const scoreEl = document.getElementById('hud-space-score');
+                const heartsEl = document.getElementById('hud-space-hearts');
+                if(scoreEl) scoreEl.innerText = score;
+                if(heartsEl) {
+                    let glyphs = '';
+                    for(let i=0; i<hearts; i++) glyphs += '❤️';
+                    heartsEl.innerText = glyphs || 'TERMINATED';
+                }
             }
 
             return {
                 start: function() {
+                    if(!canvas) return;
                     window.addEventListener('keydown', trapKeyDown);
                     window.addEventListener('keyup', trapKeyUp);
                     score = 0; hearts = 3; enemyFleet = []; laserArsenal = [];
@@ -994,7 +989,7 @@
         // משחק 2: תפוס את המטבע
         const coinCollectorEngine = (function() {
             const canvas = document.getElementById('os-canvas-coin');
-            let ctx = canvas.getContext('2d');
+            let ctx = canvas ? canvas.getContext('2d') : null;
             let frameId = null, score = 0, timeRemaining = 30, internalClock = 0;
             let operativePlayer = { x: 330, y: 225, w: 32, h: 32 }, dynamicCoin = { x: 100, y: 100, radius: 11 };
             let keyRegistry = {};
@@ -1006,6 +1001,7 @@
             function trackUp(e) { keyRegistry[e.code] = false; }
 
             function dropCoin() {
+                if(!canvas) return;
                 dynamicCoin.x = 50 + Math.random() * (canvas.width - 100);
                 dynamicCoin.y = 50 + Math.random() * (canvas.height - 100);
             }
@@ -1015,13 +1011,16 @@
                 
                 if(internalClock % 60 === 0) {
                     timeRemaining--;
-                    document.getElementById('hud-coin-timer').innerText = timeRemaining;
+                    const timerEl = document.getElementById('hud-coin-timer');
+                    if(timerEl) timerEl.innerText = timeRemaining;
                 }
 
                 if(timeRemaining <= 0) {
                     score = 0; timeRemaining = 30;
-                    document.getElementById('hud-coin-score').innerText = score;
-                    document.getElementById('hud-coin-timer').innerText = timeRemaining;
+                    const scoreEl = document.getElementById('hud-coin-score');
+                    const timerEl = document.getElementById('hud-coin-timer');
+                    if(scoreEl) scoreEl.innerText = score;
+                    if(timerEl) timerEl.innerText = timeRemaining;
                     dropCoin();
                 }
 
@@ -1036,7 +1035,8 @@
 
                 if(distance < (operativePlayer.w / 2) + dynamicCoin.radius) {
                     score++;
-                    document.getElementById('hud-coin-score').innerText = score;
+                    const scoreEl = document.getElementById('hud-coin-score');
+                    if(scoreEl) scoreEl.innerText = score;
                     dropCoin();
                 }
 
@@ -1065,11 +1065,14 @@
 
             return {
                 start: function() {
+                    if(!canvas) return;
                     window.addEventListener('keydown', trackDown);
                     window.addEventListener('keyup', trackUp);
                     score = 0; timeRemaining = 30; internalClock = 0;
-                    document.getElementById('hud-coin-score').innerText = score;
-                    document.getElementById('hud-coin-timer').innerText = timeRemaining;
+                    const scoreEl = document.getElementById('hud-coin-score');
+                    const timerEl = document.getElementById('hud-coin-timer');
+                    if(scoreEl) scoreEl.innerText = score;
+                    if(timerEl) timerEl.innerText = timeRemaining;
                     dropCoin();
                     engineCycle();
                 },
@@ -1087,7 +1090,8 @@
             currentStreak: 0, targetCalculatedValue: 0,
             start: function() {
                 this.currentStreak = 0;
-                document.getElementById('hud-math-streak').innerText = 0;
+                const streakEl = document.getElementById('hud-math-streak');
+                if(streakEl) streakEl.innerText = 0;
                 this.deployNewProblem();
             },
             stop: function() {},
@@ -1109,7 +1113,8 @@
                     this.targetCalculatedValue = a * b; sign = '×';
                 }
 
-                document.getElementById('quiz-string-box-target').innerText = `${a} ${sign} ${b} = ?`;
+                const stringBox = document.getElementById('quiz-string-box-target');
+                if(stringBox) stringBox.innerText = `${a} ${sign} ${b} = ?`;
                 
                 let matrixPool = [this.targetCalculatedValue];
                 while(matrixPool.length < 4) {
@@ -1120,6 +1125,7 @@
                 matrixPool.sort(() => Math.random() - 0.5);
 
                 const injectorTarget = document.getElementById('quiz-injected-buttons-target');
+                if(!injectorTarget) return;
                 injectorTarget.innerHTML = '';
                 
                 matrixPool.forEach(opt => {
@@ -1133,11 +1139,13 @@
             verifyUserResponse: function(selectedValue) {
                 if(selectedValue === this.targetCalculatedValue) {
                     this.currentStreak++;
-                    document.getElementById('hud-math-streak').innerText = this.currentStreak;
+                    const streakEl = document.getElementById('hud-math-streak');
+                    if(streakEl) streakEl.innerText = this.currentStreak;
                     this.deployNewProblem();
                 } else {
                     this.currentStreak = 0;
-                    document.getElementById('hud-math-streak').innerText = 0;
+                    const streakEl = document.getElementById('hud-math-streak');
+                    if(streakEl) streakEl.innerText = 0;
                     this.deployNewProblem();
                 }
             }
@@ -1151,11 +1159,13 @@
             reset: function() {
                 this.meshMemory = ["","","","","","","","",""];
                 this.stateLock = true;
-                document.getElementById('hud-ttt-status-label').innerText = "תורך לשחק (X)";
+                const statusEl = document.getElementById('hud-ttt-status-label');
+                if(statusEl) statusEl.innerText = "תורך לשחק (X)";
                 this.refreshGrid();
             },
             refreshGrid: function() {
                 const hostMesh = document.getElementById('ttt-injected-mesh-target');
+                if(!hostMesh) return;
                 hostMesh.innerHTML = '';
                 
                 this.meshMemory.forEach((value, idx) => {
@@ -1174,7 +1184,8 @@
                         
                         if(!this.evaluateMatrixWinner()) {
                             this.stateLock = false;
-                            document.getElementById('hud-ttt-status-label').innerText = "חישוב מהלך AI...";
+                            const statusEl = document.getElementById('hud-ttt-status-label');
+                            if(statusEl) statusEl.innerText = "חישוב מהלך AI...";
                             setTimeout(() => { this.executeAiMove(); }, 400);
                         }
                     };
@@ -1194,7 +1205,8 @@
                 this.stateLock = true;
                 this.evaluateMatrixWinner();
                 if(this.stateLock) {
-                    document.getElementById('hud-ttt-status-label').innerText = "תורך לשחק (X)";
+                    const statusEl = document.getElementById('hud-ttt-status-label');
+                    if(statusEl) statusEl.innerText = "תורך לשחק (X)";
                 }
             },
             evaluateMatrixWinner: function() {
@@ -1208,19 +1220,28 @@
                     const [a, b, c] = vec;
                     if(this.meshMemory[a] !== "" && this.meshMemory[a] === this.meshMemory[b] && this.meshMemory[a] === this.meshMemory[c]) {
                         const winSign = this.meshMemory[a];
-                        document.getElementById('hud-ttt-status-label').innerText = `סבב ננעל! ניצחון ל: ${winSign}`;
+                        const statusEl = document.getElementById('hud-ttt-status-label');
+                        if(statusEl) statusEl.innerText = `סבב ננעל! ניצחון ל: ${winSign}`;
                         this.stateLock = false;
                         return true;
                     }
                 }
                 
                 if(!this.meshMemory.includes("")) {
-                    document.getElementById('hud-ttt-status-label').innerText = "שוויון נקודות אבסולוטי!";
+                    const statusEl = document.getElementById('hud-ttt-status-label');
+                    if(statusEl) statusEl.innerText = "שוויון נקודות אבסולוטי!";
                     this.stateLock = false;
                     return true;
                 }
                 return false;
             }
+        };
+
+        // הרצה ראשונית בטוחה רק לאחר טעינת הדף לחלוטין
+        window.onload = function() {
+            refreshSystemAnalytics();
+            systemScheduleManager.render();
+            systemTodoManager.render();
         };
     </script>
 </body>
