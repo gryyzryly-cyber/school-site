@@ -946,7 +946,8 @@
             // ב. מודול מרכז התראות פנימי (Notification Center Engine)
             // ==========================================================================
             NotificationCenter: {
-                triggerToast(title, text, variant = 'info') {
+                triggerToast(title, text, variant = 'info') { 
+                    return;
                     const container = document.getElementById('os-notification-container');
                     if (!container) return;
 
