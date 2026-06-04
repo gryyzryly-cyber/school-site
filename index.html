@@ -2379,125 +2379,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 </script>
-<div id="os-home-widgets-container" style="display: flex; flex-direction: column; gap: 20px; max-width: 500px; margin: 20px auto; padding: 0 15px; box-sizing: border-box; direction: rtl;">
-    
-    <div style="background: var(--bg-card); border: 1px solid var(--border-dark); padding: 20px; border-radius: 12px; text-align: right; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: var(--transition-smooth);">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px; border-bottom: 1px solid var(--border-dark); padding-bottom: 10px;">
-            <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-main); font-weight: 600;">🕰️ מרכז זמן עולמי</h3>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-input); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-dark);">
-                <span style="font-size: 0.95rem; font-weight: 500; color: var(--text-main);">🇮🇱 תל אביב</span>
-                <span id="clock-israel" style="font-family: monospace; font-size: 1.15rem; font-weight: bold; color: var(--primary); direction: ltr;">00:00:00</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-input); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-dark);">
-                <span style="font-size: 0.95rem; font-weight: 500; color: var(--text-main);">🇺🇸 ניו יורק</span>
-                <span id="clock-newyork" style="font-family: monospace; font-size: 1.15rem; font-weight: bold; color: #00bcff; direction: ltr;">00:00:00</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-input); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-dark);">
-                <span style="font-size: 0.95rem; font-weight: 500; color: var(--text-main);">🇯🇵 טוקיו</span>
-                <span id="clock-tokyo" style="font-family: monospace; font-size: 1.15rem; font-weight: bold; color: var(--danger); direction: ltr;">00:00:00</span>
-            </div>
-        </div>
+<div id="world-clock-widget" style="background:#0a0a0c; border:1px solid #1a1a24; padding:20px; border-radius:12px; max-width:400px; margin:20px auto; font-family:sans-serif; color:#ffffff; direction:rtl; text-align:right; box-shadow:0 4px 15px rgba(0,0,0,0.5);">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:15px; border-bottom:1px solid #1a1a24; padding-bottom:10px;">
+        <h3 style="margin:0; font-size:1.2rem; color:#ffffff;">🕰️ מרכז זמן עולמי</h3>
     </div>
 
-    <div style="background: var(--bg-card); border: 1px solid var(--border-dark); padding: 20px; border-radius: 12px; text-align: right; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: var(--transition-smooth);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border-dark); padding-bottom: 10px;">
-            <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-main); font-weight: 600;">📊 מעקב התקדמות שבועי</h3>
-            <span id="tracker-percentage" style="font-size: 1.1rem; font-weight: bold; color: var(--success);">0%</span>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#12121a; padding:10px 15px; border-radius:8px; border:1px solid #1a1a24;">
+            <span style="font-size:1rem; font-weight:bold; color:#ffffff;">🇮🇱 תל אביב</span>
+            <span id="clock-israel" style="font-family:monospace; font-size:1.2rem; font-weight:bold; color:#2ccf56; direction:ltr;">00:00:00</span>
         </div>
-        <div style="width: 100%; background: var(--bg-input); height: 10px; border-radius: 6px; overflow: hidden; margin-bottom: 15px; border: 1px solid var(--border-dark);">
-            <div id="tracker-progress-bar" style="width: 0%; height: 100%; background: var(--success); transition: width 0.4s ease;"></div>
-        </div>
-        <div id="tracker-tasks-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
-    </div>
 
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#12121a; padding:10px 15px; border-radius:8px; border:1px solid #1a1a24;">
+            <span style="font-size:1rem; font-weight:bold; color:#ffffff;">🇺🇸 ניו יורק</span>
+            <span id="clock-newyork" style="font-family:monospace; font-size:1.2rem; font-weight:bold; color:#00bcff; direction:ltr;">00:00:00</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#12121a; padding:10px 15px; border-radius:8px; border:1px solid #1a1a24;">
+            <span style="font-size:1rem; font-weight:bold; color:#ffffff;">🇯🇵 טוקיו</span>
+            <span id="clock-tokyo" style="font-family:monospace; font-size:1.2rem; font-weight:bold; color:#ff3366; direction:ltr;">00:00:00</span>
+        </div>
+    </div>
 </div>
 
 <script>
-// --- לוגיקה של השעון העולמי ---
 function updateWorldClocks() {
     const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+
+    // זמן ישראל
+    const timeIsrael = new Date().toLocaleTimeString('he-IL', { ...options, timeZone: 'Asia/Jerusalem' });
     const elIsrael = document.getElementById('clock-israel');
+    if (elIsrael) elIsrael.innerText = timeIsrael;
+
+    // זמן ניו יורק
+    const timeNewYork = new Date().toLocaleTimeString('he-IL', { ...options, timeZone: 'America/New_York' });
     const elNewYork = document.getElementById('clock-newyork');
+    if (elNewYork) elNewYork.innerText = timeNewYork;
+
+    // זמן טוקיו
+    const timeTokyo = new Date().toLocaleTimeString('he-IL', { ...options, timeZone: 'Asia/Tokyo' });
     const elTokyo = document.getElementById('clock-tokyo');
-
-    if (elIsrael) elIsrael.innerText = new Date().toLocaleTimeString('he-IL', { ...options, timeZone: 'Asia/Jerusalem' });
-    if (elNewYork) elNewYork.innerText = new Date().toLocaleTimeString('he-IL', { ...options, timeZone: 'America/New_York' });
-    if (elTokyo) elTokyo.innerText = new Date().toLocaleTimeString('he-IL', { ...options, timeZone: 'Asia/Tokyo' });
+    if (elTokyo) elTokyo.innerText = timeTokyo;
 }
 
-// --- לוגיקה של מד ההתקדמות השבועי ---
-const DEFAULT_TASKS = [
-    { id: 1, text: "לסיים שיעורי בית לשבוע הבא", completed: false },
-    { id: 2, text: "לעבור על קוד האתר בגיטהאב", completed: false },
-    { id: 3, text: "לנצח לפחות פעם אחת בוורדל", completed: false },
-    { id: 4, text: "לסדר את הקישורים במסך הבית", completed: false }
-];
-
-let weeklyTasks = JSON.parse(localStorage.getItem('os_weekly_tasks')) || DEFAULT_TASKS;
-
-function renderTracker() {
-    const listContainer = document.getElementById('tracker-tasks-list');
-    if (!listContainer) return;
-    
-    listContainer.innerHTML = '';
-    let completedCount = 0;
-
-    weeklyTasks.forEach(task => {
-        if (task.completed) completedCount++;
-
-        const taskRow = document.createElement('div');
-        taskRow.style.cssText = "display: flex; align-items: center; gap: 10px; background: var(--bg-input); padding: 10px; border-radius: 8px; border: 1px solid var(--border-dark);";
-        
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = task.completed;
-        checkbox.style.cssText = "width: 16px; height: 16px; cursor: pointer; accent-color: var(--success);";
-        checkbox.onchange = () => toggleTask(task.id);
-
-        const label = document.createElement('span');
-        label.innerText = task.text;
-        label.style.cssText = task.completed ? "text-decoration: line-through; color: var(--text-muted); font-size: 0.9rem;" : "color: var(--text-main); font-size: 0.9rem;";
-
-        taskRow.appendChild(checkbox);
-        taskRow.appendChild(label);
-        listContainer.appendChild(taskRow);
-    });
-
-    const totalTasks = weeklyTasks.length;
-    const percentage = totalTasks > 0 ? Math.round((completedCount / totalTasks) * 100) : 0;
-    
-    const txtPercent = document.getElementById('tracker-percentage');
-    const barPercent = document.getElementById('tracker-progress-bar');
-    
-    if (txtPercent) txtPercent.innerText = percentage + "%";
-    if (barPercent) barPercent.style.width = percentage + "%";
-    
-    localStorage.setItem('os_weekly_tasks', JSON.stringify(weeklyTasks));
-}
-
-function toggleTask(id) {
-    weeklyTasks = weeklyTasks.map(task => task.id === id ? { ...task, completed: !task.completed } : task);
-    renderTracker();
-}
-
-// --- הזרקה אוטומטית ישירות לתוך דף הבית (Main Architecture) ---
-function injectWidgetsToHome() {
-    const mainArchitecture = document.getElementById('main-architecture') || document.body;
-    const widgetsContainer = document.getElementById('os-home-widgets-container');
-    
-    if (mainArchitecture && widgetsContainer) {
-        // מכניס את הווידג'טים לראש אזור התוכן הראשי
-        mainArchitecture.insertBefore(widgetsContainer, mainArchitecture.firstChild);
-    }
-}
-
-// הפעלת הכל ברגע שהדף נטען
+// הפעלה ועדכון השעונים בכל שנייה
 document.addEventListener('DOMContentLoaded', () => {
-    injectWidgetsToHome();
     updateWorldClocks();
     setInterval(updateWorldClocks, 1000);
-    renderTracker();
 });
 </script>
