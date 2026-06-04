@@ -5,10 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCHOOL OS v40.0 - Ultra Enterprise Operating System</title>
     <style>
-       /* צביעת הרקע הכללי והדף של משחקי הארקייד בשחור */
-html, body, #section-games-view, .arcade-container {
-    background-color: #000000 !important;
-    background: #000000 !important;
+      /* עיצוב פס הגלילה (הדבר שעולה ויורד בדף) לשחור כהה */
+::-webkit-scrollbar {
+    width: 12px; /* רוחב הפס */
+    background-color: #000000 !important; /* רקע המסילה שחור מוחלט */
+}
+
+::-webkit-scrollbar-track {
+    background-color: #000000 !important; /* רקע המסילה */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #1a1a2e !important; /* הצבע של הידית שזזה (אפור-כחול כהה) */
+    border-radius: 6px; /* פינות מעוגלות לידית */
+    border: 3px solid #000000 !important; /* רווח שחור מסביב לידית */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #2a2a4e !important; /* צבע הידית כשנוגעים בה */
+}
+
+/* תאימות לדפדפני פיירפוקס */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #1a1a2e #000000;
 }
         /* ==========================================================================
            1. משתני מערכת וארכיטקטורת עיצוב (System Variables & Tokens)
