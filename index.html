@@ -2428,3 +2428,150 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateWorldClocks, 1000);
 });
 </script>
+<div id="os-paint-page" style="background: var(--bg-card); border: 1px solid var(--border-dark); padding: 25px; border-radius: 16px; max-width: 700px; margin: 40px auto; font-family: var(--font-family); color: var(--text-main); direction: rtl; text-align: right; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+    
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-dark); padding-bottom: 15px;">
+        <span style="font-size: 1.5rem;">🎨</span>
+        <h2 style="margin: 0; font-size: 1.4rem; font-weight: 700;">סטודיו ציור ותיקיית קבצים</h2>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; background: var(--bg-input); padding: 10px; border-radius: 8px; border: 1px solid var(--border-dark);">
+        <label style="font-size: 0.9rem; display: flex; align-items: center; gap: 5px;">
+            צבע: <input type="color" id="paint-color" value="#00adb5" style="border: none; background: none; cursor: pointer; width: 30px; height: 30px;">
+        </label>
+        <label style="font-size: 0.9rem; display: flex; align-items: center; gap: 5px; margin-right: 15px;">
+            עובי קו: <input type="range" id="paint-size" min="1" max="20" value="5" style="accent-color: var(--primary); width: 80px;">
+        </label>
+        
+        <button onclick="clearCanvas()" style="margin-right: auto; background: var(--danger); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">נקה לוח</button>
+        <button onclick="saveCanvasToFolder()" style="background: var(--success); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">💾 שמור לתיקייה</button>
+    </div>
+
+    <div style="background: #000000; border: 1px solid var(--border-dark); border-radius: 8px; overflow: hidden; margin-bottom: 30px; cursor: crosshair;">
+        <canvas id="os-paint-canvas" width="650" height="350" style="display: block; width: 100%; height: auto; background: #000000;"></canvas>
+    </div>
+
+    <div style="border-top: 1px solid var(--border-dark); padding-top: 20px;">
+        <h3 style="margin: 0 0 15px 0; font-size: 1.1rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
+            📁 תיקיית גלריה (ציורים שמורים)
+        </h3>
+        <div id="paint-folder-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px;">
+            </div>
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById('os-paint-canvas');
+const ctx = canvas.getContext('2d');
+const colorInput = document.getElementById('paint-color');
+const sizeInput = document.getElementById('paint-size');
+
+let isDrawing = false;
+
+// פונקציות עבודה עם הציור
+function startDrawing(e) {
+    isDrawing = true;
+    draw(e);
+}
+
+function stopDrawing() {
+    isDrawing = false;
+    ctx.beginPath();
+}
+
+function draw(e) {
+    if (!isDrawing) return;
+    
+    // חישוב מיקום מדויק של העכבר על הלוח
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+    
+    ctx.lineWidth = sizeInput.value;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = colorInput.value;
+    
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+}
+
+// מאזינים לעכבר על הלוח
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDrawing);
+canvas.addEventListener('mouseout', stopDrawing);
+
+// תמיכה במסכי מגע (טאבלט/טלפון)
+canvas.addEventListener('touchstart', (e) => { startDrawing(e.touches[0]); e.preventDefault(); });
+canvas.addEventListener('touchmove', (e) => { draw(e.touches[0]); e.preventDefault(); });
+canvas.addEventListener('touchend', stopDrawing);
+
+function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// ניהול התיקייה והשמירה ב-LocalStorage
+function saveCanvasToFolder() {
+    // בודק אם הלוח ריק לחלוטין (כדי לא לשמור סתם קובץ שחור)
+    const buffer = new Uint32Array(ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer);
+    if (!buffer.some(color => color !== 0)) {
+        alert("הלוח ריק! צייר משהו לפני השמירה.");
+        return;
+    }
+
+    const dataURL = canvas.toDataURL();
+    let savedDrawings = JSON.parse(localStorage.getItem('os_saved_drawings')) || [];
+    
+    const newDrawing = {
+        id: Date.now(),
+        name: "ציור_סודי_" + (savedDrawings.length + 1) + ".png",
+        image: dataURL
+    };
+    
+    savedDrawings.push(newDrawing);
+    localStorage.setItem('os_saved_drawings', JSON.stringify(savedDrawings));
+    renderPaintFolder();
+    clearCanvas();
+}
+
+function deleteDrawing(id) {
+    let savedDrawings = JSON.parse(localStorage.getItem('os_saved_drawings')) || [];
+    savedDrawings = savedDrawings.filter(item => item.id !== id);
+    localStorage.setItem('os_saved_drawings', JSON.stringify(savedDrawings));
+    renderPaintFolder();
+}
+
+function renderPaintFolder() {
+    const gallery = document.getElementById('paint-folder-gallery');
+    if (!gallery) return;
+    
+    gallery.innerHTML = '';
+    const savedDrawings = JSON.parse(localStorage.getItem('os_saved_drawings')) || [];
+    
+    if (savedDrawings.length === 0) {
+        gallery.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; grid-column: 1/-1; text-align: center;">התיקייה ריקה. הציורים שתשמור יופיעו כאן.</p>';
+        return;
+    }
+    
+    savedDrawings.forEach(file => {
+        const fileCard = document.createElement('div');
+        fileCard.style.cssText = "background: var(--bg-input); border: 1px solid var(--border-dark); padding: 8px; border-radius: 8px; text-align: center; position: relative; display: flex; flex-direction: column; gap: 5px;";
+        
+        const img = document.createElement('img');
+        img.src = file.image;
+        img.style.cssText = "width: 100%; height: 80px; object-fit: contain; background: #000; border-radius: 4px; border: 1px solid var(--border-dark); cursor: pointer;";
+        // פתיחת התמונה בגודל מלא בחלון חדש בלחיצה
+        img.onclick = () => {
+            const win = window.open();
+            win.document.write('<iframe src="' + file.image + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; background:#000;" allowfullscreen></iframe>');
+        };
+
+        const title = document.createElement('span');
+        title.innerText = file.name;
+        title.style.cssText = "font-size: 0.75rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%;";
+        
+        const delBtn = document.createElement('button');
+        delBtn.innerText = "🗑️";
+        delBtn.style.cssText = "background: none; border: none; color: var(--danger); cursor: pointer; font-size: 0.85rem;
