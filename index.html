@@ -2379,3 +2379,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 </script>
+<div id="world-clock-widget" style="background:#0a0a0c; border:1px solid #1a1a24; padding:20px; border-radius:12px; max-width:400px; margin:20px auto; font-family:sans-serif; color:#ffffff; direction:rtl; text-align:right; box-shadow:0 4px 15px rgba(0,0,0,0.5);">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:15px; border-bottom:1px solid #1a1a24; padding-bottom:10px;">
+        <h3 style="margin:0; font-size:1.2rem; color:#ffffff;">🕰️ מרכז זמן עולמי</h3>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#12121a; padding:10px 15px; border-radius:8px; border:1px solid #1a1a24;">
+            <span style="font-size:1rem; font-weight:bold; color:#ffffff;">🇮🇱 תל אביב</span>
+            <span id="clock-israel" style="font-family:monospace; font-size:1.2rem; font-weight:bold; color:#2ccf56; direction:ltr;">00:00:00</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#12121a; padding:10px 15px; border-radius:8px; border:1px solid #1a1a24;">
+            <span style="font-size:1rem; font-weight:bold; color:#ffffff;">🇺🇸 ניו יורק</span>
+            <span id="clock-newyork" style="font-family:monospace; font-size:1.2rem; font-weight:bold; color:#00bcff; direction:ltr;">00:00:00</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#12121a; padding:10px 15px; border-radius:8px; border:1px solid #1a1a24;">
+            <span style="font-size:1rem; font-weight:bold; color:#ffffff;">🇯🇵 טוקיו</span>
+            <span id="clock-tokyo" style="font-family:monospace; font-size:1.2rem; font-weight:bold; color:#ff3366; direction:ltr;">00:00:00</span>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateWorldClocks() {
+    const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+
+    // זמן ישראל
+    const timeIsrael = new Date().toLocaleTimeString('he-IL', { ...options, timeZone: 'Asia/Jerusalem' });
+    const elIsrael = document.getElementById('clock-israel');
+    if (elIsrael) elIsrael.innerText = timeIsrael;
+
+    // זמן ניו יורק
+    const timeNewYork = new Date().toLocaleTimeString('he-IL', { ...options, timeZone: 'America/New_York' });
+    const elNewYork = document.getElementById('clock-newyork');
+    if (elNewYork) elNewYork.innerText = timeNewYork;
+
+    // זמן טוקיו
+    const timeTokyo = new Date().toLocaleTimeString('he-IL', { ...options, timeZone: 'Asia/Tokyo' });
+    const elTokyo = document.getElementById('clock-tokyo');
+    if (elTokyo) elTokyo.innerText = timeTokyo;
+}
+
+// הפעלה ועדכון השעונים בכל שנייה
+document.addEventListener('DOMContentLoaded', () => {
+    updateWorldClocks();
+    setInterval(updateWorldClocks, 1000);
+});
+</script>
