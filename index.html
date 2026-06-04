@@ -2142,6 +2142,119 @@ html {
             // פתיחת טאב ברירת המחדל
             SystemEngine.Core.switchTab('section-dashboard-view', 'trigger-dashboard-tab');
         });
-    </script>
+  <script>
+window.addEventListener('DOMContentLoaded', () => {
+    // 1. מוצא את המשחק הישן ומחליף אותו בוורדל
+    const cards = document.querySelectorAll('.content-card');
+    let oldGameCard = null;
+    
+    cards.forEach(card => {
+        if (card.innerHTML.includes('ניחוש') || card.innerHTML.includes('מספרים')) {
+            oldGameCard = card;
+        }
+    });
+    
+    // אם לא מצא לפי טקסט, ניקח את הכרטיסייה השנייה בארקייד
+    if (!oldGameCard && cards.length >= 2) {
+        oldGameCard = cards[1]; 
+    }
+
+    if (oldGameCard) {
+        oldGameCard.innerHTML = `
+            <h3>🧠 וורדל בעברית (Wordle)</h3>
+            <p class="arcade-meta-text" style="font-size:0.9rem; color:#aaa;">נחש את המילה בת 5 האותיות! 6 ניסיונות.</p>
+            <div id="wordle-board" style="display:flex; flex-direction:column; gap:6px; align-items:center; margin:15px 0;"></div>
+            <div style="display:flex; justify-content:center; gap:8px;">
+                <input type="text" id="input-wordle-field" class="control-input" maxlength="5" placeholder="מילה..." style="width:140px; font-size:1.2rem; text-align:center; background:#080812; color:#fff; border:1px solid #333; border-radius:4px;">
+                <button class="action-button success-variant" onclick="startWordleLogic()" style="background:#2e7d32; color:#fff; border:none; padding:6px 12px; border-radius:4px; cursor:pointer;">בדוק</button>
+            </div>
+            <p id="text-wordle-feedback" style="color:var(--primary); font-weight:700; margin:14px 0 0 0;">הזן מילה בת 5 אותיות בעברית!</p>
+            <button class="action-button" style="margin-top:14px; padding:4px 10px; font-size:0.85rem;" onclick="initWordleGame()">משחק חדש</button>
+        `;
+        initWordleGame();
+    }
+});
+
+// 2. לוגיקת המשחק וורדל
+var wordleSecret = "";
+var wordleAttempts = 0;
+var wordleMaxAttempts = 6;
+var wordleWords = ["מחשב", "מקלדת", "מסכים", "תוכנה", "קודים", "לייזר", "חללית", "שרתים", "מערכת", "זיכרון", "הודעה", "טלפון", "הורדה", "אתרים", "רשתות"];
+
+function initWordleGame() {
+    wordleSecret = wordleWords[Math.floor(Math.random() * wordleWords.length)];
+    wordleAttempts = 0;
+    
+    const feedback = document.getElementById('text-wordle-feedback');
+    if(feedback) feedback.innerText = "המשחק החל! בהצלחה.";
+    
+    const input = document.getElementById('input-wordle-field');
+    if(input) { input.value = ""; input.disabled = false; }
+    
+    const board = document.getElementById('wordle-board');
+    if (!board) return;
+    board.innerHTML = "";
+    
+    for (let r = 0; r < wordleMaxAttempts; r++) {
+        const row = document.createElement('div');
+        row.style.display = "flex"; row.style.gap = "6px";
+        for (let c = 0; c < 5; c++) {
+            const box = document.createElement('div');
+            box.id = `w-box-${r}-${c}`;
+            box.style.width = "36px"; box.style.height = "36px"; box.style.border = "2px solid #333";
+            box.style.borderRadius = "6px"; box.style.display = "flex"; box.style.alignItems = "center";
+            box.style.justifyContent = "center"; box.style.fontWeight = "bold"; box.style.color = "#fff";
+            row.appendChild(box);
+        }
+        board.appendChild(row);
+    }
+}
+
+function startWordleLogic() {
+    const input = document.getElementById('input-wordle-field');
+    const feedback = document.getElementById('text-wordle-feedback');
+    if(!input || !feedback) return;
+    
+    const guess = input.value.trim();
+    if(guess.length !== 5) {
+        feedback.innerText = "⚠️ המילה חייבת להיות בת 5 אותיות!";
+        return;
+    }
+    
+    let secretArr = wordleSecret.split("");
+    let guessArr = guess.split("");
+    let status = Array(5).fill("gray");
+    
+    for(let i=0; i<5; i++) {
+        if(guessArr[i] === secretArr[i]) { status[i] = "green"; secretArr[i] = null; }
+    }
+    for(let i=0; i<5; i++) {
+        if(status[i] !== "green") {
+            let idx = secretArr.indexOf(guessArr[i]);
+            if(idx !== -1) { status[i] = "yellow"; secretArr[idx] = null; }
+        }
+    }
+    for(let i=0; i<5; i++) {
+        const box = document.getElementById(`w-box-${wordleAttempts}-${i}`);
+        if(box) {
+            box.innerText = guessArr[i];
+            if(status[i] === "green") box.style.backgroundColor = "#2e7d32";
+            else if(status[i] === "yellow") box.style.backgroundColor = "#f9a825";
+            else box.style.backgroundColor = "#37474f";
+        }
+    }
+    if(guess === wordleSecret) {
+        feedback.innerText = "🎉 ניצחת! כל הכבוד!";
+        input.disabled = true;
+        return;
+    }
+    wordleAttempts++;
+    input.value = "";
+    if(wordleAttempts >= wordleMaxAttempts) {
+        feedback.innerText = `💥 הפסדת! המילה הייתה: "${wordleSecret}"`;
+        input.disabled = true;
+    }
+}
+</script>
 </body>
 </html>
