@@ -2379,199 +2379,150 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 </script>
-<div id="world-clock-widget" style="background:#0a0a0c; border:1px solid #1a1a24; padding:20px; border-radius:12px; max-width:400px; margin:20px auto; font-family:sans-serif; color:#ffffff; direction:rtl; text-align:right; box-shadow:0 4px 15px rgba(0,0,0,0.5);">
-    <div style="display:flex; align-items:center; gap:8px; margin-bottom:15px; border-bottom:1px solid #1a1a24; padding-bottom:10px;">
-        <h3 style="margin:0; font-size:1.2rem; color:#ffffff;">🕰️ מרכז זמן עולמי</h3>
-    </div>
+<button onclick="openPaintModal()" style="position: fixed; bottom: 20px; right: 20px; background: #12121a; color: #ffffff; border: 1px solid #2a2a36; padding: 10px 14px; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: bold; z-index: 9998; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);" onmouseover="this.style.background='#1a1a26'" onmouseout="this.style.background='#12121a'">
+    <span>🎨</span> סטודיו ציור
+</button>
 
-    <div style="display:flex; flex-direction:column; gap:12px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; background:#12121a; padding:10px 15px; border-radius:8px; border:1px solid #1a1a24;">
-            <span style="font-size:1rem; font-weight:bold; color:#ffffff;">🇮🇱 תל אביב</span>
-            <span id="clock-israel" style="font-family:monospace; font-size:1.2rem; font-weight:bold; color:#2ccf56; direction:ltr;">00:00:00</span>
-        </div>
-
-        <div style="display:flex; justify-content:space-between; align-items:center; background:#12121a; padding:10px 15px; border-radius:8px; border:1px solid #1a1a24;">
-            <span style="font-size:1rem; font-weight:bold; color:#ffffff;">🇺🇸 ניו יורק</span>
-            <span id="clock-newyork" style="font-family:monospace; font-size:1.2rem; font-weight:bold; color:#00bcff; direction:ltr;">00:00:00</span>
-        </div>
-
-        <div style="display:flex; justify-content:space-between; align-items:center; background:#12121a; padding:10px 15px; border-radius:8px; border:1px solid #1a1a24;">
-            <span style="font-size:1rem; font-weight:bold; color:#ffffff;">🇯🇵 טוקיו</span>
-            <span id="clock-tokyo" style="font-family:monospace; font-size:1.2rem; font-weight:bold; color:#ff3366; direction:ltr;">00:00:00</span>
-        </div>
-    </div>
-</div>
-
-<script>
-function updateWorldClocks() {
-    const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-
-    // זמן ישראל
-    const timeIsrael = new Date().toLocaleTimeString('he-IL', { ...options, timeZone: 'Asia/Jerusalem' });
-    const elIsrael = document.getElementById('clock-israel');
-    if (elIsrael) elIsrael.innerText = timeIsrael;
-
-    // זמן ניו יורק
-    const timeNewYork = new Date().toLocaleTimeString('he-IL', { ...options, timeZone: 'America/New_York' });
-    const elNewYork = document.getElementById('clock-newyork');
-    if (elNewYork) elNewYork.innerText = timeNewYork;
-
-    // זמן טוקיו
-    const timeTokyo = new Date().toLocaleTimeString('he-IL', { ...options, timeZone: 'Asia/Tokyo' });
-    const elTokyo = document.getElementById('clock-tokyo');
-    if (elTokyo) elTokyo.innerText = timeTokyo;
-}
-
-// הפעלה ועדכון השעונים בכל שנייה
-document.addEventListener('DOMContentLoaded', () => {
-    updateWorldClocks();
-    setInterval(updateWorldClocks, 1000);
-});
-</script>
-<div id="os-paint-page" style="background: var(--bg-card); border: 1px solid var(--border-dark); padding: 25px; border-radius: 16px; max-width: 700px; margin: 40px auto; font-family: var(--font-family); color: var(--text-main); direction: rtl; text-align: right; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+<div id="os-paint-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 2, 4, 0.98); z-index: 99999; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
     
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-dark); padding-bottom: 15px;">
-        <span style="font-size: 1.5rem;">🎨</span>
-        <h2 style="margin: 0; font-size: 1.4rem; font-weight: 700;">סטודיו ציור ותיקיית קבצים</h2>
-    </div>
-
-    <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; background: var(--bg-input); padding: 10px; border-radius: 8px; border: 1px solid var(--border-dark);">
-        <label style="font-size: 0.9rem; display: flex; align-items: center; gap: 5px;">
-            צבע: <input type="color" id="paint-color" value="#00adb5" style="border: none; background: none; cursor: pointer; width: 30px; height: 30px;">
-        </label>
-        <label style="font-size: 0.9rem; display: flex; align-items: center; gap: 5px; margin-right: 15px;">
-            עובי קו: <input type="range" id="paint-size" min="1" max="20" value="5" style="accent-color: var(--primary); width: 80px;">
-        </label>
+    <div style="background: #08080f; border: 1px solid #161626; padding: 25px; border-radius: 16px; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; font-family: sans-serif; color: #f1f2f6; direction: rtl; text-align: right; box-shadow: 0 10px 30px rgba(0,0,0,0.8); position: relative;">
         
-        <button onclick="clearCanvas()" style="margin-right: auto; background: var(--danger); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">נקה לוח</button>
-        <button onclick="saveCanvasToFolder()" style="background: var(--success); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">💾 שמור לתיקייה</button>
-    </div>
+        <button onclick="closePaintModal()" style="position: absolute; top: 20px; left: 20px; background: none; border: none; color: #8e94a5; font-size: 1.5rem; cursor: pointer;" onmouseover="this.style.color='#ff4a4a'" onmouseout="this.style.color='#8e94a5'">✕</button>
 
-    <div style="background: #000000; border: 1px solid var(--border-dark); border-radius: 8px; overflow: hidden; margin-bottom: 30px; cursor: crosshair;">
-        <canvas id="os-paint-canvas" width="650" height="350" style="display: block; width: 100%; height: auto; background: #000000;"></canvas>
-    </div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #161626; padding-bottom: 15px;">
+            <span style="font-size: 1.5rem;">🎨</span>
+            <h2 style="margin: 0; font-size: 1.4rem; font-weight: 700;">סטודיו ציור ותיקיית קבצים</h2>
+        </div>
 
-    <div style="border-top: 1px solid var(--border-dark); padding-top: 20px;">
-        <h3 style="margin: 0 0 15px 0; font-size: 1.1rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
-            📁 תיקיית גלריה (ציורים שמורים)
-        </h3>
-        <div id="paint-folder-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px;">
-            </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; background: #040408; padding: 10px; border-radius: 8px; border: 1px solid #161626; align-items: center;">
+            <label style="font-size: 0.9rem; display: flex; align-items: center; gap: 5px;">
+                צבע: <input type="color" id="modal-paint-color" value="#00adb5" style="border: none; background: none; cursor: pointer; width: 30px; height: 30px;">
+            </label>
+            <label style="font-size: 0.9rem; display: flex; align-items: center; gap: 5px; margin-right: 15px;">
+                עובי: <input type="range" id="modal-paint-size" min="1" max="20" value="5" style="accent-color: #00adb5; width: 80px;">
+            </label>
+            
+            <button onclick="clearModalCanvas()" style="margin-right: auto; background: #ff4a4a; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;">נקה לוח</button>
+            <button onclick="saveModalCanvas()" style="background: #28a745; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;">💾 שמור לתיקייה</button>
+        </div>
+
+        <div style="background: #000000; border: 1px solid #161626; border-radius: 8px; overflow: hidden; margin-bottom: 25px; cursor: crosshair;">
+            <canvas id="modal-paint-canvas" width="650" height="350" style="display: block; width: 100%; height: auto; background: #000000;"></canvas>
+        </div>
+
+        <div style="border-top: 1px solid #161626; padding-top: 20px;">
+            <h3 style="margin: 0 0 15px 0; font-size: 1.1rem; color: #8e94a5; display: flex; align-items: center; gap: 8px;">📁 תיקיית ציורים שמורים</h3>
+            <div id="modal-paint-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px;"></div>
+        </div>
+
     </div>
 </div>
 
 <script>
-const canvas = document.getElementById('os-paint-canvas');
-const ctx = canvas.getContext('2d');
-const colorInput = document.getElementById('paint-color');
-const sizeInput = document.getElementById('paint-size');
+const mCanvas = document.getElementById('modal-paint-canvas');
+const mCtx = mCanvas.getContext('2d');
+const mColorInput = document.getElementById('modal-paint-color');
+const mSizeInput = document.getElementById('modal-paint-size');
+let mIsDrawing = false;
 
-let isDrawing = false;
-
-// פונקציות עבודה עם הציור
-function startDrawing(e) {
-    isDrawing = true;
-    draw(e);
+function openPaintModal() {
+    document.getElementById('os-paint-modal').style.display = 'flex';
+    renderModalFolder();
 }
 
-function stopDrawing() {
-    isDrawing = false;
-    ctx.beginPath();
+function closePaintModal() {
+    document.getElementById('os-paint-modal').style.display = 'none';
 }
 
-function draw(e) {
-    if (!isDrawing) return;
+// לוגיקת ציור
+mCanvas.addEventListener('mousedown', (e) => { mIsDrawing = true; drawModal(e); });
+mCanvas.addEventListener('mousemove', drawModal);
+window.addEventListener('mouseup', () => { mIsDrawing = false; mCtx.beginPath(); });
+
+function drawModal(e) {
+    if (!mIsDrawing) return;
+    const rect = mCanvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (mCanvas.width / rect.width);
+    const y = (e.clientY - rect.top) * (mCanvas.height / rect.height);
     
-    // חישוב מיקום מדויק של העכבר על הלוח
-    const rect = canvas.getBoundingClientRect();
-    const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-    const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+    mCtx.lineWidth = mSizeInput.value;
+    mCtx.lineCap = 'round';
+    mCtx.strokeStyle = mColorInput.value;
     
-    ctx.lineWidth = sizeInput.value;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = colorInput.value;
-    
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x, y);
+    mCtx.lineTo(x, y);
+    mCtx.stroke();
+    mCtx.beginPath();
+    mCtx.moveTo(x, y);
 }
 
-// מאזינים לעכבר על הלוח
-canvas.addEventListener('mousedown', startDrawing);
-canvas.addEventListener('mousemove', draw);
-canvas.addEventListener('mouseup', stopDrawing);
-canvas.addEventListener('mouseout', stopDrawing);
+// תמיכה בטאצ'
+mCanvas.addEventListener('touchstart', (e) => { mIsDrawing = true; drawModal(e.touches[0]); e.preventDefault(); });
+mCanvas.addEventListener('touchmove', (e) => { drawModal(e.touches[0]); e.preventDefault(); });
+mCanvas.addEventListener('touchend', () => { mIsDrawing = false; mCtx.beginPath(); });
 
-// תמיכה במסכי מגע (טאבלט/טלפון)
-canvas.addEventListener('touchstart', (e) => { startDrawing(e.touches[0]); e.preventDefault(); });
-canvas.addEventListener('touchmove', (e) => { draw(e.touches[0]); e.preventDefault(); });
-canvas.addEventListener('touchend', stopDrawing);
-
-function clearCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+function clearModalCanvas() {
+    mCtx.clearRect(0, 0, mCanvas.width, mCanvas.height);
 }
 
-// ניהול התיקייה והשמירה ב-LocalStorage
-function saveCanvasToFolder() {
-    // בודק אם הלוח ריק לחלוטין (כדי לא לשמור סתם קובץ שחור)
-    const buffer = new Uint32Array(ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer);
-    if (!buffer.some(color => color !== 0)) {
-        alert("הלוח ריק! צייר משהו לפני השמירה.");
-        return;
-    }
+// שמירה ותיקייה
+function saveModalCanvas() {
+    const buffer = new Uint32Array(mCtx.getImageData(0, 0, mCanvas.width, mCanvas.height).data.buffer);
+    if (!buffer.some(color => color !== 0)) return;
 
-    const dataURL = canvas.toDataURL();
-    let savedDrawings = JSON.parse(localStorage.getItem('os_saved_drawings')) || [];
+    const dataURL = mCanvas.toDataURL();
+    let saved = JSON.parse(localStorage.getItem('os_modal_drawings')) || [];
     
-    const newDrawing = {
+    saved.push({
         id: Date.now(),
-        name: "ציור_סודי_" + (savedDrawings.length + 1) + ".png",
+        name: "ציור_" + (saved.length + 1) + ".png",
         image: dataURL
-    };
+    });
     
-    savedDrawings.push(newDrawing);
-    localStorage.setItem('os_saved_drawings', JSON.stringify(savedDrawings));
-    renderPaintFolder();
-    clearCanvas();
+    localStorage.setItem('os_modal_drawings', JSON.stringify(saved));
+    renderModalFolder();
+    clearModalCanvas();
 }
 
-function deleteDrawing(id) {
-    let savedDrawings = JSON.parse(localStorage.getItem('os_saved_drawings')) || [];
-    savedDrawings = savedDrawings.filter(item => item.id !== id);
-    localStorage.setItem('os_saved_drawings', JSON.stringify(savedDrawings));
-    renderPaintFolder();
+function deleteModalDrawing(id) {
+    let saved = JSON.parse(localStorage.getItem('os_modal_drawings')) || [];
+    saved = saved.filter(item => item.id !== id);
+    localStorage.setItem('os_modal_drawings', JSON.stringify(saved));
+    renderModalFolder();
 }
 
-function renderPaintFolder() {
-    const gallery = document.getElementById('paint-folder-gallery');
+function renderModalFolder() {
+    const gallery = document.getElementById('modal-paint-gallery');
     if (!gallery) return;
-    
     gallery.innerHTML = '';
-    const savedDrawings = JSON.parse(localStorage.getItem('os_saved_drawings')) || [];
+    const saved = JSON.parse(localStorage.getItem('os_modal_drawings')) || [];
     
-    if (savedDrawings.length === 0) {
-        gallery.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; grid-column: 1/-1; text-align: center;">התיקייה ריקה. הציורים שתשמור יופיעו כאן.</p>';
+    if (saved.length === 0) {
+        gallery.innerHTML = '<p style="color: #8e94a5; font-size: 0.85rem; grid-column: 1/-1; text-align: center;">התיקייה ריקה.</p>';
         return;
     }
     
-    savedDrawings.forEach(file => {
-        const fileCard = document.createElement('div');
-        fileCard.style.cssText = "background: var(--bg-input); border: 1px solid var(--border-dark); padding: 8px; border-radius: 8px; text-align: center; position: relative; display: flex; flex-direction: column; gap: 5px;";
+    saved.forEach(file => {
+        const card = document.createElement('div');
+        card.style.cssText = "background: #040408; border: 1px solid #161626; padding: 8px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; gap: 5px;";
         
         const img = document.createElement('img');
         img.src = file.image;
-        img.style.cssText = "width: 100%; height: 80px; object-fit: contain; background: #000; border-radius: 4px; border: 1px solid var(--border-dark); cursor: pointer;";
-        // פתיחת התמונה בגודל מלא בחלון חדש בלחיצה
-        img.onclick = () => {
-            const win = window.open();
-            win.document.write('<iframe src="' + file.image + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; background:#000;" allowfullscreen></iframe>');
-        };
+        img.style.cssText = "width: 100%; height: 70px; object-fit: contain; background: #000; border-radius: 4px; cursor: pointer;";
+        img.onclick = () => window.open().document.write('<img src="'+file.image+'" style="background:#000; width:100%; height:100%; object-fit:contain;">');
 
         const title = document.createElement('span');
         title.innerText = file.name;
-        title.style.cssText = "font-size: 0.75rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%;";
+        title.style.cssText = "font-size: 0.7rem; color: #f1f2f6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;";
         
-        const delBtn = document.createElement('button');
-        delBtn.innerText = "🗑️";
-        delBtn.style.cssText = "background: none; border: none; color: var(--danger); cursor: pointer; font-size: 0.85rem;
+        const del = document.createElement('button');
+        del.innerText = "🗑️";
+        del.style.cssText = "background: none; border: none; color: #ff4a4a; cursor: pointer; font-size: 0.8rem; align-self: center;";
+        del.onclick = () => deleteModalDrawing(file.id);
+        
+        card.appendChild(img);
+        card.appendChild(title);
+        card.appendChild(del);
+        gallery.appendChild(card);
+    });
+}
+</script>
