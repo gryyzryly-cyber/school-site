@@ -2419,11 +2419,74 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <script>
+<button onclick="openPaintModal()" style="position: fixed; bottom: 20px; right: 20px; background: #12121a; color: #ffffff; border: 1px solid #2a2a36; padding: 10px 14px; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: bold; z-index: 9998; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);" onmouseover="this.style.background='#1a1a26'" onmouseout="this.style.background='#12121a'">
+    <span>🎨</span> סטודיו ציור Pro
+</button>
+
+<div id="os-paint-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 2, 4, 0.98); z-index: 99999; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
+    
+    <div style="background: #08080f; border: 1px solid #161626; padding: 25px; border-radius: 16px; width: 100%; max-width: 750px; max-height: 90vh; overflow-y: auto; font-family: sans-serif; color: #f1f2f6; direction: rtl; text-align: right; box-shadow: 0 10px 30px rgba(0,0,0,0.8); position: relative;">
+        
+        <button onclick="closePaintModal()" style="position: absolute; top: 20px; left: 20px; background: none; border: none; color: #8e94a5; font-size: 1.5rem; cursor: pointer;" onmouseover="this.style.color='#ff4a4a'" onmouseout="this.style.color='#8e94a5'">✕</button>
+
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #161626; padding-bottom: 15px;">
+            <span style="font-size: 1.5rem;">🎨</span>
+            <h2 style="margin: 0; font-size: 1.4rem; font-weight: 700;">סטודיו ציור ריאליסטי לענן</h2>
+        </div>
+
+        <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; background: #040408; padding: 12px; border-radius: 8px; border: 1px solid #161626; align-items: center;">
+            
+            <label style="font-size: 0.9rem; display: flex; align-items: center; gap: 5px;">
+                סוג מכחול:
+                <select id="paint-brush-type" style="background: #12121a; color: #fff; border: 1px solid #2a2a36; padding: 4px; border-radius: 4px; cursor: pointer;">
+                    <option value="classic">🖊️ טוש רגיל</option>
+                    <option value="pencil">✏️ עיפרון רך</option>
+                    <option value="oil">🖌️ צבע שמן/מכחול</option>
+                    <option value="spray">💨 ספריי גרפיטי</option>
+                </select>
+            </label>
+
+            <label style="font-size: 0.9rem; display: flex; align-items: center; gap: 5px;">
+                צבע: <input type="color" id="modal-paint-color" value="#00adb5" style="border: none; background: none; cursor: pointer; width: 30px; height: 30px;">
+            </label>
+            
+            <label style="font-size: 0.9rem; display: flex; align-items: center; gap: 5px;">
+                עובי קו: <input type="range" id="modal-paint-size" min="1" max="40" value="8" style="accent-color: #00adb5; width: 80px;">
+            </label>
+
+            <div style="display: flex; gap: 5px; margin-right: 10px;">
+                <div onclick="setQuickColor('#ffffff')" style="width:18px; height:18px; background:#fff; border-radius:50%; cursor:pointer; border:1px solid #555;"></div>
+                <div onclick="setQuickColor('#ff4a4a')" style="width:18px; height:18px; background:#ff4a4a; border-radius:50%; cursor:pointer;"></div>
+                <div onclick="setQuickColor('#28a745')" style="width:18px; height:18px; background:#28a745; border-radius:50%; cursor:pointer;"></div>
+                <div onclick="setQuickColor('#00adb5')" style="width:18px; height:18px; background:#00adb5; border-radius:50%; cursor:pointer;"></div>
+                <div onclick="setQuickColor('#ffaa00')" style="width:18px; height:18px; background:#ffaa00; border-radius:50%; cursor:pointer;"></div>
+            </div>
+            
+            <button onclick="clearModalCanvas()" style="margin-right: auto; background: #ff4a4a; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;">נקה לוח</button>
+            <button onclick="saveModalCanvas()" style="background: #28a745; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;">💾 שמור לתיקייה</button>
+        </div>
+
+        <div style="background: #000000; border: 1px solid #161626; border-radius: 8px; overflow: hidden; margin-bottom: 25px; cursor: crosshair;">
+            <canvas id="modal-paint-canvas" width="700" height="380" style="display: block; width: 100%; height: auto; background: #000000;"></canvas>
+        </div>
+
+        <div style="border-top: 1px solid #161626; padding-top: 20px;">
+            <h3 style="margin: 0 0 15px 0; font-size: 1.1rem; color: #8e94a5; display: flex; align-items: center; gap: 8px;">📁 תיקיית ציורים שמורים</h3>
+            <div id="modal-paint-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px;"></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
 const mCanvas = document.getElementById('modal-paint-canvas');
 const mCtx = mCanvas.getContext('2d');
 const mColorInput = document.getElementById('modal-paint-color');
 const mSizeInput = document.getElementById('modal-paint-size');
+const mBrushType = document.getElementById('paint-brush-type');
 let mIsDrawing = false;
+let lastX = 0;
+let lastY = 0;
 
 function openPaintModal() {
     document.getElementById('os-paint-modal').style.display = 'flex';
@@ -2434,37 +2497,101 @@ function closePaintModal() {
     document.getElementById('os-paint-modal').style.display = 'none';
 }
 
-// לוגיקת ציור
-mCanvas.addEventListener('mousedown', (e) => { mIsDrawing = true; drawModal(e); });
+function setQuickColor(color) {
+    mColorInput.value = color;
+}
+
+// לוגיקת הציור הריאליסטית
+mCanvas.addEventListener('mousedown', (e) => { 
+    mIsDrawing = true; 
+    const rect = mCanvas.getBoundingClientRect();
+    lastX = (e.clientX - rect.left) * (mCanvas.width / rect.width);
+    lastY = (e.clientY - rect.top) * (mCanvas.height / rect.height);
+});
+
 mCanvas.addEventListener('mousemove', drawModal);
-window.addEventListener('mouseup', () => { mIsDrawing = false; mCtx.beginPath(); });
+window.addEventListener('mouseup', () => mIsDrawing = false);
 
 function drawModal(e) {
     if (!mIsDrawing) return;
+    
     const rect = mCanvas.getBoundingClientRect();
     const x = (e.clientX - rect.left) * (mCanvas.width / rect.width);
     const y = (e.clientY - rect.top) * (mCanvas.height / rect.height);
     
-    mCtx.lineWidth = mSizeInput.value;
+    const brush = mBrushType.value;
+    const color = mColorInput.value;
+    const size = parseInt(mSizeInput.value);
+
+    mCtx.strokeStyle = color;
+    mCtx.fillStyle = color;
     mCtx.lineCap = 'round';
-    mCtx.strokeStyle = mColorInput.value;
-    
-    mCtx.lineTo(x, y);
-    mCtx.stroke();
-    mCtx.beginPath();
-    mCtx.moveTo(x, y);
+    mCtx.lineJoin = 'round';
+
+    if (brush === 'classic') {
+        mCtx.globalAlpha = 1.0;
+        mCtx.shadowBlur = 0;
+        mCtx.lineWidth = size;
+        mCtx.beginPath();
+        mCtx.moveTo(lastX, lastY);
+        mCtx.lineTo(x, y);
+        mCtx.stroke();
+    } 
+    else if (brush === 'pencil') {
+        // עיפרון: קו דק חצי שקוף שנבנה בשכבות
+        mCtx.globalAlpha = 0.25;
+        mCtx.shadowBlur = 0;
+        mCtx.lineWidth = size * 0.4;
+        mCtx.beginPath();
+        mCtx.moveTo(lastX, lastY);
+        mCtx.lineTo(x, y);
+        mCtx.stroke();
+    } 
+    else if (brush === 'oil') {
+        // מכחול שמן: קווים עבים רכים עם אפקט "מריחה" זוהר עדין
+        mCtx.globalAlpha = 0.6;
+        mCtx.shadowBlur = size * 0.2;
+        mCtx.shadowColor = color;
+        mCtx.lineWidth = size;
+        mCtx.beginPath();
+        mCtx.moveTo(lastX, lastY);
+        mCtx.lineTo(x, y);
+        mCtx.stroke();
+    } 
+    else if (brush === 'spray') {
+        // ספריי גרפיטי: פיזור נקודות רנדומליות סביב העכבר
+        mCtx.globalAlpha = 0.4;
+        mCtx.shadowBlur = 0;
+        for (let i = 0; i < size * 2; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const radius = Math.random() * size * 1.5;
+            const sprayX = x + Math.cos(angle) * radius;
+            const sprayY = y + Math.sin(angle) * radius;
+            mCtx.fillRect(sprayX, sprayY, 1.5, 1.5);
+        }
+    }
+
+    lastX = x;
+    lastY = y;
 }
 
-// תמיכה בטאצ'
-mCanvas.addEventListener('touchstart', (e) => { mIsDrawing = true; drawModal(e.touches[0]); e.preventDefault(); });
+// תמיכה בטאבלטים/טלפונים
+mCanvas.addEventListener('touchstart', (e) => {
+    mIsDrawing = true;
+    const rect = mCanvas.getBoundingClientRect();
+    lastX = (e.touches[0].clientX - rect.left) * (mCanvas.width / rect.width);
+    lastY = (e.touches[0].clientY - rect.top) * (mCanvas.height / rect.height);
+    e.preventDefault();
+});
 mCanvas.addEventListener('touchmove', (e) => { drawModal(e.touches[0]); e.preventDefault(); });
-mCanvas.addEventListener('touchend', () => { mIsDrawing = false; mCtx.beginPath(); });
+mCanvas.addEventListener('touchend', () => mIsDrawing = false);
 
 function clearModalCanvas() {
     mCtx.clearRect(0, 0, mCanvas.width, mCanvas.height);
+    mCtx.shadowBlur = 0;
 }
 
-// שמירה ותיקייה
+// שמירה ותיקייה ב-LocalStorage
 function saveModalCanvas() {
     const buffer = new Uint32Array(mCtx.getImageData(0, 0, mCanvas.width, mCanvas.height).data.buffer);
     if (!buffer.some(color => color !== 0)) return;
@@ -2474,7 +2601,7 @@ function saveModalCanvas() {
     
     saved.push({
         id: Date.now(),
-        name: "ציור_" + (saved.length + 1) + ".png",
+        name: "ציור_ריאליסטי_" + (saved.length + 1) + ".png",
         image: dataURL
     });
     
