@@ -2192,3 +2192,120 @@ html {
     </script>
 </body>
 </html>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // פונקציה שמחפשת את אזור המשחק הישן ומחליפה אותו
+    setTimeout(() => {
+        const cards = document.querySelectorAll('.content-card');
+        let targetCard = null;
+
+        cards.forEach(card => {
+            if (card.innerHTML.includes('guess-numeric-input') || card.innerHTML.includes('ניחוש')) {
+                targetCard = card;
+            }
+        });
+
+        if (targetCard) {
+            targetCard.innerHTML = `
+                <h3>🧠 וורדל בעברית (Wordle)</h3>
+                <p class="arcade-meta-text">נחש את המילה בת 5 האותיות! 6 ניסיונות.</p>
+                <div class="wordle-grid" id="w-board"></div>
+                <div class="guess-box-layout">
+                    <input type="text" id="w-input" class="guess-numeric-input" maxlength="5" placeholder="מילה" style="width:150px; letter-spacing:2px;">
+                    <button class="action-button success-variant" onclick="checkWordleGuess()" style="padding:10px 20px; font-weight:bold;">בדוק</button>
+                </div>
+                <p id="w-feedback" style="color:var(--primary); font-weight:700; margin-top:10px;">הקלד מילה בת 5 אותיות בעברית!</p>
+                <button class="action-button" style="margin-top:15px; padding:6px 12px; font-size:0.85rem;" onclick="resetWordleGame()">משחק חדש</button>
+            `;
+            resetWordleGame();
+        }
+    }, 500);
+});
+
+// לוגיקת המשחק וורדל
+var wordleSecretWord = "";
+var wordleCurrentRow = 0;
+const wordleMaxRows = 6;
+const wordleDictionary = ["מחשב", "מקלדת", "מסכים", "תוכנה", "קודים", "לייזר", "חללית", "שרתים", "מערכת", "זיכרון", "הודעה", "טלפון", "הורדה", "אתרים", "רשתות", "חיבור"];
+
+function resetWordleGame() {
+    wordleSecretWord = wordleDictionary[Math.floor(Math.random() * wordleDictionary.length)];
+    wordleCurrentRow = 0;
+    
+    const feedback = document.getElementById('w-feedback');
+    if (feedback) feedback.innerText = "המשחק החל! בהצלחה.";
+    
+    const input = document.getElementById('w-input');
+    if (input) { input.value = ""; input.disabled = false; }
+    
+    const board = document.getElementById('w-board');
+    if (!board) return;
+    board.innerHTML = "";
+    
+    for (let r = 0; r < wordleMaxRows; r++) {
+        const row = document.createElement('div');
+        row.className = "wordle-row";
+        for (let c = 0; c < 5; c++) {
+            const box = document.createElement('div');
+            box.className = "wordle-box";
+            box.id = `w-box-${r}-${c}`;
+            row.appendChild(box);
+        }
+        board.appendChild(row);
+    }
+}
+
+function checkWordleGuess() {
+    const input = document.getElementById('w-input');
+    const feedback = document.getElementById('w-feedback');
+    if (!input || !feedback || wordleCurrentRow >= wordleMaxRows) return;
+    
+    const guess = input.value.trim();
+    if (guess.length !== 5) {
+        feedback.innerText = "⚠️ המילה חייבת להיות בת בדיוק 5 אותיות!";
+        return;
+    }
+    
+    let secretArr = wordleSecretWord.split("");
+    let guessArr = guess.split("");
+    let rowStatus = Array(5).fill("absent");
+    
+    // בול (ירוק)
+    for (i = 0; i < 5; i++) {
+        if (guessArr[i] === secretArr[i]) { rowStatus[i] = "correct"; secretArr[i] = null; }
+    }
+    // פגיעה (צהוב)
+    for (i = 0; i < 5; i++) {
+        if (rowStatus[i] !== "correct") {
+            let idx = secretArr.indexOf(guessArr[i]);
+            if (idx !== -1) { rowStatus[i] = "present"; secretArr[idx] = null; }
+        }
+    }
+    // צביעת הקוביות במסך
+    for (i = 0; i < 5; i++) {
+        const box = document.getElementById(`w-box-${wordleCurrentRow}-${i}`);
+        if (box) {
+            box.innerText = guessArr[i];
+            if (rowStatus[i] === "correct") box.className = "wordle-box w-correct";
+            else if (rowStatus[i] === "present") box.className = "wordle-box w-present";
+            else box.className = "wordle-box w-absent";
+        }
+    }
+    
+    if (guess === wordleSecretWord) {
+        feedback.innerText = "🎉 ניצחת! כל הכבוד פתרת את הוורדל!";
+        input.disabled = true;
+        return;
+    }
+    
+    wordleCurrentRow++;
+    input.value = "";
+    
+    if (wordleCurrentRow >= wordleMaxRows) {
+        feedback.innerText = `💥 המשחק נגמר! המילה הייתה: "${wordleSecretWord}"`;
+        input.disabled = true;
+    } else {
+        feedback.innerText = `נשארו עוד ${wordleMaxRows - wordleCurrentRow} ניסיונות.`;
+    }
+}
+</script>
