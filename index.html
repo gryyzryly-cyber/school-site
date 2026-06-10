@@ -2717,54 +2717,60 @@ function copyModalPassword() {
     }, 2500);
 }
 </script>
-<button onclick="openGradeModal()" style="position: fixed; bottom: 20px; right: 290px; background: #12121a; color: #ffffff; border: 1px solid #2a2a36; padding: 10px 14px; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: bold; z-index: 9998; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);" onmouseover="this.style.background='#1a1a26'" onmouseout="this.style.background='#12121a'">
+<button onclick="openGradeModal()" style="position: fixed; bottom: 20px; right: 290px; background: #12121a; color: #ffffff; border: 1px solid #2a2a36; padding: 10px 14px; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: bold; z-index: 9998; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: all 0.2s;" onmouseover="this.style.background='#1a1a26'; this.style.borderColor='#00adb5';" onmouseout="this.style.background='#12121a'; this.style.borderColor='#2a2a36';">
     <span>📈</span> מחשבון ציונים
 </button>
 
-<div id="os-grade-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 2, 4, 0.95); z-index: 9999999; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
+<div id="os-grade-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 2, 4, 0.96); z-index: 9999999; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
     
-    <div style="background: #08080f; border: 1px solid #161626; padding: 25px; border-radius: 16px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; font-family: sans-serif; color: #f1f2f6; direction: rtl; text-align: right; box-shadow: 0 10px 30px rgba(0,0,0,0.8); position: relative;">
+    <div style="background: #08080f; border: 1px solid #161626; padding: 30px; border-radius: 16px; width: 100%; max-width: 650px; max-height: 90vh; overflow-y: auto; font-family: sans-serif; color: #f1f2f6; direction: rtl; text-align: right; box-shadow: 0 15px 40px rgba(0,0,0,0.8); position: relative;">
         
-        <button onclick="closeGradeModal()" style="position: absolute; top: 20px; left: 20px; background: none; border: none; color: #8e94a5; font-size: 1.5rem; cursor: pointer;" onmouseover="this.style.color='#ff4a4a'" onmouseout="this.style.color='#8e94a5'">✕</button>
+        <button onclick="closeGradeModal()" style="position: absolute; top: 20px; left: 20px; background: none; border: none; color: #8e94a5; font-size: 1.5rem; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#ff4a4a'" onmouseout="this.style.color='#8e94a5'">✕</button>
 
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #161626; padding-bottom: 15px;">
-            <span style="font-size: 1.5rem;">📈</span>
-            <h2 style="margin: 0; font-size: 1.3rem; font-weight: 700;">Grade OS - מחשבון ממוצע משוקלל</h2>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; border-bottom: 1px solid #161626; padding-bottom: 15px;">
+            <span style="font-size: 1.6rem;">📈</span>
+            <h2 style="margin: 0; font-size: 1.4rem; font-weight: 700; letter-spacing: 0.5px;">Grade OS <span style="font-size: 0.8rem; color: #00adb5; vertical-align: middle; background: rgba(0,173,181,0.1); padding: 3px 8px; border-radius: 20px; margin-right: 5px;">UX Pro</span></h2>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; background: #040408; border: 1px solid #161626; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px;">
-            <div>
-                <span style="font-size: 0.9rem; color: #8e94a5;">הממוצע המשוקלל שלך:</span>
-                <h1 id="total-grade-average" style="margin: 5px 0 0 0; font-size: 2.2rem; color: #00adb5; font-family: monospace;">100</h1>
+        <div style="background: #040408; border: 1px solid #161626; padding: 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div>
+                    <span style="font-size: 0.85rem; color: #8e94a5; font-weight: 500;">הממוצע המשוקלל שלך</span>
+                    <h1 id="total-grade-average" style="margin: 5px 0 0 0; font-size: 2.8rem; color: #00adb5; font-family: monospace; font-weight: 700; line-height: 1;">100</h1>
+                </div>
+                <div style="text-align: left;">
+                    <span style="font-size: 0.85rem; color: #8e94a5; font-weight: 500;">סה"כ משקל מוזן</span>
+                    <div style="font-family: monospace; font-size: 1.3rem; color: #f1f2f6; margin-top: 5px; font-weight: bold;"><span id="total-weight-percent" style="color: #ffaa00;">0</span> / 100%</div>
+                </div>
             </div>
-            <div style="text-align: left;">
-                <span style="font-size: 0.85rem; color: #8e94a5;">סה"כ משקל מוזן:</span>
-                <div style="font-family: monospace; font-size: 1.1rem; color: #f1f2f6; margin-top: 5px;"><span id="total-weight-percent">0</span>%</div>
+            
+            <div style="width: 100%; height: 8px; background: #12121a; border-radius: 10px; overflow: hidden; border: 1px solid #1c1c2d;">
+                <div id="grade-progress-bar" style="width: 100%; height: 100%; background: #00adb5; width: 0%; transition: width 0.4s ease, background-color 0.4s ease;"></div>
             </div>
         </div>
 
-        <button onclick="addGradeRow()" style="background: #161626; border: 1px solid #2a2a36; color: #00adb5; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;" onmouseover="this.style.background='#12121a'" onmouseout="this.style.background='#161626'">
-            ➕ הוסף מבחן / משימה
+        <div id="grade-target-tip" style="background: rgba(0,173,181,0.04); border: 1px solid rgba(0,173,181,0.15); padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.85rem; color: #b4b9c5; display: flex; align-items: center; gap: 8px;">
+            💡 הזן ציונים כדי לקבל תחזית ליעד הבא שלך.
+        </div>
+
+        <button onclick="addGradeRow()" style="background: #161626; border: 1px solid #2a2a36; color: #00adb5; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(0,173,181,0.1)'; this.style.color='#fff';" onmouseout="this.style.background='#161626'; this.style.color='#00adb5';">
+            ➕ הוסף מבחן / משימה חדשה
         </button>
 
-        <div style="overflow-x: auto; margin-bottom: 15px;">
+        <div style="overflow-x: auto; margin-bottom: 10px; border: 1px solid #161626; border-radius: 8px; background: #040408;">
             <table style="width: 100%; border-collapse: collapse; text-align: right;">
                 <thead>
-                    <tr style="border-bottom: 1px solid #161626;">
-                        <th style="padding: 10px; color: #8e94a5; font-size: 0.85rem; font-weight: 600;">שם המטלה/מבחן</th>
-                        <th style="padding: 10px; color: #8e94a5; font-size: 0.85rem; font-weight: 600; width: 140px;">ציון (0-100)</th>
-                        <th style="padding: 10px; color: #8e94a5; font-size: 0.85rem; font-weight: 600; width: 140px;">משקל (אחוזים)</th>
-                        <th style="padding: 10px; width: 40px;"></th>
+                    <tr style="border-bottom: 1px solid #161626; background: #08080f;">
+                        <th style="padding: 12px 15px; color: #8e94a5; font-size: 0.85rem; font-weight: 600;">שם המטלה / המבחן</th>
+                        <th style="padding: 12px 15px; color: #8e94a5; font-size: 0.85rem; font-weight: 600; width: 120px; text-align: center;">ציון (0-100)</th>
+                        <th style="padding: 12px 15px; color: #8e94a5; font-size: 0.85rem; font-weight: 600; width: 120px; text-align: center;">משקל (אחוזים)</th>
+                        <th style="padding: 12px 15px; width: 50px; text-align: center;"></th>
                     </tr>
                 </thead>
                 <tbody id="grades-table-body">
                     </tbody>
             </table>
         </div>
-
-        <p style="font-size: 0.75rem; color: #8e94a5; margin: 10px 0 0 0; line-height: 1.4;">
-            💡 <b>איך זה עובד?</b> המערכת מכפילה כל ציון במשקל שלו ומחשבת את הממוצע ביחס לאחוזים הכוללים. כדי לקבל חישוב מושלם, ודא שסך כל האחוזים בטבלה מגיע ל-100%.
-        </p>
     </div>
 </div>
 
@@ -2778,44 +2784,48 @@ function closeGradeModal() {
     document.getElementById('os-grade-modal').style.display = 'none';
 }
 
-// פונקציה מאובטחת להוספת שורה פיזית לטבלה בדף
 function appendRowToDOM(id, name = '', score = '', weight = '') {
     const tbody = document.getElementById('grades-table-body');
     const row = tbody.insertRow();
     row.id = `grade-row-${id}`;
     row.style.borderBottom = "1px solid #11111f";
+    row.style.transition = "background 0.2s";
+    
+    // אפקט מעבר עכבר על שורה בטבלה
+    row.onmouseover = () => row.style.background = "rgba(255,255,255,0.01)";
+    row.onmouseout = () => row.style.background = "none";
 
-    // תא 1: שם המטלה
+    // תא 1: שם
     const cellName = row.insertCell(0);
-    cellName.style.padding = "8px 5px";
-    cellName.innerHTML = `<input type="text" value="${name}" oninput="updateGradeData(${id}, 'name', this.value)" placeholder="למשל: מבחן רבעון א'" style="width: 95%; background: #040408; border: 1px solid #161626; color: #f1f2f6; padding: 6px 10px; border-radius: 6px; outline: none; font-size: 0.9rem;">`;
+    cellName.style.padding = "10px 15px";
+    cellName.innerHTML = `<input type="text" value="${name}" oninput="updateGradeData(${id}, 'name', this.value)" placeholder="למשל: מבחן רבעון א'" style="width: 100%; background: #08080f; border: 1px solid #161626; color: #f1f2f6; padding: 8px 12px; border-radius: 6px; outline: none; font-size: 0.9rem; box-sizing: border-box; transition: border 0.2s;" onfocus="this.style.borderColor='#00adb5'" onblur="this.style.borderColor='#161626'">`;
 
     // תא 2: ציון
     const cellScore = row.insertCell(1);
-    cellScore.style.padding = "8px 5px";
-    cellScore.innerHTML = `<input type="number" value="${score}" min="0" max="100" oninput="updateGradeData(${id}, 'score', this.value)" placeholder="95" style="width: 90px; background: #040408; border: 1px solid #161626; color: #00adb5; padding: 6px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center;">`;
+    cellScore.style.padding = "10px 15px";
+    cellScore.style.textAlign = "center";
+    cellScore.innerHTML = `<input type="number" value="${score}" min="0" max="100" oninput="updateGradeData(${id}, 'score', this.value)" placeholder="- -" style="width: 85px; background: #08080f; border: 1px solid #161626; color: #00adb5; padding: 8px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center; box-sizing: border-box; transition: border 0.2s;" onfocus="this.style.borderColor='#00adb5'" onblur="this.style.borderColor='#161626'">`;
 
-    // תא 3: משקל באחוזים
+    // תא 3: משקל
     const cellWeight = row.insertCell(2);
-    cellWeight.style.padding = "8px 5px";
-    cellWeight.innerHTML = `<input type="number" value="${weight}" min="1" max="100" oninput="updateGradeData(${id}, 'weight', this.value)" placeholder="30" style="width: 90px; background: #040408; border: 1px solid #161626; color: #ffaa00; padding: 6px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center;">`;
+    cellWeight.style.padding = "10px 15px";
+    cellWeight.style.textAlign = "center";
+    cellWeight.innerHTML = `<input type="number" value="${weight}" min="1" max="100" oninput="updateGradeData(${id}, 'weight', this.value)" placeholder="- -" style="width: 85px; background: #08080f; border: 1px solid #161626; color: #ffaa00; padding: 8px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center; box-sizing: border-box; transition: border 0.2s;" onfocus="this.style.borderColor='#ffaa00'" onblur="this.style.borderColor='#161626'">`;
 
-    // תא 4: כפתור מחיקה
+    // תא 4: כפתור מחיקה משודרג
     const cellDelete = row.insertCell(3);
-    cellDelete.style.padding = "8px 5px";
+    cellDelete.style.padding = "10px 15px";
     cellDelete.style.textAlign = "center";
-    cellDelete.innerHTML = `<button onclick="deleteGradeRow(${id})" style="background: none; border: none; color: #ff4a4a; cursor: pointer; font-size: 1rem;">🗑️</button>`;
+    cellDelete.innerHTML = `<button onclick="deleteGradeRow(${id})" style="background: none; border: none; color: #555964; cursor: pointer; font-size: 1.1rem; transition: color 0.2s; padding: 4px;" onmouseover="this.style.color='#ff4a4a'" onmouseout="this.style.color='#555964'">✕</button>`;
 }
 
 function addGradeRow() {
     let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
     const newId = Date.now();
     
-    // מוסיף למאגר
     savedGrades.push({ id: newId, name: '', score: '', weight: '' });
     localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
     
-    // מוסיף פיזית למסך
     appendRowToDOM(newId);
     calculateAverage();
 }
@@ -2861,45 +2871,73 @@ function calculateAverage() {
 
     const avgDisplay = document.getElementById('total-grade-average');
     const weightDisplay = document.getElementById('total-weight-percent');
+    const progressBar = document.getElementById('grade-progress-bar');
+    const tipDisplay = document.getElementById('grade-target-tip');
 
     weightDisplay.innerText = totalWeight;
 
     if (validRowsCount === 0) {
         avgDisplay.innerText = "0";
         avgDisplay.style.color = "#8e94a5";
+        progressBar.style.width = "0%";
+        progressBar.style.backgroundColor = "#12121a";
+        tipDisplay.innerHTML = "💡 הזן ציונים ומשקלים בטבלה כדי להתחיל בחישוב הממוצע.";
     } else {
         const finalAverage = totalWeightedScore / totalWeight;
         avgDisplay.innerText = finalAverage.toFixed(1);
         
-        if (finalAverage >= 85) avgDisplay.style.color = "#28a745";
-        else if (finalAverage >= 70) avgDisplay.style.color = "#00adb5";
-        else if (finalAverage >= 55) avgDisplay.style.color = "#ffaa00";
-        else avgDisplay.style.color = "#ff4a4a";
+        // עדכון בר התקדמות
+        progressBar.style.width = `${Math.min(finalAverage, 100)}%`;
+        
+        // צביעת הממוצע והבר דינמית לפי רמה
+        let color = "#ff4a4a"; // נכשל
+        if (finalAverage >= 85) color = "#28a745"; // מצוין
+        else if (finalAverage >= 70) color = "#00adb5"; // טוב
+        else if (finalAverage >= 55) color = "#ffaa00"; // עובר
+        
+        avgDisplay.style.color = color;
+        progressBar.style.backgroundColor = color;
+
+        // לוגיקה חכמה לחישוב הציון הבא הדרוש ליעד 90
+        const target = 90;
+        const nextTaskWeight = 20; // נניח שהמטלה הבאה שווה 20% מהציון
+        if (finalAverage >= target) {
+            tipDisplay.innerHTML = `🔥 <b>שמור על זה!</b> הממוצע הנוכחי שלך מעל 90. אתה בדרך הבטוחה להצטיינות.`;
+        } else {
+            // נוסחה לחישוב הציון הנדרש במטלה הבאה:
+            // ((Target * (CurrentWeight + NextWeight)) - CurrentWeightedScore) / NextWeight
+            const neededScore = ((target * (totalWeight + nextTaskWeight)) - totalWeightedScore) / nextTaskWeight;
+            
+            if (neededScore <= 100 && neededScore > 0) {
+                tipDisplay.innerHTML = `🎯 כדי להעלות את הממוצע ל-<b>${target}</b>, אתה צריך לקבל לפחות <b>${Math.ceil(neededScore)}</b> במבחן הבא (אם המשקל שלו הוא ${nextTaskWeight}%).`;
+            } else {
+                tipDisplay.innerHTML = `📈 הממוצע בבנייה. המשך להזין ציונים גבוהים כדי לטפס אל עבר היעד!`;
+            }
+        }
     }
 }
 
 function loadGrades() {
     const tbody = document.getElementById('grades-table-body');
-    tbody.innerHTML = ''; // מנקה את הטבלה הישנה
+    tbody.innerHTML = '';
     
     let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
     
-    // אם המערכת ריקה לגמרי, ניצור 3 שורות ראשוניות
     if (savedGrades.length === 0) {
         const now = Date.now();
         savedGrades = [
             { id: now, name: '', score: '', weight: '' },
-            { id: now+1, name: '', score: '', weight: '' },
-            { id: now+2, name: '', score: '', weight: '' }
+            { id: now+1, name: '', score: '', weight: '' }
         ];
         localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
     }
 
-    // טוען את השורות למסך
     savedGrades.forEach(g => {
         appendRowToDOM(g.id, g.name, g.score, g.weight);
     });
 
     calculateAverage();
 }
+</script>
+
 </script>
