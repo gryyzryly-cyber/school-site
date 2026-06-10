@@ -2660,7 +2660,8 @@ window.addEventListener('resize', () => {
             </div>
         </div>
 <button onclick="openGradeModal()" style="position: fixed; bottom: 20px; right: 290px; background: #12121a; color: #ffffff; border: 1px solid #2a2a36; padding: 10px 14px; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: bold; z-index: 9998; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: all 0.2s;" onmouseover="this.style.background='#1a1a26'; this.style.borderColor='#00adb5';" onmouseout="this.style.background='#12121a'; this.style.borderColor='#2a2a36';">
-    <span>📈</span> מחשבון ציונים
+  <button onclick="openGradeModal()" style="position: fixed; bottom: 20px; right: 290px; background: #12121a; color: #ffffff; border: 1px solid #2a2a36; padding: 10px 14px; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: bold; z-index: 9998; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: all 0.2s;" onmouseover="this.style.background='#1a1a26'; this.style.borderColor='#00adb5';" onmouseout="this.style.background='#12121a'; this.style.borderColor='#2a2a36';">
+    <span>📈</span> מחשבון ציונים <span style="font-size: 0.75rem; color: #8e94a5; background: #222230; padding: 1px 5px; border-radius: 4px; margin-right: 3px;">G</span>
 </button>
 
 <div id="os-grade-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #020204; z-index: 9999999; flex-direction: column; box-sizing: border-box; font-family: sans-serif; color: #f1f2f6; direction: rtl; text-align: right;">
@@ -2703,7 +2704,7 @@ window.addEventListener('resize', () => {
         </div>
 
         <div style="flex: 4; background: #05050a; border-right: 1px solid #161626; padding: 25px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; overflow-y: auto;">
-            <h3 style="margin: 0; font-size: 1.1rem; color: #8e94a5; border-bottom: 1px solid #161626; padding-bottom: 10px;">📊 אנליזת ביצועים</h3>
+            <h3 style="margin: 0; font-size: 1.1rem; color: #8e94a5; border-bottom: 1px solid #161626; padding-bottom: 10px;">📊 אבחון נתונים</h3>
 
             <div style="background: #08080f; border: 1px solid #161626; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
                 <span style="font-size: 0.9rem; color: #8e94a5; font-weight: 500; display: block; margin-bottom: 5px;">הממוצע המשוקלל הנוכחי</span>
@@ -2789,5 +2790,113 @@ function updateGradeData(id, field, value) {
     if (item) {
         item[field] = value;
         localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
+        calculateAverage();
+    }
+}
 
+function deleteGradeRow(id) {
+    let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
+    savedGrades = savedGrades.filter(g => g.id !== id);
+    localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
+    const row = document.getElementById(`grade-row-${id}`);
+    if (row) row.remove();
+    calculateAverage();
+}
+
+function calculateAverage() {
+    let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
+    let totalWeightedScore = 0, totalWeight = 0, validRowsCount = 0;
+
+    savedGrades.forEach(g => {
+        const score = parseFloat(g.score);
+        const weight = parseFloat(g.weight);
+        if (!isNaN(score) && !isNaN(weight) && weight > 0) {
+            totalWeightedScore += (score * weight);
+            totalWeight += weight;
+            validRowsCount++;
+        }
+    });
+
+    const avgDisplay = document.getElementById('total-grade-average');
+    const weightDisplay = document.getElementById('total-weight-percent');
+    const countDisplay = document.getElementById('total-tasks-count');
+    const progressBar = document.getElementById('grade-progress-bar');
+    const tipDisplay = document.getElementById('grade-target-tip');
+
+    weightDisplay.innerText = totalWeight;
+    countDisplay.innerText = savedGrades.length;
+
+    if (validRowsCount === 0) {
+        avgDisplay.innerText = "0";
+        avgDisplay.style.color = "#8e94a5";
+        progressBar.style.width = "0%";
+        progressBar.style.backgroundColor = "#12121a";
+        tipDisplay.innerHTML = "💡 <b>מערכת מוכנה:</b> הזן שמות של מקצועות, ציונים ואת המשקל שלהם בטבלה מימין כדי שה-AI יתחיל לנתח את סיכויי ההצלחה שלך.";
+    } else {
+        const finalAverage = totalWeightedScore / totalWeight;
+        avgDisplay.innerText = finalAverage.toFixed(1);
+        progressBar.style.width = `${Math.min(finalAverage, 100)}%`;
+        
+        let color = "#ff4a4a"; 
+        if (finalAverage >= 85) color = "#28a745"; 
+        else if (finalAverage >= 70) color = "#00adb5"; 
+        else if (finalAverage >= 55) color = "#ffaa00"; 
+        
+        avgDisplay.style.color = color;
+        progressBar.style.backgroundColor = color;
+
+        const target = 90;
+        const nextTaskWeight = 20; 
+        if (finalAverage >= target) {
+            tipDisplay.innerHTML = `🔥 <b>סטטוס: הצטיינות על!</b> הממוצע המשוקלל שלך עומד על <b>${finalAverage.toFixed(1)}</b>, שזה מעל רף היעד (90). המשך ככה והתעודה שלך הולכת להיראות מטורפת השנה!`;
+        } else {
+            const neededScore = ((target * (totalWeight + nextTaskWeight)) - totalWeightedScore) / nextTaskWeight;
+            if (neededScore <= 100 && neededScore > 0) {
+                tipDisplay.innerHTML = `🎯 <b>תוכנית פעולה להעלאת הממוצע:</b><br>כדי להקפיץ את הממוצע השנתי שלך ל-<b>${target}</b>, המערכת מחשבת שאתה חייב לקבל לפחות <span style="color:#28a745; font-weight:bold; font-size:1.1rem;">${Math.ceil(neededScore)}</span> במבחן הבא (בהנחה שמשקלו יהיה ${nextTaskWeight}%).`;
+            } else {
+                tipDisplay.innerHTML = `📈 <b>ניתוח מגמה:</b> הממוצע הנוכחי שלך יציב. המשך להוסיף את שאר מטלות סוף השנה כדי לקבל תחזית מדויקת לפריצה אל עבר יעד ה-90.`;
+            }
+        }
+    }
+}
+
+function loadGrades() {
+    const tbody = document.getElementById('grades-table-body');
+    tbody.innerHTML = '';
+    let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
+    if (savedGrades.length === 0) {
+        const now = Date.now();
+        savedGrades = [
+            { id: now, name: '', score: '', weight: '' },
+            { id: now+1, name: '', score: '', weight: '' },
+            { id: now+2, name: '', score: '', weight: '' }
+        ];
+        localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
+    }
+    savedGrades.forEach(g => { appendRowToDOM(g.id, g.name, g.score, g.weight); });
+    calculateAverage();
+}
+
+// ==========================================================================
+// ⌨️ פתיחה וסגירה מהירה באמצעות מקש קיצור (Hotkey Listener)
+// ==========================================================================
+document.addEventListener('keydown', function(event) {
+    // בודק שלא מקלידים כרגע בתוך תיבת טקסט כלשהי
+    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+        return; 
+    }
+    
+    // לחיצה על האות G (קטנה או גדולה) פותחת/סוגרת את המחשבון
+    if (event.key === 'g' || event.key === 'G' || event.key === 'ע') {
+        const modal = document.getElementById('os-grade-modal');
+        if (modal) {
+            if (modal.style.display === 'flex') {
+                closeGradeModal();
+            } else {
+                openGradeModal();
+            }
+        }
+    }
+});
+</script>
 </script>
