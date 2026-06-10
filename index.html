@@ -2728,7 +2728,7 @@ function copyModalPassword() {
             <span style="font-size: 1.5rem;">📈</span>
             <h2 style="margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 0.5px;">School OS - מרכז ניהול וחישוב ציונים משוקלל</h2>
         </div>
-        <button onclick="document.getElementById('os-grade-modal').style.display = 'none';" style="background: #161626; border: 1px solid #2a2a36; color: #ff4a4a; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: all 0.2s;" onmouseover="this.style.background='#ff4a4a'; this.style.color='#fff';" onmouseout="this.style.background='#161626'; this.style.color='#ff4a4a';">❌ סגור מחשבון</button>
+        <button onclick="this.closest('#os-grade-modal').style.display = 'none';" style="background: #161626; border: 1px solid #2a2a36; color: #ff4a4a; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: all 0.2s;" onmouseover="this.style.background='#ff4a4a'; this.style.color='#fff';" onmouseout="this.style.background='#161626'; this.style.color='#ff4a4a';">❌ סגור מחשבון</button>
     </div>
 
     <div style="display: flex; flex: 1; width: 100%; overflow: hidden;">
@@ -2792,6 +2792,168 @@ function copyModalPassword() {
         </div>
     </div>
 </div>
+
+<script>
+function openGradeModal() {
+    const modal = document.getElementById('os-grade-modal');
+    if (modal) modal.style.display = 'flex';
+    loadGrades();
+}
+
+function appendRowToDOM(id, name = '', score = '', weight = '') {
+    const tbody = document.getElementById('grades-table-body');
+    if (!tbody) return;
+    const row = tbody.insertRow();
+    row.id = `grade-row-${id}`;
+    row.style.borderBottom = "1px solid #11111f";
+    
+    row.onmouseover = () => row.style.background = "rgba(255,255,255,0.01)";
+    row.onmouseout = () => row.style.background = "none";
+
+    const cellName = row.insertCell(0);
+    cellName.style.padding = "10px 15px";
+    cellName.innerHTML = `<input type="text" value="${name}" oninput="updateGradeData(${id}, 'name', this.value)" placeholder="למשל: מבחן רבעון א'" style="width: 100%; background: #08080f; border: 1px solid #161626; color: #f1f2f6; padding: 8px 12px; border-radius: 6px; outline: none; font-size: 0.9rem; box-sizing: border-box;">`;
+
+    const cellScore = row.insertCell(1);
+    cellScore.style.padding = "10px 15px";
+    cellScore.style.textAlign = "center";
+    cellScore.innerHTML = `<input type="number" value="${score}" min="0" max="100" oninput="updateGradeData(${id}, 'score', this.value)" placeholder="- -" style="width: 95px; background: #08080f; border: 1px solid #161626; color: #00adb5; padding: 8px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center; box-sizing: border-box;">`;
+
+    const cellWeight = row.insertCell(2);
+    cellWeight.style.padding = "10px 15px";
+    cellWeight.style.textAlign = "center";
+    cellWeight.innerHTML = `<input type="number" value="${weight}" min="1" max="100" oninput="updateGradeData(${id}, 'weight', this.value)" placeholder="- -" style="width: 95px; background: #08080f; border: 1px solid #161626; color: #ffaa00; padding: 8px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center; box-sizing: border-box;">`;
+
+    const cellDelete = row.insertCell(3);
+    cellDelete.style.padding = "10px 15px";
+    cellDelete.style.textAlign = "center";
+    cellDelete.innerHTML = `<button onclick="deleteGradeRow(${id})" style="background: none; border: none; color: #555964; cursor: pointer; font-size: 1.1rem; padding: 4px;" onmouseover="this.style.color='#ff4a4a'" onmouseout="this.style.color='#555964'">✕</button>`;
+}
+
+function addGradeRow() {
+    let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
+    const newId = Date.now();
+    savedGrades.push({ id: newId, name: '', score: '', weight: '' });
+    localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
+    appendRowToDOM(newId);
+    calculateAverage();
+}
+
+function updateGradeData(id, field, value) {
+    let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
+    let item = savedGrades.find(g => g.id === id);
+    if (item) {
+        item[field] = value;
+        localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
+        calculateAverage();
+    }
+}
+
+function deleteGradeRow(id) {
+    let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
+    savedGrades = savedGrades.filter(g => g.id !== id);
+    localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
+    const row = document.getElementById(`grade-row-${id}`);
+    if (row) row.remove();
+    calculateAverage();
+}
+
+function calculateAverage() {
+    let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
+    let totalWeightedScore = 0, totalWeight = 0, validRowsCount = 0;
+
+    savedGrades.forEach(g => {
+        const score = parseFloat(g.score);
+        const weight = parseFloat(g.weight);
+        if (!isNaN(score) && !isNaN(weight) && weight > 0) {
+            totalWeightedScore += (score * weight);
+            totalWeight += weight;
+            validRowsCount++;
+        }
+    });
+
+    const avgDisplay = document.getElementById('total-grade-average');
+    const weightDisplay = document.getElementById('total-weight-percent');
+    const countDisplay = document.getElementById('total-tasks-count');
+    const progressBar = document.getElementById('grade-progress-bar');
+    const tipDisplay = document.getElementById('grade-target-tip');
+
+    if(weightDisplay) weightDisplay.innerText = totalWeight;
+    if(countDisplay) countDisplay.innerText = savedGrades.length;
+
+    if (!avgDisplay) return;
+
+    if (validRowsCount === 0) {
+        avgDisplay.innerText = "0";
+        avgDisplay.style.color = "#8e94a5";
+        if(progressBar) { progressBar.style.width = "0%"; progressBar.style.backgroundColor = "#12121a"; }
+        if(tipDisplay) tipDisplay.innerHTML = "💡 <b>מערכת מוכנה:</b> הזן ציונים ומשקלים בטבלה כדי להתחיל.";
+    } else {
+        const finalAverage = totalWeightedScore / totalWeight;
+        avgDisplay.innerText = finalAverage.toFixed(1);
+        if(progressBar) progressBar.style.width = `${Math.min(finalAverage, 100)}%`;
+        
+        let color = "#00adb5"; 
+        if (finalAverage >= 85) color = "#28a745"; 
+        else if (finalAverage >= 55) color = "#ffaa00"; 
+        
+        avgDisplay.style.color = color;
+        if(progressBar) progressBar.style.backgroundColor = color;
+    }
+}
+
+function loadGrades() {
+    const tbody = document.getElementById('grades-table-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
+    if (savedGrades.length === 0) {
+        const now = Date.now();
+        savedGrades = [
+            { id: now, name: '', score: '', weight: '' },
+            { id: now+1, name: '', score: '', weight: '' }
+        ];
+        localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
+    }
+    savedGrades.forEach(g => { appendRowToDOM(g.id, g.name, g.score, g.weight); });
+    calculateAverage();
+}
+
+// ==========================================================================
+// 🚀 מנגנון חיבור אוטומטי ללוגו (בטוח ומאובטח)
+// ==========================================================================
+function bindLogoToCalculator() {
+    const keywords = ['ציונים', 'ממוצע', 'grade', 'grades', 'score', '📈'];
+    const elements = document.querySelectorAll('a, button, div, img');
+    
+    elements.forEach(el => {
+        const text = (el.textContent || '').toLowerCase();
+        const id = (el.id || '').toLowerCase();
+        const cls = (el.className || '').toLowerCase();
+        const src = el.src ? el.src.toLowerCase() : '';
+        
+        const match = keywords.some(k => text.includes(k) || id.includes(k) || cls.includes(k) || src.includes(k));
+        
+        // מוודא שאנחנו לא דורסים את כפתור הסגירה או פונקציות פנימיות
+        if (match && !el.closest('#os-grade-modal') && el.getAttribute('onclick') !== 'openGradeModal()') {
+            el.removeAttribute('href'); 
+            el.style.cursor = 'pointer';
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                openGradeModal();
+            });
+        }
+    });
+}
+
+// הפעלה כשהדף מוכן
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindLogoToCalculator);
+} else {
+    bindLogoToCalculator();
+}
+</script>
 
 <script>
 function openGradeModal() {
