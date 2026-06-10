@@ -2659,9 +2659,66 @@ window.addEventListener('resize', () => {
                 <span id="modal-length-val" style="font-family: monospace; font-weight: bold; color: #00adb5; font-size: 1rem;">16</span>
             </div>
         </div>
+
+        <button onclick="generateModalPassword()" style="width: 100%; background: #28a745; color: #fff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95rem;" onmouseover="this.style.background='#218838'" onmouseout="this.style.background='#28a745'">⚡ ג'נרט סיסמה מוצפנת</button>
+        
+        <p id="modal-password-toast" style="margin: 10px 0 0 0; font-size: 0.8rem; color: #28a745; text-align: center; display: none; font-weight: bold;">✓ הסיסמה הועתקה ללוח המחשב!</p>
+    </div>
+</div>
+
+<script>
+function openPasswordModal() {
+    document.getElementById('os-password-modal').style.display = 'flex';
+    document.getElementById('modal-generated-password').value = '';
+    document.getElementById('modal-password-toast').style.display = 'none';
+}
+
+function closePasswordModal() {
+    document.getElementById('os-password-modal').style.display = 'none';
+}
+
+function generateModalPassword() {
+    const length = document.getElementById('modal-password-slider').value;
+    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowercase = "abcdefghijklmnopqrstuvwxyz";
+    const numbers = "0123456789";
+    const symbols = "!@#$%^&*()_+~|}{[]:;?><,./-=";
+    
+    const allChars = uppercase + lowercase + numbers + symbols;
+    let password = "";
+    
+    password += uppercase[Math.floor(Math.random() * uppercase.length)];
+    password += lowercase[Math.floor(Math.random() * lowercase.length)];
+    password += numbers[Math.floor(Math.random() * numbers.length)];
+    password += symbols[Math.floor(Math.random() * symbols.length)];
+    
+    for (let i = password.length; i < length; i++) {
+        password += allChars[Math.floor(Math.random() * allChars.length)];
+    }
+    
+    password = password.split('').sort(() => 0.5 - Math.random()).join('');
+    document.getElementById('modal-generated-password').value = password;
+    document.getElementById('modal-password-toast').style.display = 'none';
+}
+
+function copyModalPassword() {
+    const input = document.getElementById('modal-generated-password');
+    if (!input.value) return;
+    
+    input.select();
+    input.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(input.value);
+    
+    const toast = document.getElementById('modal-password-toast');
+    toast.style.display = 'block';
+    
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 2500);
+}
+</script>
 <button onclick="openGradeModal()" style="position: fixed; bottom: 20px; right: 290px; background: #12121a; color: #ffffff; border: 1px solid #2a2a36; padding: 10px 14px; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: bold; z-index: 9998; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: all 0.2s;" onmouseover="this.style.background='#1a1a26'; this.style.borderColor='#00adb5';" onmouseout="this.style.background='#12121a'; this.style.borderColor='#2a2a36';">
-  <button onclick="openGradeModal()" style="position: fixed; bottom: 20px; right: 290px; background: #12121a; color: #ffffff; border: 1px solid #2a2a36; padding: 10px 14px; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: bold; z-index: 9998; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: all 0.2s;" onmouseover="this.style.background='#1a1a26'; this.style.borderColor='#00adb5';" onmouseout="this.style.background='#12121a'; this.style.borderColor='#2a2a36';">
-    <span>📈</span> מחשבון ציונים <span style="font-size: 0.75rem; color: #8e94a5; background: #222230; padding: 1px 5px; border-radius: 4px; margin-right: 3px;">G</span>
+    <span>📈</span> מחשבון ציונים
 </button>
 
 <div id="os-grade-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #020204; z-index: 9999999; flex-direction: column; box-sizing: border-box; font-family: sans-serif; color: #f1f2f6; direction: rtl; text-align: right;">
@@ -2704,7 +2761,7 @@ window.addEventListener('resize', () => {
         </div>
 
         <div style="flex: 4; background: #05050a; border-right: 1px solid #161626; padding: 25px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; overflow-y: auto;">
-            <h3 style="margin: 0; font-size: 1.1rem; color: #8e94a5; border-bottom: 1px solid #161626; padding-bottom: 10px;">📊 אבחון נתונים</h3>
+            <h3 style="margin: 0; font-size: 1.1rem; color: #8e94a5; border-bottom: 1px solid #161626; padding-bottom: 10px;">📊 אנליזת ביצועים</h3>
 
             <div style="background: #08080f; border: 1px solid #161626; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
                 <span style="font-size: 0.9rem; color: #8e94a5; font-weight: 500; display: block; margin-bottom: 5px;">הממוצע המשוקלל הנוכחי</span>
@@ -2878,25 +2935,46 @@ function loadGrades() {
 }
 
 // ==========================================================================
-// ⌨️ פתיחה וסגירה מהירה באמצעות מקש קיצור (Hotkey Listener)
+// 🔒 מנגנון יירוט לחיצות גלובלי סופר-חזק (Global Click Interceptor)
 // ==========================================================================
-document.addEventListener('keydown', function(event) {
-    // בודק שלא מקלידים כרגע בתוך תיבת טקסט כלשהי
-    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
-        return; 
-    }
+document.addEventListener('click', function(event) {
+    // רשימת מילים שאנחנו מחפשים בטקסט, ב-ID, במחלקה או בקישור
+    const terms = ['ציונים', 'ממוצע', 'grade', 'grades', 'score', '📈'];
     
-    // לחיצה על האות G (קטנה או גדולה) פותחת/סוגרת את המחשבון
-    if (event.key === 'g' || event.key === 'G' || event.key === 'ע') {
-        const modal = document.getElementById('os-grade-modal');
-        if (modal) {
-            if (modal.style.display === 'flex') {
-                closeGradeModal();
-            } else {
-                openGradeModal();
-            }
+    // בודק את האלמנט שנלחץ וגם את האבות שלו (למקרה שלחצו על תמונה בתוך כפתור)
+    let target = event.target;
+    while (target && target !== document.body) {
+        
+        // מוציא את כל הטקסטים והמאפיינים של האלמנט הנוכחי
+        const text = (target.textContent || '').toLowerCase();
+        const id = (target.id || '').toLowerCase();
+        const className = (target.className || '').toLowerCase();
+        const href = target.href ? target.href.toLowerCase() : '';
+        const src = target.src ? target.src.toLowerCase() : '';
+
+        // האם אחד מהם מכיל מילת מפתח של דף הציונים?
+        const isMatch = terms.some(term => 
+            text.includes(term) || 
+            id.includes(term) || 
+            className.includes(term) || 
+            href.includes(term) ||
+            src.includes(term)
+        );
+
+        // הגנה: ודא שלא לחצנו בטעות על הכפתור הצף החדש עצמו
+        if (isMatch && target.getAttribute('onclick') !== 'openGradeModal()') {
+            event.preventDefault();  // עוצר את מעבר הדף המקורי!
+            event.stopPropagation(); // עוצר פקודות אחרות
+            openGradeModal();        // פותח את המחשבון המלא במסך הנוכחי
+            return false;
         }
+        
+        target = target.parentNode; // עולה רמה אחת למעלה בעץ ה-HTML
     }
-});
-</script>
+}, true); // שימוש ב-Capturing Mode כדי לתפוס את הלחיצה לפני כולם
+
+// הגנה משנית: אם האתר בכל זאת עבר לדף שמכיל את המילה grade בכתובת, נפתח אוטומטית
+if (window.location.href.toLowerCase().includes('grade')) {
+    window.addEventListener('load', openGradeModal);
+}
 </script>
