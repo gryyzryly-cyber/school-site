@@ -2734,7 +2734,6 @@ function copyModalPassword() {
     <div style="display: flex; flex: 1; width: 100%; overflow: hidden;">
         
         <div style="flex: 6; padding: 25px; box-sizing: border-box; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
-            
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="margin: 0; font-size: 1.1rem; color: #8e94a5;">📝 רשימת מבחנים ומטלות</h3>
                 <button onclick="addGradeRow()" style="background: #161626; border: 1px solid #2a2a36; color: #00adb5; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(0,173,181,0.1)'; this.style.color='#fff';" onmouseout="this.style.background='#161626'; this.style.color='#00adb5';">
@@ -2756,9 +2755,77 @@ function copyModalPassword() {
                         </tbody>
                 </table>
             </div>
-            
             <p style="font-size: 0.75rem; color: #555964; line-height: 1.4; margin-top: auto;">
-                * הנתונים נשמרים אוטומטית בדפדפן שלך. כדי לקבל חישוב מ
+                * הנתונים נשמרים אוטומטית בדפדפן שלך. כדי לקבל חישוב ממוצע שנתי מושלם, מומלץ שסך כל האחוזים (משקל) של המבחנים יגיע בדיוק ל-100%.
+            </p>
+        </div>
+
+        <div style="flex: 4; background: #05050a; border-right: 1px solid #161626; padding: 25px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; overflow-y: auto;">
+            <h3 style="margin: 0; font-size: 1.1rem; color: #8e94a5; border-bottom: 1px solid #161626; padding-bottom: 10px;">📊 אנליזת ביצועים</h3>
+
+            <div style="background: #08080f; border: 1px solid #161626; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+                <span style="font-size: 0.9rem; color: #8e94a5; font-weight: 500; display: block; margin-bottom: 5px;">הממוצע המשוקלל הנוכחי</span>
+                <h1 id="total-grade-average" style="margin: 0; font-size: 4rem; color: #00adb5; font-family: monospace; font-weight: 700; line-height: 1;">100</h1>
+                <div style="width: 100%; height: 10px; background: #020204; border-radius: 10px; overflow: hidden; border: 1px solid #161626; margin-top: 20px;">
+                    <div id="grade-progress-bar" style="width: 0%; height: 100%; background: #00adb5; transition: width 0.4s ease, background-color 0.4s ease;"></div>
+                </div>
+            </div>
+
+            <div style="background: #08080f; border: 1px solid #161626; padding: 15px; border-radius: 12px; display: flex; justify-content: space-around; text-align: center;">
+                <div>
+                    <span style="font-size: 0.8rem; color: #8e94a5; display: block;">משקל כולל מוזן</span>
+                    <span id="total-weight-percent" style="font-family: monospace; font-size: 1.4rem; color: #ffaa00; font-weight: bold;">0</span><span style="color: #ffaa00; font-family: monospace; font-size: 1.1rem;">%</span>
+                </div>
+                <div style="border-left: 1px solid #161626;"></div>
+                <div>
+                    <span style="font-size: 0.8rem; color: #8e94a5; display: block;">מטלות שהוזנו</span>
+                    <span id="total-tasks-count" style="font-family: monospace; font-size: 1.4rem; color: #fff; font-weight: bold;">0</span>
+                </div>
+            </div>
+
+            <div style="background: #08080f; border: 1px solid #161626; padding: 20px; border-radius: 12px; flex: 1; display: flex; flex-direction: column; gap: 10px;">
+                <span style="font-size: 0.85rem; color: #8e94a5; font-weight: bold;">🎯 עוזר לימודי חכם (AI Predictor):</span>
+                <div id="grade-target-tip" style="font-size: 0.9rem; color: #b4b9c5; line-height: 1.5; background: #040408; padding: 15px; border-radius: 8px; border: 1px solid #11111f; flex: 1;">
+                    הזן ציונים ומשקלים בטבלה הימנית כדי שהמערכת תנתח את המצב שלך ותציג תחזית ליעד הבא.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openGradeModal() {
+    document.getElementById('os-grade-modal').style.display = 'flex';
+    loadGrades();
+}
+
+function closeGradeModal() {
+    document.getElementById('os-grade-modal').style.display = 'none';
+}
+
+function appendRowToDOM(id, name = '', score = '', weight = '') {
+    const tbody = document.getElementById('grades-table-body');
+    const row = tbody.insertRow();
+    row.id = `grade-row-${id}`;
+    row.style.borderBottom = "1px solid #11111f";
+    row.style.transition = "background 0.2s";
+    
+    row.onmouseover = () => row.style.background = "rgba(255,255,255,0.01)";
+    row.onmouseout = () => row.style.background = "none";
+
+    const cellName = row.insertCell(0);
+    cellName.style.padding = "10px 15px";
+    cellName.innerHTML = `<input type="text" value="${name}" oninput="updateGradeData(${id}, 'name', this.value)" placeholder="למשל: מבחן רבעון א'" style="width: 100%; background: #08080f; border: 1px solid #161626; color: #f1f2f6; padding: 8px 12px; border-radius: 6px; outline: none; font-size: 0.9rem; box-sizing: border-box; transition: border 0.2s;" onfocus="this.style.borderColor='#00adb5'" onblur="this.style.borderColor='#161626'">`;
+
+    const cellScore = row.insertCell(1);
+    cellScore.style.padding = "10px 15px";
+    cellScore.style.textAlign = "center";
+    cellScore.innerHTML = `<input type="number" value="${score}" min="0" max="100" oninput="updateGradeData(${id}, 'score', this.value)" placeholder="- -" style="width: 95px; background: #08080f; border: 1px solid #161626; color: #00adb5; padding: 8px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center; box-sizing: border-box; transition: border 0.2s;" onfocus="this.style.borderColor='#00adb5'" onblur="this.style.borderColor='#161626'">`;
+
+    const cellWeight = row.insertCell(2);
+    cellWeight.style.padding = "10px 15px";
+    cellWeight.style.textAlign = "center";
+    cellWeight.innerHTML = `<input type="number" value="${weight}" min="1" max="100" oninput="updateGradeData(${id}, 'weight', this.value)" placeholder="- -" style="width: 9
 </script>
 
 </script>
