@@ -2752,8 +2752,8 @@ function copyModalPassword() {
                 <thead>
                     <tr style="border-bottom: 1px solid #161626;">
                         <th style="padding: 10px; color: #8e94a5; font-size: 0.85rem; font-weight: 600;">שם המטלה/מבחן</th>
-                        <th style="padding: 10px; color: #8e94a5; font-size: 0.85rem; font-weight: 600; width: 100px;">ציון (0-100)</th>
-                        <th style="padding: 10px; color: #8e94a5; font-size: 0.85rem; font-weight: 600; width: 110px;">משקל (אחוזים)</th>
+                        <th style="padding: 10px; color: #8e94a5; font-size: 0.85rem; font-weight: 600; width: 140px;">ציון (0-100)</th>
+                        <th style="padding: 10px; color: #8e94a5; font-size: 0.85rem; font-weight: 600; width: 140px;">משקל (אחוזים)</th>
                         <th style="padding: 10px; width: 40px;"></th>
                     </tr>
                 </thead>
@@ -2778,38 +2778,45 @@ function closeGradeModal() {
     document.getElementById('os-grade-modal').style.display = 'none';
 }
 
-// פונקציה ליצירת שורה חדשה בטבלה
-function createRowHTML(id, name = '', score = '', weight = '') {
-    return `
-        <tr id="grade-row-${id}" style="border-bottom: 1px solid #11111f;">
-            <td style="padding: 8px 5px;">
-                <input type="text" value="${name}" oninput="updateGradeData(${id}, 'name', this.value)" placeholder="למשל: מבחן רבעון א'" style="width: 95%; background: #040408; border: 1px solid #161626; color: #f1f2f6; padding: 6px 10px; border-radius: 6px; outline: none; font-size: 0.9rem;">
-            </td>
-            <td style="padding: 8px 5px;">
-                <input type="number" value="${score}" min="0" max="100" oninput="updateGradeData(${id}, 'score', this.value)" placeholder="95" style="width: 80px; background: #040408; border: 1px solid #161626; color: #00adb5; padding: 6px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center;">
-            </td>
-            <td style="padding: 8px 5px;">
-                <input type="number" value="${weight}" min="1" max="100" oninput="updateGradeData(${id}, 'weight', this.value)" placeholder="30" style="width: 80px; background: #040408; border: 1px solid #161626; color: #ffaa00; padding: 6px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center;">
-            </td>
-            <td style="padding: 8px 5px; text-align: center;">
-                <button onclick="deleteGradeRow(${id})" style="background: none; border: none; color: #ff4a4a; cursor: pointer; font-size: 1rem;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">🗑️</button>
-            </td>
-        </tr>
-    `;
+// פונקציה מאובטחת להוספת שורה פיזית לטבלה בדף
+function appendRowToDOM(id, name = '', score = '', weight = '') {
+    const tbody = document.getElementById('grades-table-body');
+    const row = tbody.insertRow();
+    row.id = `grade-row-${id}`;
+    row.style.borderBottom = "1px solid #11111f";
+
+    // תא 1: שם המטלה
+    const cellName = row.insertCell(0);
+    cellName.style.padding = "8px 5px";
+    cellName.innerHTML = `<input type="text" value="${name}" oninput="updateGradeData(${id}, 'name', this.value)" placeholder="למשל: מבחן רבעון א'" style="width: 95%; background: #040408; border: 1px solid #161626; color: #f1f2f6; padding: 6px 10px; border-radius: 6px; outline: none; font-size: 0.9rem;">`;
+
+    // תא 2: ציון
+    const cellScore = row.insertCell(1);
+    cellScore.style.padding = "8px 5px";
+    cellScore.innerHTML = `<input type="number" value="${score}" min="0" max="100" oninput="updateGradeData(${id}, 'score', this.value)" placeholder="95" style="width: 90px; background: #040408; border: 1px solid #161626; color: #00adb5; padding: 6px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center;">`;
+
+    // תא 3: משקל באחוזים
+    const cellWeight = row.insertCell(2);
+    cellWeight.style.padding = "8px 5px";
+    cellWeight.innerHTML = `<input type="number" value="${weight}" min="1" max="100" oninput="updateGradeData(${id}, 'weight', this.value)" placeholder="30" style="width: 90px; background: #040408; border: 1px solid #161626; color: #ffaa00; padding: 6px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center;">`;
+
+    // תא 4: כפתור מחיקה
+    const cellDelete = row.insertCell(3);
+    cellDelete.style.padding = "8px 5px";
+    cellDelete.style.textAlign = "center";
+    cellDelete.innerHTML = `<button onclick="deleteGradeRow(${id})" style="background: none; border: none; color: #ff4a4a; cursor: pointer; font-size: 1rem;">🗑️</button>`;
 }
 
 function addGradeRow() {
     let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
     const newId = Date.now();
     
+    // מוסיף למאגר
     savedGrades.push({ id: newId, name: '', score: '', weight: '' });
     localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
     
-    const tbody = document.getElementById('grades-table-body');
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = createRowHTML(newId);
-    tbody.appendChild(tempDiv.querySelector('tr'));
-    
+    // מוסיף פיזית למסך
+    appendRowToDOM(newId);
     calculateAverage();
 }
 
@@ -2845,7 +2852,6 @@ function calculateAverage() {
         const score = parseFloat(g.score);
         const weight = parseFloat(g.weight);
 
-        // מחשב רק שורות שבהן מולאו גם ציון וגם אחוז
         if (!isNaN(score) && !isNaN(weight) && weight > 0) {
             totalWeightedScore += (score * weight);
             totalWeight += weight;
@@ -2863,23 +2869,22 @@ function calculateAverage() {
         avgDisplay.style.color = "#8e94a5";
     } else {
         const finalAverage = totalWeightedScore / totalWeight;
-        avgDisplay.innerText = finalAverage.toFixed(1); // מציג ספרה אחת אחרי הנקודה
+        avgDisplay.innerText = finalAverage.toFixed(1);
         
-        // צביעת הממוצע לפי רמת ההצלחה
-        if (finalAverage >= 85) avgDisplay.style.color = "#28a745"; // ירוק מעולה
-        else if (finalAverage >= 70) avgDisplay.style.color = "#00adb5"; // תכלת טוב
-        else if (finalAverage >= 55) avgDisplay.style.color = "#ffaa00"; // כתום עובר
-        else avgDisplay.style.color = "#ff4a4a"; // אדום נכשל
+        if (finalAverage >= 85) avgDisplay.style.color = "#28a745";
+        else if (finalAverage >= 70) avgDisplay.style.color = "#00adb5";
+        else if (finalAverage >= 55) avgDisplay.style.color = "#ffaa00";
+        else avgDisplay.style.color = "#ff4a4a";
     }
 }
 
 function loadGrades() {
     const tbody = document.getElementById('grades-table-body');
-    tbody.innerHTML = '';
+    tbody.innerHTML = ''; // מנקה את הטבלה הישנה
     
     let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
     
-    // אם התיבה ריקה לחלוטין בפעם הראשונה, ניצור 3 שורות ריקות כברירת מחדל
+    // אם המערכת ריקה לגמרי, ניצור 3 שורות ראשוניות
     if (savedGrades.length === 0) {
         const now = Date.now();
         savedGrades = [
@@ -2890,10 +2895,9 @@ function loadGrades() {
         localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
     }
 
+    // טוען את השורות למסך
     savedGrades.forEach(g => {
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = createRowHTML(g.id, g.name, g.score, g.weight);
-        tbody.appendChild(tempDiv.querySelector('tr'));
+        appendRowToDOM(g.id, g.name, g.score, g.weight);
     });
 
     calculateAverage();
