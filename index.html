@@ -2659,64 +2659,6 @@ window.addEventListener('resize', () => {
                 <span id="modal-length-val" style="font-family: monospace; font-weight: bold; color: #00adb5; font-size: 1rem;">16</span>
             </div>
         </div>
-
-        <button onclick="generateModalPassword()" style="width: 100%; background: #28a745; color: #fff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95rem;" onmouseover="this.style.background='#218838'" onmouseout="this.style.background='#28a745'">⚡ ג'נרט סיסמה מוצפנת</button>
-        
-        <p id="modal-password-toast" style="margin: 10px 0 0 0; font-size: 0.8rem; color: #28a745; text-align: center; display: none; font-weight: bold;">✓ הסיסמה הועתקה ללוח המחשב!</p>
-    </div>
-</div>
-
-<script>
-function openPasswordModal() {
-    document.getElementById('os-password-modal').style.display = 'flex';
-    document.getElementById('modal-generated-password').value = '';
-    document.getElementById('modal-password-toast').style.display = 'none';
-}
-
-function closePasswordModal() {
-    document.getElementById('os-password-modal').style.display = 'none';
-}
-
-function generateModalPassword() {
-    const length = document.getElementById('modal-password-slider').value;
-    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const lowercase = "abcdefghijklmnopqrstuvwxyz";
-    const numbers = "0123456789";
-    const symbols = "!@#$%^&*()_+~|}{[]:;?><,./-=";
-    
-    const allChars = uppercase + lowercase + numbers + symbols;
-    let password = "";
-    
-    password += uppercase[Math.floor(Math.random() * uppercase.length)];
-    password += lowercase[Math.floor(Math.random() * lowercase.length)];
-    password += numbers[Math.floor(Math.random() * numbers.length)];
-    password += symbols[Math.floor(Math.random() * symbols.length)];
-    
-    for (let i = password.length; i < length; i++) {
-        password += allChars[Math.floor(Math.random() * allChars.length)];
-    }
-    
-    password = password.split('').sort(() => 0.5 - Math.random()).join('');
-    document.getElementById('modal-generated-password').value = password;
-    document.getElementById('modal-password-toast').style.display = 'none';
-}
-
-function copyModalPassword() {
-    const input = document.getElementById('modal-generated-password');
-    if (!input.value) return;
-    
-    input.select();
-    input.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(input.value);
-    
-    const toast = document.getElementById('modal-password-toast');
-    toast.style.display = 'block';
-    
-    setTimeout(() => {
-        toast.style.display = 'none';
-    }, 2500);
-}
-</script>
 <button onclick="openGradeModal()" style="position: fixed; bottom: 20px; right: 290px; background: #12121a; color: #ffffff; border: 1px solid #2a2a36; padding: 10px 14px; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: bold; z-index: 9998; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: all 0.2s;" onmouseover="this.style.background='#1a1a26'; this.style.borderColor='#00adb5';" onmouseout="this.style.background='#12121a'; this.style.borderColor='#2a2a36';">
     <span>📈</span> מחשבון ציונים
 </button>
@@ -2808,24 +2750,44 @@ function appendRowToDOM(id, name = '', score = '', weight = '') {
     const row = tbody.insertRow();
     row.id = `grade-row-${id}`;
     row.style.borderBottom = "1px solid #11111f";
-    row.style.transition = "background 0.2s";
     
     row.onmouseover = () => row.style.background = "rgba(255,255,255,0.01)";
     row.onmouseout = () => row.style.background = "none";
 
     const cellName = row.insertCell(0);
     cellName.style.padding = "10px 15px";
-    cellName.innerHTML = `<input type="text" value="${name}" oninput="updateGradeData(${id}, 'name', this.value)" placeholder="למשל: מבחן רבעון א'" style="width: 100%; background: #08080f; border: 1px solid #161626; color: #f1f2f6; padding: 8px 12px; border-radius: 6px; outline: none; font-size: 0.9rem; box-sizing: border-box; transition: border 0.2s;" onfocus="this.style.borderColor='#00adb5'" onblur="this.style.borderColor='#161626'">`;
+    cellName.innerHTML = `<input type="text" value="${name}" oninput="updateGradeData(${id}, 'name', this.value)" placeholder="למשל: מבחן רבעון א'" style="width: 100%; background: #08080f; border: 1px solid #161626; color: #f1f2f6; padding: 8px 12px; border-radius: 6px; outline: none; font-size: 0.9rem; box-sizing: border-box;">`;
 
     const cellScore = row.insertCell(1);
     cellScore.style.padding = "10px 15px";
     cellScore.style.textAlign = "center";
-    cellScore.innerHTML = `<input type="number" value="${score}" min="0" max="100" oninput="updateGradeData(${id}, 'score', this.value)" placeholder="- -" style="width: 95px; background: #08080f; border: 1px solid #161626; color: #00adb5; padding: 8px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center; box-sizing: border-box; transition: border 0.2s;" onfocus="this.style.borderColor='#00adb5'" onblur="this.style.borderColor='#161626'">`;
+    cellScore.innerHTML = `<input type="number" value="${score}" min="0" max="100" oninput="updateGradeData(${id}, 'score', this.value)" placeholder="- -" style="width: 95px; background: #08080f; border: 1px solid #161626; color: #00adb5; padding: 8px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center; box-sizing: border-box;">`;
 
     const cellWeight = row.insertCell(2);
     cellWeight.style.padding = "10px 15px";
     cellWeight.style.textAlign = "center";
-    cellWeight.innerHTML = `<input type="number" value="${weight}" min="1" max="100" oninput="updateGradeData(${id}, 'weight', this.value)" placeholder="- -" style="width: 9
-</script>
+    cellWeight.innerHTML = `<input type="number" value="${weight}" min="1" max="100" oninput="updateGradeData(${id}, 'weight', this.value)" placeholder="- -" style="width: 95px; background: #08080f; border: 1px solid #161626; color: #ffaa00; padding: 8px 10px; border-radius: 6px; outline: none; font-family: monospace; font-size: 0.95rem; text-align: center; box-sizing: border-box;">`;
+
+    const cellDelete = row.insertCell(3);
+    cellDelete.style.padding = "10px 15px";
+    cellDelete.style.textAlign = "center";
+    cellDelete.innerHTML = `<button onclick="deleteGradeRow(${id})" style="background: none; border: none; color: #555964; cursor: pointer; font-size: 1.1rem; padding: 4px;" onmouseover="this.style.color='#ff4a4a'" onmouseout="this.style.color='#555964'">✕</button>`;
+}
+
+function addGradeRow() {
+    let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
+    const newId = Date.now();
+    savedGrades.push({ id: newId, name: '', score: '', weight: '' });
+    localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
+    appendRowToDOM(newId);
+    calculateAverage();
+}
+
+function updateGradeData(id, field, value) {
+    let savedGrades = JSON.parse(localStorage.getItem('os_grades_list')) || [];
+    let item = savedGrades.find(g => g.id === id);
+    if (item) {
+        item[field] = value;
+        localStorage.setItem('os_grades_list', JSON.stringify(savedGrades));
 
 </script>
