@@ -2632,5 +2632,88 @@ window.addEventListener('resize', () => {
 </script>
 }
 </script>
-🔐 שדרוגי אבטחה ופרטיות (Security Hacks)
-105. 🔑 מחולל סיסמאות חזקות (Secure Password Generator): כלי קטן שמייצר בשבילך בשנייה סיסמאות מוצפנות וחזקות (עם אותיות גדולות, קטנות, מספרים וסימנים) שאי אפשר לפרוץ, בשביל חשבונות שאתה פותח ברשת.
+<button onclick="openPasswordModal()" style="position: fixed; bottom: 20px; right: 150px; background: #12121a; color: #ffffff; border: 1px solid #2a2a36; padding: 10px 14px; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: bold; z-index: 9998; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);" onmouseover="this.style.background='#1a1a26'" onmouseout="this.style.background='#12121a'">
+    <span>🔑</span> מחולל סיסמאות
+</button>
+
+<div id="os-password-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 2, 4, 0.95); z-index: 9999999; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
+    
+    <div style="background: #08080f; border: 1px solid #161626; padding: 25px; border-radius: 16px; width: 100%; max-width: 400px; font-family: sans-serif; color: #f1f2f6; direction: rtl; text-align: right; box-shadow: 0 10px 30px rgba(0,0,0,0.8); position: relative;">
+        
+        <button onclick="closePasswordModal()" style="position: absolute; top: 20px; left: 20px; background: none; border: none; color: #8e94a5; font-size: 1.5rem; cursor: pointer;" onmouseover="this.style.color='#ff4a4a'" onmouseout="this.style.color='#8e94a5'">✕</button>
+
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #161626; padding-bottom: 15px;">
+            <span style="font-size: 1.5rem;">🔑</span>
+            <h2 style="margin: 0; font-size: 1.3rem; font-weight: 700;">מחולל סיסמאות מוגן</h2>
+        </div>
+
+        <div style="display: flex; background: #040408; border: 1px solid #161626; border-radius: 8px; overflow: hidden; margin-bottom: 20px; align-items: center; padding: 8px 12px;">
+            <input type="text" id="modal-generated-password" readonly placeholder="לחץ על הכפתור למטה..." style="width: 100%; background: none; border: none; color: #00adb5; font-family: monospace; font-size: 1.2rem; outline: none; padding: 4px; direction: ltr; text-align: left;">
+            <button onclick="copyModalPassword()" style="background: #161626; border: 1px solid #2a2a36; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; white-space: nowrap;" onmouseover="this.style.background='#00adb5'" onmouseout="this.style.background='#161626'">העתק</button>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; border: 1px solid #161626;">
+            <span style="font-size: 0.9rem; color: #8e94a5;">אורך סיסמה (תווים):</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <input type="range" id="modal-password-slider" min="8" max="26" value="16" oninput="document.getElementById('modal-length-val').innerText = this.value" style="accent-color: #00adb5; width: 90px; cursor: pointer;">
+                <span id="modal-length-val" style="font-family: monospace; font-weight: bold; color: #00adb5; font-size: 1rem;">16</span>
+            </div>
+        </div>
+
+        <button onclick="generateModalPassword()" style="width: 100%; background: #28a745; color: #fff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95rem;" onmouseover="this.style.background='#218838'" onmouseout="this.style.background='#28a745'">⚡ ג'נרט סיסמה מוצפנת</button>
+        
+        <p id="modal-password-toast" style="margin: 10px 0 0 0; font-size: 0.8rem; color: #28a745; text-align: center; display: none; font-weight: bold;">✓ הסיסמה הועתקה ללוח המחשב!</p>
+    </div>
+</div>
+
+<script>
+function openPasswordModal() {
+    document.getElementById('os-password-modal').style.display = 'flex';
+    document.getElementById('modal-generated-password').value = '';
+    document.getElementById('modal-password-toast').style.display = 'none';
+}
+
+function closePasswordModal() {
+    document.getElementById('os-password-modal').style.display = 'none';
+}
+
+function generateModalPassword() {
+    const length = document.getElementById('modal-password-slider').value;
+    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowercase = "abcdefghijklmnopqrstuvwxyz";
+    const numbers = "0123456789";
+    const symbols = "!@#$%^&*()_+~|}{[]:;?><,./-=";
+    
+    const allChars = uppercase + lowercase + numbers + symbols;
+    let password = "";
+    
+    password += uppercase[Math.floor(Math.random() * uppercase.length)];
+    password += lowercase[Math.floor(Math.random() * lowercase.length)];
+    password += numbers[Math.floor(Math.random() * numbers.length)];
+    password += symbols[Math.floor(Math.random() * symbols.length)];
+    
+    for (let i = password.length; i < length; i++) {
+        password += allChars[Math.floor(Math.random() * allChars.length)];
+    }
+    
+    password = password.split('').sort(() => 0.5 - Math.random()).join('');
+    document.getElementById('modal-generated-password').value = password;
+    document.getElementById('modal-password-toast').style.display = 'none';
+}
+
+function copyModalPassword() {
+    const input = document.getElementById('modal-generated-password');
+    if (!input.value) return;
+    
+    input.select();
+    input.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(input.value);
+    
+    const toast = document.getElementById('modal-password-toast');
+    toast.style.display = 'block';
+    
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 2500);
+}
+</script>
