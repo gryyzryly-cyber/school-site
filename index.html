@@ -2958,6 +2958,15 @@ if (document.readyState === 'loading') {
 <script>
 function openGradeModal() {
     document.getElementById('os-grade-modal').style.display
+<script>
+function openGradeModal() {
+    const gradeModal = document.getElementById('os-grade-modal');
+    if (gradeModal) {
+        gradeModal.style.display = 'flex';
+    }
+}
+</script>
+
 <div id="arcade-leaderboard-section" style="margin: 40px auto; max-width: 900px; padding: 25px; background: #08080f; border: 1px solid #161626; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); direction: rtl; text-align: right; font-family: sans-serif;">
     <h3 style="color: #ffaa00; margin: 0 0 10px 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;">🏆 היכל התהילה של ה-Arcade Hub</h3>
     <p style="color: #8e94a5; font-size: 0.95rem; margin: 0 0 20px 0;">המערכת מזהה אותך ומעדכנת את תוצאת השיא שלך אוטומטית!</p>
