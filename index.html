@@ -746,13 +746,25 @@ html {
 <body>
 
     <div id="main-architecture">
-        
+         
         <header class="system-header">
             <h2>⚡ SCHOOL OS v40.0 - Enterprise Ultra</h2>
-            <div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <select id="os-theme-select" onchange="changeOSTheme(this.value)" style="background: #08080f; border: 1px solid var(--border-dark); color: var(--text-main); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-family: var(--font-family); font-size: 0.9rem; font-weight: bold; outline: none; transition: var(--transition-smooth);">
+                    <option value="enterprise">Dark Enterprise 💼</option>
+                    <option value="hacker">Matrix Hacker 💚</option>
+                    <option value="cyberpunk">Cyberpunk Neon 🔮</option>
+                </select>
                 <button class="action-button" onclick="SystemEngine.Core.toggleAdminView()" style="background:#080812; border:1px solid var(--border-dark);">⚙️ מסד הגדרות ועריכה</button>
             </div>
         </header>
+
+        <nav class="navigation-dock">
+            <button id="trigger-dashboard-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-dashboard-view', 'trigger-dashboard-tab')">📊 לוח בקרה</button>
+            <button id="trigger-day-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-day-view', 'trigger-day-tab')">📅 מערכת לו"ז</button>
+            <button id="trigger-tasks-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-tasks-view', 'trigger-tasks-tab')">🚀 משימות ומדד</button>
+            <button id="trigger-games-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-games-view', 'trigger-games-tab')">🎮 מרכז ארקייד ריאליסטי</button>
+        </nav>
 
         <nav class="navigation-dock">
             <button id="trigger-dashboard-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-dashboard-view', 'trigger-dashboard-tab')">📊 לוח בקרה</button>
