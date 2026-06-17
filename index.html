@@ -746,25 +746,13 @@ html {
 <body>
 
     <div id="main-architecture">
-         
+        
         <header class="system-header">
             <h2>⚡ SCHOOL OS v40.0 - Enterprise Ultra</h2>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <select id="os-theme-select" onchange="changeOSTheme(this.value)" style="background: #08080f; border: 1px solid var(--border-dark); color: var(--text-main); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-family: var(--font-family); font-size: 0.9rem; font-weight: bold; outline: none; transition: var(--transition-smooth);">
-                    <option value="enterprise">Dark Enterprise 💼</option>
-                    <option value="hacker">Matrix Hacker 💚</option>
-                    <option value="cyberpunk">Cyberpunk Neon 🔮</option>
-                </select>
+            <div>
                 <button class="action-button" onclick="SystemEngine.Core.toggleAdminView()" style="background:#080812; border:1px solid var(--border-dark);">⚙️ מסד הגדרות ועריכה</button>
             </div>
         </header>
-
-        <nav class="navigation-dock">
-            <button id="trigger-dashboard-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-dashboard-view', 'trigger-dashboard-tab')">📊 לוח בקרה</button>
-            <button id="trigger-day-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-day-view', 'trigger-day-tab')">📅 מערכת לו"ז</button>
-            <button id="trigger-tasks-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-tasks-view', 'trigger-tasks-tab')">🚀 משימות ומדד</button>
-            <button id="trigger-games-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-games-view', 'trigger-games-tab')">🎮 מרכז ארקייד ריאליסטי</button>
-        </nav>
 
         <nav class="navigation-dock">
             <button id="trigger-dashboard-tab" class="tab-controller-btn" onclick="SystemEngine.Core.switchTab('section-dashboard-view', 'trigger-dashboard-tab')">📊 לוח בקרה</button>
@@ -2732,15 +2720,6 @@ function copyModalPassword() {
 <button onclick="openGradeModal()" style="position: fixed; bottom: 20px; right: 290px; background: #12121a; color: #ffffff; border: 1px solid #2a2a36; padding: 10px 14px; border-radius: 50px; cursor: pointer; font-size: 0.9rem; font-weight: bold; z-index: 9998; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: all 0.2s;" onmouseover="this.style.background='#1a1a26'; this.style.borderColor='#00adb5';" onmouseout="this.style.background='#12121a'; this.style.borderColor='#2a2a36';">
     <span>📈</span> מחשבון ציונים
 </button>
-<!-- כפתור החלפת ערכות נושא (Theme Switcher) -->
-<div class="theme-switcher-container" style="margin: 15px; display: flex; align-items: center; gap: 10px; direction: rtl;">
-    <span style="color: var(--text-muted); font-size: 0.9rem; font-family: var(--font-family);">🎨 ערכת נושא:</span>
-    <select id="os-theme-select" onchange="changeOSTheme(this.value)" style="background: var(--bg-card); border: 1px solid var(--border-dark); color: var(--text-main); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-family: var(--font-family); font-size: 0.9rem;">
-        <option value="enterprise">Dark Enterprise 💼</option>
-        <option value="hacker">Matrix Hacker 💚</option>
-        <option value="cyberpunk">Cyberpunk Neon 🔮</option>
-    </select>
-</div>
 
 <div id="os-grade-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #020204; z-index: 9999999; flex-direction: column; box-sizing: border-box; font-family: sans-serif; color: #f1f2f6; direction: rtl; text-align: right;">
     
@@ -2983,54 +2962,4 @@ function openGradeModal() {
         gradeModal.style.display = 'flex';
     }
 }
-</script
-function changeOSTheme(themeName) {
-    const root = document.documentElement;
-    
-    if (themeName === 'enterprise') {
-        // 💼 המצב הרגיל והיוקרתי שלך (החזרת הערכים המקוריים)
-        root.style.setProperty('--bg-pure', '#020204');
-        root.style.setProperty('--bg-card', '#08080f');
-        root.style.setProperty('--bg-card-hover', '#10101f');
-        root.style.setProperty('--bg-input', '#040408');
-        root.style.setProperty('--primary', '#00adb5');
-        root.style.setProperty('--primary-hover', '#008c94');
-        root.style.setProperty('--primary-glow', 'rgba(0, 173, 181, 0.4)');
-        root.style.setProperty('--text-main', '#f1f2f6');
-        root.style.setProperty('--text-muted', '#8e94a5');
-        root.style.setProperty('--border-dark', '#161626');
-        root.style.setProperty('--border-glow', '#22223b');
-        root.style.setProperty('--warning', '#ffaa00');
-    } 
-    else if (themeName === 'hacker') {
-        // 💚 מצב מטריקס ירוק זוהר (האקר)
-        root.style.setProperty('--bg-pure', '#000000');
-        root.style.setProperty('--bg-card', '#020a02');
-        root.style.setProperty('--bg-card-hover', '#041404');
-        root.style.setProperty('--bg-input', '#010501');
-        root.style.setProperty('--primary', '#39ff14');
-        root.style.setProperty('--primary-hover', '#00ff00');
-        root.style.setProperty('--primary-glow', 'rgba(57, 255, 20, 0.4)');
-        root.style.setProperty('--text-main', '#39ff14');
-        root.style.setProperty('--text-muted', '#008f11');
-        root.style.setProperty('--border-dark', '#00ff00');
-        root.style.setProperty('--border-glow', '#00ff00');
-        root.style.setProperty('--warning', '#00ff00');
-    } 
-    else if (themeName === 'cyberpunk') {
-        // 🔮 מצב ניאון סייברפאנק עתידני
-        root.style.setProperty('--bg-pure', '#0f051d');
-        root.style.setProperty('--bg-card', '#180b2b');
-        root.style.setProperty('--bg-card-hover', '#24123e');
-        root.style.setProperty('--bg-input', '#0a0314');
-        root.style.setProperty('--primary', '#00ffff');
-        root.style.setProperty('--primary-hover', '#00cccc');
-        root.style.setProperty('--primary-glow', 'rgba(0, 255, 255, 0.4)');
-        root.style.setProperty('--text-main', '#ffffff');
-        root.style.setProperty('--text-muted', '#ff007f');
-        root.style.setProperty('--border-dark', '#ff007f');
-        root.style.setProperty('--border-glow', '#bd00ff');
-        root.style.setProperty('--warning', '#ff007f');
-    }
-}    
-
+</script>
