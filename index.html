@@ -2958,3 +2958,38 @@ if (document.readyState === 'loading') {
 <script>
 function openGradeModal() {
     document.getElementById('os-grade-modal').style.display
+<div id="arcade-leaderboard-section" style="margin: 40px auto; max-width: 900px; padding: 25px; background: #08080f; border: 1px solid #161626; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); direction: rtl; text-align: right; font-family: sans-serif;">
+    <h3 style="color: #ffaa00; margin: 0 0 10px 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;">🏆 היכל התהילה של ה-Arcade Hub</h3>
+    <p style="color: #8e94a5; font-size: 0.95rem; margin: 0 0 20px 0;">המערכת מזהה אותך ומעדכנת את תוצאת השיא שלך אוטומטית!</p>
+    
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #12121a; border-bottom: 2px solid #161626; color: #8e94a5;">
+                <th style="padding: 12px; text-align: center; width: 70px;">מיקום</th>
+                <th style="padding: 12px;">שם השחקן</th>
+                <th style="padding: 12px; text-align: center;">המשחק</th>
+                <th style="padding: 12px; text-align: center; width: 100px;">ניקוד</th>
+            </tr>
+        </thead>
+        <tbody id="arcade-leaderboard-rows">
+            <tr style="border-bottom: 1px solid #161626; background: rgba(0, 173, 181, 0.04);">
+                <td style="padding: 12px; text-align: center; font-size: 1.2rem;">🥇</td>
+                <td style="padding: 12px; font-weight: bold; color: #00adb5;">איתי (אתה - Creator)</td>
+                <td style="padding: 12px; text-align: center; color: #00adb5;">אלתר המערכת 🚀</td>
+                <td style="padding: 12px; text-align: center; font-family: monospace; color: #00adb5; font-weight: bold;">15,000</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #161626;">
+                <td style="padding: 12px; text-align: center; font-size: 1.2rem;">🥈</td>
+                <td style="padding: 12px; color: #b4b9c5;">נועם</td>
+                <td style="padding: 12px; text-align: center; color: #8e94a5;">חלליות Space</td>
+                <td style="padding: 12px; text-align: center; font-family: monospace; color: #8e94a5;">12,450</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #161626;">
+                <td style="padding: 12px; text-align: center; font-size: 1.2rem;">🥉</td>
+                <td style="padding: 12px; color: #b4b9c5;">עידו</td>
+                <td style="padding: 12px; text-align: center; color: #8e94a5;">משחק הזיכרון 3D</td>
+                <td style="padding: 12px; text-align: center; font-family: monospace; color: #8e94a5;">9,200</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
