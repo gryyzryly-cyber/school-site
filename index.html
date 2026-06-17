@@ -2957,17 +2957,85 @@ if (document.readyState === 'loading') {
 
 <script>
 function openGradeModal() {
-    document.getElementById('os-grade-modal').style.display
-<script>
-function openGradeModal() {
-    const gradeModal = document.getElementById('os-grade-modal');
-    if (gradeModal) {
-        gradeModal.style.display 
-    <script>
-function openGradeModal() {
     const gradeModal = document.getElementById('os-grade-modal');
     if (gradeModal) {
         gradeModal.style.display = 'flex';
     }
 }
-</script>
+</script
+<div id="arcade-leaderboard-section" style="margin: 40px auto; max-width: 900px; padding: 25px; background: #08080f; border: 1px solid #161626; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); direction: rtl; text-align: right; font-family: sans-serif;">
+    
+    <h3 style="color: #ffaa00; margin: 0 0 10px 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;">🏆 היכל שיאי הגיימינג של SCHOOL OS</h3>
+    <p style="color: #8e94a5; font-size: 0.95rem; margin: 0 0 20px 0;">הכנס את השם שלך כדי להירשם בלוח המובילים הרשמי של הארקייד!</p>
+    
+    <div style="display: flex; gap: 10px; margin-bottom: 25px; align-items: center; background: #12121a; padding: 15px; border-radius: 10px; border: 1px solid #161626;">
+        <label style="color: #fff; font-weight: bold; min-width: 90px;">שם השחקן:</label>
+        <input type="text" id="leaderboard-player-input" placeholder="הקלד שם כאן..." style="flex: 1; padding: 10px; background: #030306; border: 1px solid #2a2a36; color: #fff; border-radius: 6px; font-size: 1rem;">
+        <button onclick="savePlayerName()" style="background: #00adb5; border: none; color: #fff; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;">💾 שמור שם</button>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #12121a; border-bottom: 2px solid #161626; color: #8e94a5;">
+                <th style="padding: 12px; text-align: center; width: 70px;">מספר</th>
+                <th style="padding: 12px;">שם המשחק</th>
+                <th style="padding: 12px;">מחזיק השיא 👑</th>
+                <th style="padding: 12px; text-align: center; width: 150px;">תוצאת שיא 🔥</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom: 1px solid #161626;">
+                <td style="padding: 12px; text-align: center;">1️⃣</td>
+                <td style="padding: 12px; font-weight: bold; color: #fff;">🔤 משחק וורדל (Wordle)</td>
+                <td style="padding: 12px; color: #00adb5; font-weight: bold;" class="player-name-cell">איתי</td>
+                <td style="padding: 12px; text-align: center; font-family: monospace; color: #ffaa00; font-weight: bold;">5 משחקים</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #161626;">
+                <td style="padding: 12px; text-align: center;">2️⃣</td>
+                <td style="padding: 12px; font-weight: bold; color: #fff;">❌ איקס עיגול AI</td>
+                <td style="padding: 12px; color: #00adb5; font-weight: bold;" class="player-name-cell">איתי</td>
+                <td style="padding: 12px; text-align: center; font-family: monospace; color: #ffaa00; font-weight: bold;">12 ניצחונות</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #161626;">
+                <td style="padding: 12px; text-align: center;">3️⃣</td>
+                <td style="padding: 12px; font-weight: bold; color: #fff;">🚀 חלליות ארקייד Space</td>
+                <td style="padding: 12px; color: #00adb5; font-weight: bold;" class="player-name-cell">איתי</td>
+                <td style="padding: 12px; text-align: center; font-family: monospace; color: #ffaa00; font-weight: bold;">15,400 נק'</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #161626;">
+                <td style="padding: 12px; text-align: center;">4️⃣</td>
+                <td style="padding: 12px; font-weight: bold; color: #fff;">🧠 משחק הזיכרון 3D</td>
+                <td style="padding: 12px; color: #00adb5; font-weight: bold;" class="player-name-cell">איתי</td>
+                <td style="padding: 12px; text-align: center; font-family: monospace; color: #ffaa00; font-weight: bold;">8 ניצחונות</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #161626;">
+                <td style="padding: 12px; text-align: center;">5️⃣</td>
+                <td style="padding: 12px; font-weight: bold; color: #fff;">🔢 משחק ניחושי מספרים</td>
+                <td style="padding: 12px; color: #00adb5; font-weight: bold;" class="player-name-cell">איתי</td>
+                <td style="padding: 12px; text-align: center; font-family: monospace; color: #ffaa00; font-weight: bold;">3,200 נק'</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+// פונקציה לעדכון השם של השחקן בלייב על המסך
+function savePlayerName() {
+    const input = document.getElementById('leaderboard-player-input');
+    const name = input.value.trim();
+    
+    if (name === "") {
+        alert("בבקשה תכניס שם תקין!");
+        return;
+    }
+    
+    // מוצא את כל התאים של השמות בטבלה ומעדכן אותם לשם החדש
+    const nameCells = document.querySelectorAll('.player-name-cell');
+    nameCells.forEach(cell => {
+        cell.textContent = name;
+    });
+    
+    alert("השם " + name + " עודכן בהצלחה כמחזיק השיאים הנוכחי! 🎮");
+}
+</script>    
+    
